@@ -25,7 +25,7 @@
     "dynamicBindingPathList": [],
     "name": "getCatalogAll",
     "pageId": "Configuration",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }
