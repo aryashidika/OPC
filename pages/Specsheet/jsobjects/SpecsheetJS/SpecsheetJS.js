@@ -9,7 +9,7 @@ export default {
 			navigateTo('Login');
 			return;
 		}
-		if (!['SPECSHEET', 'ADMIN'].includes(u.role)) {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF', 'ADMIN'].includes(u.role)) {
 			showAlert("Anda tidak punya akses ke halaman ini", "error");
 			navigateTo('Summary Page');
 			return;
@@ -18,8 +18,6 @@ export default {
 		await getSessionList.run();
 		await getAllActiveSessions.run();
 	},
-
-	// ─── ARTICLE & SESSION ────────────────────────────────
 
 	getArticleOptions() {
 		const sessions = getSessionList.data || [];
@@ -76,8 +74,6 @@ export default {
 		return !!(rep && rep.article_id !== articleId);
 	},
 
-	// ─── RELEASE ──────────────────────────────────────────
-
 	canRelease() {
 		const statuses = getAggregateStatus.data;
 		if (!statuses || statuses.length === 0) return false;
@@ -103,7 +99,7 @@ export default {
 	},
 
 	async onRelease() {
-		if (appsmith.store.currentUser?.role !== 'SPECSHEET') {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role SPECSHEET yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -124,10 +120,8 @@ export default {
 		}
 	},
 
-	// ─── CONCERN ──────────────────────────────────────────
-
 	async onRaiseConcern(targetDivision, reason, itemRef) {
-		if (appsmith.store.currentUser?.role !== 'SPECSHEET') {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role SPECSHEET yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -166,7 +160,7 @@ export default {
 	},
 
 	async onCloseConcern(concernId, concernSource) {
-		if (appsmith.store.currentUser?.role !== 'SPECSHEET') {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role SPECSHEET yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -187,8 +181,6 @@ export default {
 			showAlert('Gagal tutup concern: ' + e.message, 'error');
 		}
 	},
-
-	// ─── REVISION HISTORY & COMPARE ───────────────────────
 
 	async onCompareRevisions() {
 		const rows = tbl_revisionList.selectedRows;
@@ -246,7 +238,6 @@ export default {
 		});
 	},
 
-	// ─── §10 openReworkModal: sekarang dengan hidden-sibling warning ──
 	openReworkModal(division, reworkAll) {
 		const articleId = sel_specArticle.selectedOptionValue;
 		if (SpecsheetJS.isHiddenSibling(articleId)) {
@@ -259,7 +250,7 @@ export default {
 	},
 
 	async onReworkDivision() {
-		if (appsmith.store.currentUser?.role !== 'SPECSHEET') {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role SPECSHEET yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -323,17 +314,12 @@ export default {
 		}
 	},
 
-	// ═══════════════════════════════════════════════════════════════════════
-	// COPY PROSES ANTAR ARTIKEL (dipindah dari HomeJS)
-	// ═══════════════════════════════════════════════════════════════════════
-
 	async copyProcessToArticles(sourceSessionId, targetSessionIds) {
 		if (!sourceSessionId || !targetSessionIds || targetSessionIds.length === 0) {
 			showAlert("Pilih artikel sumber dan minimal 1 artikel target", "warning");
 			return;
 		}
 
-		// ── Guard: source harus SUBMITTED semua divisi dulu ──
 		const sourceStatuses = await getDivisionStatusForSession.run({ sessionId: sourceSessionId });
 		const sourceComplete = sourceStatuses.length === 5 && sourceStatuses.every((s) => s.state === 'SUBMITTED');
 		if (!sourceComplete) {
@@ -347,7 +333,6 @@ export default {
 
 		for (const newSessionId of targetSessionIds) {
 			try {
-				// ── Guard: block kalau ada divisi target yang sudah SUBMITTED ──
 				const statuses = await getDivisionStatusForSession.run({ sessionId: newSessionId });
 				const alreadySubmitted = statuses.some((s) => s.state === 'SUBMITTED');
 				if (alreadySubmitted) {
@@ -355,16 +340,13 @@ export default {
 					continue;
 				}
 
-				// ── a. Laminating / Commerz / COS (upsert) ──
 				await copyPartProcessOverwrite.run({ oldSessionId: sourceSessionId, newSessionId });
 
-				// ── b. UT: delete-then-reinsert ──
 				await copyWIPInputDelete.run({ newSessionId });
 				await copyWIPDelete.run({ newSessionId });
 				await copyWIPInsert.run({ oldSessionId: sourceSessionId, newSessionId });
 				await carryOverWIPInputIngest.run({ oldSessionId: sourceSessionId, newSessionId });
 
-				// ── c. COS package / before-package: unlink, delete, reinsert, assign ──
 				await copyCOSUnlinkPackages.run({ newSessionId });
 				await copyCOSPackageDelete.run({ newSessionId });
 
@@ -392,14 +374,12 @@ export default {
 																						 ));
 				}
 
-				// ── d. BE: delete-then-reinsert ──
 				await copyBtmWIPInputDelete.run({ newSessionId });
 				await copyBtmWIPDelete.run({ newSessionId });
 				await copyBtmWIPInsert.run({ oldSessionId: sourceSessionId, newSessionId });
 				await carryOverBtmWIPInputIngest.run({ oldSessionId: sourceSessionId, newSessionId });
 				await copySocklinerFlagsIngest.run({ oldSessionId: sourceSessionId, newSessionId });
 
-				// ── e. Set semua divisi target jadi SUBMITTED ──
 				await setDivisionsInWorkFromCopy.run({ oldSessionId: sourceSessionId, newSessionId });
 
 				succeeded.push(newSessionId);

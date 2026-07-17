@@ -1,5 +1,4 @@
 export default {
-
 	isSupplierInhouse(supplier, matcherRows, module, configType) {
 		const patterns = (matcherRows ?? [])
 		.filter(r => r.module === module && r.config_type === configType)
@@ -99,8 +98,6 @@ export default {
 			} else if (node.process_type === 'STOCKFITTING BOTTOM') {
 				cfg = getSbConfig(node.node_supplier, node.lead_time ?? node.node_supplier_lt);
 			} else if (node.process_type === 'SOCKLINER TREATMENT BOTTOM') {
-				// TODO: sockliner-kena-cutting bottom (kode ISP) belum punya metrik sendiri.
-				// Sementara numpang config Stockfitting sampai tabelnya dibuat.
 				cfg = getSbConfig(node.node_supplier, node.lead_time ?? node.node_supplier_lt);
 			} else if (node.process_type === 'TREATMENT BOTTOM') {
 				cfg = getIbtConfig(node.node_supplier, node.lead_time ?? node.node_supplier_lt);
@@ -138,8 +135,6 @@ export default {
 		return String(size).replace(/(\d+)-([A-Za-z]+)/g, '$1T$2').replace(/(\d+)-$/g, '$1T');
 	},
 
-	// meta = { productType, sportsCategory, sizePage, ageGroup, modelName, sizes }
-	// Sumbernya bebas: Aras (produksi) atau mock (debug).
 	async fetchZfgDataGen(meta) {
 		const base = await ZsfJS.fetchZfgDataDc();
 		const [configClassTable, materialGroupTable] = await Promise.all([
@@ -261,8 +256,6 @@ export default {
 			} else if (node.process_type === 'STOCKFITTING BOTTOM') {
 				cfg = getSbConfig(node.node_supplier, node.lead_time ?? node.node_supplier_lt);
 			} else if (node.process_type === 'SOCKLINER TREATMENT BOTTOM') {
-				// TODO: sockliner-kena-cutting bottom (kode ISP) belum punya metrik sendiri.
-				// Sementara numpang config Stockfitting sampai tabelnya dibuat.
 				cfg = getSbConfig(node.node_supplier, node.lead_time ?? node.node_supplier_lt);
 			} else if (node.process_type === 'TREATMENT BOTTOM') {
 				cfg = getIbtConfig(node.node_supplier, node.lead_time ?? node.node_supplier_lt);
@@ -299,9 +292,8 @@ export default {
 	},
 
 	async downloadZsfExcel() {
-		if (appsmith.store.currentUser?.role !== 'SPECSHEET' &&
-				appsmith.store.currentUser?.role !== 'ADMIN') {
-			showAlert("Hanya role SPECSHEET yang bisa download ZSF.", "warning");
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF', 'ADMIN'].includes(appsmith.store.currentUser?.role)) {
+			showAlert("Anda tidak punya akses untuk download ZSF.", "warning");
 			return;
 		}
 		const articleCode = sel_article.selectedOptionValue;
@@ -316,7 +308,6 @@ export default {
 
 		const XLSX = await import("https://cdn.jsdelivr.net/npm/xlsx/+esm");
 
-		// ===== FILE 1: Leveling =====
 		const headers1 = ['level','parent_code','part_id','process_code','part_name','process_type','lead_time'];
 		const ws1data = [headers1].concat(nodes.map(function (n) {
 			return [n.level ?? '', n.parent_code ?? '', n.part_id ?? '', n.process_code ?? '',
@@ -331,7 +322,6 @@ export default {
 																							{ type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
 		navigateTo(url1, {}, 'NEW_WINDOW');
 
-		// ===== FILE 2: ZSF (DC dulu; GEN menyusul di fase B2) =====
 		try {
 			const meta    = await ZsfJS.fetchArasMeta(articleCode);
 			const zfgData = await ZsfJS.fetchZfgDataGen(meta);

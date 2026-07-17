@@ -8,7 +8,7 @@ export default {
 			navigateTo('Login');
 			return;
 		}
-		if (!['SPECSHEET', 'ADMIN'].includes(u.role)) {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF', 'ADMIN'].includes(u.role)) {
 			showAlert("Anda tidak punya akses ke halaman ini", "error");
 			navigateTo('Summary Page');
 			return;

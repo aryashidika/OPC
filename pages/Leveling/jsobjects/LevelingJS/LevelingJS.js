@@ -1,14 +1,11 @@
 export default {
 
-	// State — hanya untuk proses generate, bukan persist
 	_counters: { ISP: 0, CS: 0, OSP: 0, IC: 0, IBT: 0 },
 	_nodes: [],
 	_edges: [],
 	_anchorMap: {},
 	_nodeId: 1,
-	_slCount: 0,   // counter khusus SL Rubber, lintas upper+bottom, di-reset tiap generate
-
-	// ─── HELPERS ───────────────────────────────────────────
+	_slCount: 0,
 
 	resetState() {
 		LevelingJS._counters = { ISP: 0, CS: 0, OSP: 0, IC: 0, IBT: 0 };
@@ -23,9 +20,6 @@ export default {
 		return (supplierName ?? '').toLowerCase().includes('sl rubber');
 	},
 
-	// Pusat logika: pilih kode node treatment (family ISP/IBT).
-	// Kalau supplier mengandung "sl rubber" -> override jadi SL-ARTIKEL (tanpa nomor),
-	// SL02-ARTIKEL dst. HANYA kalau ada tabrakan (>1 node SL dalam artikel yang sama).
 	resolveTreatmentCode(defaultPrefix, artikel, supplierName) {
 		if (LevelingJS.isSlRubberSupplier(supplierName)) {
 			LevelingJS._slCount += 1;
@@ -122,8 +116,6 @@ export default {
 		return false;
 	},
 
-	// ─── PAGE LOAD ─────────────────────────────────────────
-
 	async onPageLoad() {
 		const u = appsmith.store.currentUser;
 		const SESSION_HOURS = 12;
@@ -133,7 +125,7 @@ export default {
 			navigateTo('Login');
 			return;
 		}
-		if (!['SPECSHEET', 'ADMIN'].includes(u.role)) {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF', 'ADMIN'].includes(u.role)) {
 			showAlert("Anda tidak punya akses ke halaman ini", "error");
 			navigateTo('Summary Page');
 			return;
@@ -158,7 +150,6 @@ export default {
 		}
 	},
 
-	// ─── VALIDASI ──────────────────────────────────────────
 
 	validate(parts, wips) {
 		const errors = [];
@@ -183,7 +174,6 @@ export default {
 		return errors;
 	},
 
-	// ─── BUILD STEPS ───────────────────────────────────────
 
 	buildSpine(artikel, parts) {
 		const hasCentral = parts.some(function(p) { return p.cos_type === 'CENTRAL'; });
@@ -257,7 +247,6 @@ export default {
 		.sort(function(a, b) { return a.raw_id - b.raw_id; });
 
 		function codeSeq(code) {
-			// Ambil angka TEPAT setelah huruf prefix (ISP01 -> 1). SL tanpa angka -> 0.
 			const m = /^[A-Za-z]+(\d+)/.exec(code || '');
 			return m ? parseInt(m[1], 10) : 0;
 		}
@@ -270,7 +259,6 @@ export default {
 			const chain = LevelingJS.flattenWIPChain(rootWip.id, upperWips);
 			const wipNodeMap = {};
 
-			// ── Peta anak/induk ──
 			const childrenOf = {};
 			const parentOf = {};
 			chain.forEach(function(item) {
@@ -281,14 +269,11 @@ export default {
 				kids.forEach(function(k) { parentOf[k] = wip.id; });
 			});
 
-			// ── Pass 1: assign KODE dulu untuk semua node (urutan sama seperti sebelumnya) ──
 			const codeOf = {};
 			chain.forEach(function(item) {
 				codeOf[item.wip.id] = LevelingJS.resolveTreatmentCode('ISP', artikel, item.wip.supplier_name);
 			});
 
-			// ── Pass 2: identitas per-cabang, rekursif bottom-up. Di titik gabung,
-			//    identitas yang diteruskan = milik anak dgn originCode (kode ISP asal) terkecil.
 			const branchCache = {};
 			function getBranchInfo(wipId) {
 				if (branchCache[wipId]) return branchCache[wipId];
@@ -310,7 +295,6 @@ export default {
 						};
 					}
 				} else if (kids.length > 1) {
-					// TITIK GABUNG — pilih anak dgn kode ISP asal terkecil
 					let winner = null;
 					kids.forEach(function(k) {
 						const kInfo = getBranchInfo(k);
@@ -337,10 +321,8 @@ export default {
 				return result;
 			}
 
-			chain.forEach(function(item) { getBranchInfo(item.wip.id); }); // pastikan semua ke-cache
+			chain.forEach(function(item) { getBranchInfo(item.wip.id); }); 
 
-			// Total angka tertinggi per identitas (dikelompokkan per originCode, bukan per nama —
-			// supaya kalau ada 2 part berbeda cabang yang kebetulan nama sama, tidak ketuker)
 			const maxSeqByOrigin = {};
 			chain.forEach(function(item) {
 				const info = branchCache[item.wip.id];
@@ -349,7 +331,6 @@ export default {
 				}
 			});
 
-			// ── Pass 3: bangun node (kode dari Pass 1, nama dari Pass 2) ──
 			chain.forEach(function(item) {
 				const wip = item.wip;
 				const inputs = typeof wip.inputs === 'string' ? JSON.parse(wip.inputs) : wip.inputs;
@@ -546,7 +527,6 @@ export default {
 				const inputs = typeof wip.inputs === 'string' ? JSON.parse(wip.inputs) : wip.inputs;
 				const partInputs = inputs.filter(function(i) { return i.kind === 'PART'; });
 
-				// ── NODE CODE / TYPE ──────────────────────────────────  (TIDAK BERUBAH)
 				let nodeCode, nodeType, isTreatmentNode;
 				if (wip.wip_type === 'SB') {
 					nodeCode = 'SB-' + artikel;
@@ -604,7 +584,7 @@ export default {
 						LevelingJS.addEdge(nodeId, wipNodeMap[parentWip.id]);
 					}
 				}
-				
+
 				if (nodeType === 'stockfitting') {
 					let csId = null;
 					partInputs.forEach(function(input) {
@@ -658,8 +638,6 @@ export default {
 			}
 		});
 	},
-
-	// ─── GENERATE ──────────────────────────────────────────
 
 	async onGenerate() {
 		LevelingJS.resetState();

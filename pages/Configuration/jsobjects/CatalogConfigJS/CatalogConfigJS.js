@@ -18,8 +18,6 @@ export default {
 
 	ANCHORS: ['FG', 'S', 'SU', 'FS', 'SP'],
 
-	// key + val eksplisit — JANGAN turunkan dari `value` lewat split('_'),
-	// karena nama kunci sendiri mengandung underscore (cos_type, in_wip).
 	CONDITIONS: [
 		{ label: 'Tanpa kondisi (default)', value: 'default',          key: null,       val: null },
 		{ label: 'cos_type = CENTRAL',      value: 'cos_type_CENTRAL', key: 'cos_type', val: 'CENTRAL' },
@@ -49,8 +47,6 @@ export default {
 		INLINE_GROUP:  'Grup Cutting Inline',
 		FEEDING_GROUP: 'Grup Feeding / Bootie'
 	},
-
-	// ─────────────────────────────── helpers ───────────────────────────────
 
 	isGroupBehavior: function (levelingBehavior) {
 		return CatalogConfigJS.GROUP_BEHAVIORS.indexOf(levelingBehavior) !== -1;
@@ -132,8 +128,6 @@ export default {
 		});
 	},
 
-	// ─────────────────────────── page lifecycle ────────────────────────────
-
 	onPageLoad: async function () {
 		const u = appsmith.store.currentUser;
 		const SESSION_HOURS = 12;
@@ -143,17 +137,15 @@ export default {
 			navigateTo('Login');
 			return;
 		}
-		if (!['SPECSHEET', 'ADMIN'].includes(u.role)) {
+		if (!['SPECSHEET_ADMIN', 'SPECSHEET_STAFF', 'ADMIN'].includes(u.role)) {
 			showAlert("Anda tidak punya akses ke halaman ini", "error");
 			navigateTo('Summary Page');
 			return;
 		}
 
 		await getCatalogAll.run();
-		await getInhouseMatcherList.run();   // dipakai kolom "Deteksi ZSF" di tab Supplier
+		await getInhouseMatcherList.run();
 	},
-
-	// ───────────────────────────── parent rules ────────────────────────────
 
 	buildParentRulesJSON: function () {
 		return CatalogConfigJS._pendingRules.map(function (rule) {
@@ -194,7 +186,6 @@ export default {
 		});
 	},
 
-	// tabel di modal — nilai mentah; kolom Select yang menampilkan label
 	getPendingRulesDisplay: function () {
 		return CatalogConfigJS._pendingRules.map(function (rule) {
 			return {
@@ -205,7 +196,6 @@ export default {
 		});
 	},
 
-	// tombol Save di baris (inline edit)
 	onSaveRule: function (row) {
 		if (!row) return;
 		CatalogConfigJS._pendingRules = CatalogConfigJS._pendingRules.map(function (r) {
@@ -217,7 +207,6 @@ export default {
 		storeValue('catalogRulesVersion', (appsmith.store.catalogRulesVersion || 0) + 1);
 	},
 
-	// "Add new row" → Save
 	onAddRuleRow: function (newRow) {
 		const ids = CatalogConfigJS._pendingRules.map(function (r) { return r.id; });
 		const nextId = ids.length === 0 ? 0 : Math.max.apply(null, ids) + 1;
@@ -235,8 +224,6 @@ export default {
 		});
 		storeValue('catalogRulesVersion', (appsmith.store.catalogRulesVersion || 0) + 1);
 	},
-
-	// ───────────────────────────── modal open ──────────────────────────────
 
 	onOpenAddModal: async function () {
 		CatalogConfigJS._editMode = false;
@@ -290,8 +277,6 @@ export default {
 		await storeValue('catalogRulesVersion', (appsmith.store.catalogRulesVersion || 0) + 1);
 		showModal('mdl_catalogEdit');
 	},
-
-	// ────────────────────────────── save / toggle ──────────────────────────
 
 	validate: function (processName, division, wipBehavior, levelingBehavior, levelingCode, defaultLeadTime) {
 		if (!processName || processName.trim() === '') {

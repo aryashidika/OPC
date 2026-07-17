@@ -1,1 +1,1 @@
-SELECT * FROM upper_model;
+UPDATE app_users SET role = 'SPECSHEET_ADMIN' WHERE username = 'specsheet';  -- atau 'SPECSHEET_STAFF'
