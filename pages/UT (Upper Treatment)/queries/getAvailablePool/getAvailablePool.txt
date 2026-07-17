@@ -1,0 +1,57 @@
+SELECT * FROM (
+	SELECT 
+	'PART' AS kind,
+	p.id AS ref,
+	p.part_id AS code,
+	p.part_id AS part_number,
+	p.part_name AS part_name,
+	p.part_id || ' · ' || p.part_name || ' (Part)' AS label,
+	CASE WHEN wi_edit.id IS NOT NULL THEN true ELSE false END AS is_current_wip
+	FROM upper_part p
+	LEFT JOIN upper_wip_input wi_edit 
+	ON wi_edit.input_kind = 'PART' 
+	AND wi_edit.input_ref = p.id 
+	AND wi_edit.wip_id = NULLIF({{appsmith.store.editWipId}}, 0)
+	WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+	AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+	AND p.part_id NOT LIKE '%-%'
+	AND (
+		NOT EXISTS (
+			SELECT 1 FROM upper_wip_input wi
+			WHERE wi.input_kind = 'PART' 
+			AND wi.input_ref = p.id
+			AND wi.wip_id IS DISTINCT FROM NULLIF({{appsmith.store.editWipId}}, 0)
+		)
+		OR wi_edit.id IS NOT NULL
+	)
+	UNION ALL
+	SELECT 
+	'WIP' AS kind,
+	w.id AS ref,
+	CAST(w.id AS TEXT) AS code,
+	'#' || CAST(w.id AS TEXT) AS part_number,
+	w.label AS part_name,
+	'#' || CAST(w.id AS TEXT) || ' · ' || w.label || ' (Package)' AS label,
+	CASE WHEN wi_edit.id IS NOT NULL THEN true ELSE false END AS is_current_wip
+	FROM upper_wip w
+	LEFT JOIN upper_wip_input wi_edit
+	ON wi_edit.input_kind = 'WIP'
+	AND wi_edit.input_ref = w.id
+	AND wi_edit.wip_id = NULLIF({{appsmith.store.editWipId}}, 0)
+	WHERE w.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+	AND w.id IS DISTINCT FROM NULLIF({{appsmith.store.editWipId}}, 0)
+	AND (
+		NOT EXISTS (
+			SELECT 1 FROM upper_wip_input wi
+			WHERE wi.input_kind = 'WIP'
+			AND wi.input_ref = w.id
+			AND wi.wip_id IS DISTINCT FROM NULLIF({{appsmith.store.editWipId}}, 0)
+		)
+		OR wi_edit.id IS NOT NULL
+	)
+) AS pool
+ORDER BY 
+  is_current_wip DESC,
+  kind,
+  SPLIT_PART(code, '-', 1)::int,
+  CASE WHEN code LIKE '%-%' THEN SPLIT_PART(code, '-', 2)::int ELSE 0 END;

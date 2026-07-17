@@ -1,0 +1,13 @@
+INSERT INTO upper_process_catalog 
+  (process_name, division, wip_behavior, leveling_behavior, leveling_code,
+   default_lead_time_days, parent_rules, is_active)
+VALUES (
+  '{{this.params.processName}}',
+  '{{this.params.division}}'::division_enum,
+  '{{this.params.wipBehavior}}'::wip_behavior_enum,
+  '{{this.params.levelingBehavior}}',
+  '{{this.params.levelingCode}}',
+  NULLIF('{{this.params.defaultLeadTime}}', '')::int,
+  '{{this.params.parentRules}}'::JSONB,
+  {{this.params.isActive}}
+);

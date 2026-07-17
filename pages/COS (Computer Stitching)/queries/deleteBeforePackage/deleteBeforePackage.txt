@@ -1,0 +1,7 @@
+UPDATE upper_part_process
+SET cos_before_package_id = NULL
+WHERE cos_before_package_id = {{this.params.packageId}};
+
+DELETE FROM cos_before_package
+WHERE id = {{this.params.packageId}}
+  AND session_id = {{this.params.sessionId}};

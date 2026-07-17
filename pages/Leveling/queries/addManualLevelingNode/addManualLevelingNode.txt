@@ -1,0 +1,21 @@
+INSERT INTO leveling_node_prb
+  (session_id, level, node_code, node_type, node_name, part_id, parent_code, is_manual, lead_time_days, dbref_type, dbref_id)
+VALUES (
+  (SELECT id FROM v_current_session WHERE article_id = {{this.params.articleId}}),
+  COALESCE(
+    (SELECT level + 1 FROM leveling_node_prb
+     WHERE session_id = (SELECT id FROM v_current_session WHERE article_id = {{this.params.articleId}})
+     AND node_code = {{this.params.parentCode}}),
+    2
+  ),
+  {{this.params.nodeCode}},
+  {{this.params.nodeType}},
+  {{this.params.nodeName}},
+  {{this.params.partId}},
+  {{this.params.parentCode}},
+  TRUE,
+  NULL,
+  NULL,
+  NULL
+)
+RETURNING id;

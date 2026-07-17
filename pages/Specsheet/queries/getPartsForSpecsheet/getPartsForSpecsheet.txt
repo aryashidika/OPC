@@ -1,0 +1,33 @@
+SELECT
+  p.part_id,
+  p.part_name,
+  p.material_desc,
+  pp.laminating_machine,
+  pp.cutting_process_name,
+  pp.cos_type,
+  (
+    SELECT STRING_AGG(w.label, ' → ' ORDER BY w.id)
+    FROM upper_wip_input wi
+    JOIN upper_wip w ON w.id = wi.wip_id
+    WHERE wi.input_kind = 'PART'
+    AND wi.input_ref = p.id
+    AND w.session_id = p.session_id
+  ) AS treatment_wip,
+  p.is_sockliner,
+  CASE
+    WHEN pp.cos_type = 'LINE'    AND pp.cutting_type = 'NORMAL' THEN TRUE
+    WHEN pp.cos_type = 'CENTRAL' AND pp.cutting_type = 'INLINE' THEN TRUE
+    ELSE FALSE
+  END AS has_conflict,
+  cbp.package_no AS before_package_no,
+  cbp.cos_type   AS before_cos_type
+FROM upper_part p
+LEFT JOIN upper_part_process pp
+  ON pp.part_id = p.part_id AND pp.session_id = p.session_id
+LEFT JOIN cos_before_package cbp
+  ON cbp.id = pp.cos_before_package_id
+  AND cbp.session_id = p.session_id
+WHERE p.session_id = {{SpecsheetJS.getActiveSessionId()}}
+AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+AND p.part_id NOT LIKE '%-%'
+ORDER BY p.part_id::int;

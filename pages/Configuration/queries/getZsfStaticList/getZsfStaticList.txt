@@ -1,0 +1,4 @@
+SELECT id, process_type, prefix, matgroup, valclass, mrp,
+       grt, iht, pdt, purgroup, sloc, specprocur, proctype, lotsizing, description
+FROM zsf_matgroup
+ORDER BY process_type;

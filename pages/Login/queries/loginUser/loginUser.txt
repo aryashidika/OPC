@@ -1,0 +1,5 @@
+SELECT id, username, display_name, role
+FROM app_users
+WHERE username = {{this.params.username}}
+  AND dummy_password = {{this.params.password}}
+  AND is_active = TRUE;

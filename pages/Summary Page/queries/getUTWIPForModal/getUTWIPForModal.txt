@@ -1,0 +1,15 @@
+SELECT
+  w.id,
+  w.label,
+  w.lead_time_days,
+  sm.name AS supplier_name,
+  COALESCE(
+    json_agg(json_build_object('kind', wi.input_kind, 'ref', wi.input_ref))
+      FILTER (WHERE wi.id IS NOT NULL),
+    '[]'
+  ) AS inputs
+FROM upper_wip w
+LEFT JOIN upper_wip_input wi ON wi.wip_id = w.id
+LEFT JOIN supplier_master sm ON sm.id = w.supplier_id
+WHERE w.session_id = {{this.params.sessionId}}::int
+GROUP BY w.id, w.label, w.lead_time_days, sm.name;

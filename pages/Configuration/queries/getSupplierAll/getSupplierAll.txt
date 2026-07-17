@@ -1,0 +1,12 @@
+SELECT
+  sm.id,
+  sm.name,
+  sm.is_active,
+  COALESCE(
+    string_agg(sc.category::text, ', ' ORDER BY sc.category),
+    ''
+  ) AS categories
+FROM supplier_master sm
+LEFT JOIN supplier_category sc ON sc.supplier_id = sm.id
+GROUP BY sm.id, sm.name, sm.is_active
+ORDER BY sm.name;

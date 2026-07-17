@@ -1,0 +1,9 @@
+UPDATE upper_part p
+SET
+  part_name     = COALESCE(NULLIF(v.value->>'part_name', ''), p.part_name),
+  material_desc = COALESCE(NULLIF(v.value->>'material_desc', ''), p.material_desc),
+  supplier_name = COALESCE(NULLIF(v.value->>'supplier_name', ''), p.supplier_name),
+  section       = COALESCE(v.value->>'section', p.section)
+FROM json_array_elements('{{this.params.bomJson}}'::json) AS v
+WHERE p.session_id = {{this.params.sessionId}}::int
+  AND p.part_id = v.value->>'part_id';

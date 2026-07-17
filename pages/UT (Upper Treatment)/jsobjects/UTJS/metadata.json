@@ -1,0 +1,24 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_9a619b02-e031-4cd7-ba86-84c9f9154a4b",
+  "id": "UT (Upper Treatment)_UTJS",
+  "unpublishedCollection": {
+    "name": "UTJS",
+    "pageId": "UT (Upper Treatment)",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_editWipId",
+        "value": "null"
+      },
+      {
+        "name": "_pendingAdd",
+        "value": "[]"
+      },
+      {
+        "name": "_pendingRemove",
+        "value": "[]"
+      }
+    ]
+  }
+}

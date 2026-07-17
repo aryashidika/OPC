@@ -1,0 +1,1 @@
+SELECT module, config_type, pattern FROM inhouse_matcher;

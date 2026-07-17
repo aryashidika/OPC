@@ -1,0 +1,9 @@
+SELECT 
+  part_id,
+  part_name,
+  mlm_id,
+  material_desc,
+  supplier_name,
+  prod_uom
+FROM dummy_bom
+WHERE article_id = {{this.params.articleId}};

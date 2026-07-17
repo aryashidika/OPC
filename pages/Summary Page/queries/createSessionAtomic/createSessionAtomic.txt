@@ -1,0 +1,20 @@
+WITH flipped AS (
+	UPDATE upper_article_session
+	SET is_latest = FALSE
+	WHERE id = NULLIF('{{this.params.parentSessionId}}', '')::int
+	RETURNING id
+)
+INSERT INTO upper_article_session
+  (article_id, revision_no, status, parent_session_id, model_number, season, is_latest)
+SELECT
+  '{{this.params.articleId}}',
+  COALESCE(
+		(SELECT MAX(revision_no) + 1 FROM upper_article_session WHERE article_id = '{{this.params.articleId}}'),
+		1
+	),
+  'DRAFT',
+  NULLIF('{{this.params.parentSessionId}}', '')::int,
+  NULLIF('{{this.params.modelNumber}}', 'null'),
+  NULLIF('{{this.params.season}}', 'null'),
+  TRUE
+RETURNING id, article_id, revision_no, status, parent_session_id, model_number;

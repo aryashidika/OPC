@@ -1,0 +1,104 @@
+SELECT
+  attribute,
+  old_value,
+  new_value,
+  is_changed
+FROM (
+  SELECT
+    'Cutting' AS attribute,
+    COALESCE(old_pp.cutting_process_name, old_pp.cutting_type::TEXT, '-') AS old_value,
+    COALESCE(new_pp.cutting_process_name, new_pp.cutting_type::TEXT, '-') AS new_value,
+    CASE 
+      WHEN COALESCE(old_pp.cutting_process_name, old_pp.cutting_type::TEXT, '-') != 
+           COALESCE(new_pp.cutting_process_name, new_pp.cutting_type::TEXT, '-')
+      THEN true ELSE false 
+    END AS is_changed,
+    old_pp.part_id
+  FROM upper_part op
+  LEFT JOIN upper_part_process old_pp 
+    ON old_pp.part_id = op.part_id 
+    AND old_pp.session_id = {{this.params.oldSessionId}}
+  LEFT JOIN upper_part_process new_pp 
+    ON new_pp.part_id = op.part_id 
+    AND new_pp.session_id = {{this.params.newSessionId}}
+  WHERE op.session_id = {{this.params.oldSessionId}}
+    AND op.part_id = '{{this.params.partId}}'
+
+  UNION ALL
+
+  SELECT
+    'COS Type' AS attribute,
+    COALESCE(old_pp.cos_type::TEXT, '-') AS old_value,
+    COALESCE(new_pp.cos_type::TEXT, '-') AS new_value,
+    CASE 
+      WHEN COALESCE(old_pp.cos_type::TEXT, '-') != COALESCE(new_pp.cos_type::TEXT, '-')
+      THEN true ELSE false 
+    END AS is_changed,
+    old_pp.part_id
+  FROM upper_part op
+  LEFT JOIN upper_part_process old_pp 
+    ON old_pp.part_id = op.part_id 
+    AND old_pp.session_id = {{this.params.oldSessionId}}
+  LEFT JOIN upper_part_process new_pp 
+    ON new_pp.part_id = op.part_id 
+    AND new_pp.session_id = {{this.params.newSessionId}}
+  WHERE op.session_id = {{this.params.oldSessionId}}
+    AND op.part_id = '{{this.params.partId}}'
+
+  UNION ALL
+
+  SELECT
+    'Laminating' AS attribute,
+    COALESCE(old_pp.laminating_machine, '-') AS old_value,
+    COALESCE(new_pp.laminating_machine, '-') AS new_value,
+    CASE 
+      WHEN COALESCE(old_pp.laminating_machine, '-') != COALESCE(new_pp.laminating_machine, '-')
+      THEN true ELSE false 
+    END AS is_changed,
+    old_pp.part_id
+  FROM upper_part op
+  LEFT JOIN upper_part_process old_pp 
+    ON old_pp.part_id = op.part_id 
+    AND old_pp.session_id = {{this.params.oldSessionId}}
+  LEFT JOIN upper_part_process new_pp 
+    ON new_pp.part_id = op.part_id 
+    AND new_pp.session_id = {{this.params.newSessionId}}
+  WHERE op.session_id = {{this.params.oldSessionId}}
+    AND op.part_id = '{{this.params.partId}}'
+
+  UNION ALL
+
+  SELECT
+    'WIP Treatment' AS attribute,
+    COALESCE(ow_sub.label, '-') AS old_value,
+    COALESCE(nw_sub.label, '-') AS new_value,
+    CASE 
+      WHEN COALESCE(ow_sub.label, '-') != COALESCE(nw_sub.label, '-')
+      THEN true ELSE false 
+    END AS is_changed,
+    op.part_id
+  FROM upper_part op
+  LEFT JOIN (
+    SELECT DISTINCT ON (p.part_id) p.part_id, w.label
+    FROM upper_wip_input wi
+    JOIN upper_wip w ON w.id = wi.wip_id 
+      AND w.session_id = {{this.params.oldSessionId}}
+    JOIN upper_part p ON p.id = wi.input_ref
+      AND p.session_id = {{this.params.oldSessionId}}
+    WHERE wi.input_kind = 'PART'
+    ORDER BY p.part_id, w.id DESC
+  ) ow_sub ON ow_sub.part_id = op.part_id
+  LEFT JOIN (
+    SELECT DISTINCT ON (p.part_id) p.part_id, w.label
+    FROM upper_wip_input wi
+    JOIN upper_wip w ON w.id = wi.wip_id 
+      AND w.session_id = {{this.params.newSessionId}}
+    JOIN upper_part p ON p.id = wi.input_ref
+      AND p.session_id = {{this.params.oldSessionId}}
+    WHERE wi.input_kind = 'PART'
+    ORDER BY p.part_id, w.id DESC
+  ) nw_sub ON nw_sub.part_id = op.part_id
+  WHERE op.session_id = {{this.params.oldSessionId}}
+    AND op.part_id = '{{this.params.partId}}'
+) AS delta
+ORDER BY attribute;

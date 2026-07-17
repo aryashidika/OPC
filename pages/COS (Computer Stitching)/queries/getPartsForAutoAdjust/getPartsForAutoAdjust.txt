@@ -1,0 +1,17 @@
+SELECT 
+  p.id AS part_db_id,
+  p.part_id,
+  p.part_name,
+  pp.cutting_type,
+  pp.cutting_type_source,
+  pp.cos_type,
+  cp.package_no
+FROM upper_part p
+JOIN upper_part_process pp 
+  ON pp.session_id = p.session_id AND pp.part_id = p.part_id
+LEFT JOIN cos_package cp
+  ON cp.id = pp.cos_package_id
+WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+  AND pp.cos_type IS NOT NULL
+  AND pp.cutting_type = 'INLINE'
+  AND pp.cos_type = 'CENTRAL';

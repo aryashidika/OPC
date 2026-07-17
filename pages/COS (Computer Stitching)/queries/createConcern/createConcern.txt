@@ -1,0 +1,18 @@
+INSERT INTO upper_concern
+  (session_id, target_division, raised_by, reason,
+   item_ref, concern_source, concern_metadata)
+SELECT
+  {{this.params.sessionId}},
+  '{{this.params.targetDivision}}'::division_enum,
+  '{{this.params.raisedBy}}',
+  '{{this.params.reason}}',
+  '{{this.params.itemRef}}',
+  '{{this.params.concernSource}}',
+  '{{this.params.concernMetadata}}'::JSONB
+WHERE NOT EXISTS (
+  SELECT 1 FROM upper_concern
+  WHERE session_id = {{this.params.sessionId}}
+    AND target_division = '{{this.params.targetDivision}}'::division_enum
+    AND item_ref = '{{this.params.itemRef}}'
+    AND is_closed = false
+);

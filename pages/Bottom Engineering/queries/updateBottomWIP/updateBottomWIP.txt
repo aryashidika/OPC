@@ -1,0 +1,8 @@
+UPDATE bottom_wip
+SET
+  label        = '{{this.params.label}}',
+  supplier_id  = NULLIF(NULLIF('{{this.params.supplierId}}', 'NULL'), '')::INT,
+  lead_time_days = CASE WHEN '{{this.params.leadTimeDays}}' = '' THEN NULL ELSE '{{this.params.leadTimeDays}}'::int END,
+  copied_from_session_id = NULL
+WHERE id         = {{this.params.wipId}}
+  AND session_id = {{this.params.sessionId}};

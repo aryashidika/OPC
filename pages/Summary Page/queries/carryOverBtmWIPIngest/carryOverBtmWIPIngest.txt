@@ -1,0 +1,15 @@
+WITH inserted_wips AS (
+  INSERT INTO bottom_wip (session_id, wip_type, label, supplier_id, lead_time_days, created_by)
+  SELECT
+    {{this.params.newSessionId}}::INT,
+    wip_type, label, supplier_id, lead_time_days, created_by
+  FROM bottom_wip
+  WHERE session_id = {{this.params.oldSessionId}}::INT
+  RETURNING id, label, wip_type
+)
+SELECT iw.id AS new_wip_id, ow.id AS old_wip_id
+FROM inserted_wips iw
+JOIN bottom_wip ow
+  ON ow.label = iw.label
+  AND ow.wip_type = iw.wip_type
+  AND ow.session_id = {{this.params.oldSessionId}}::INT;

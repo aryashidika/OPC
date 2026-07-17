@@ -1,0 +1,4 @@
+UPDATE cos_before_package
+SET lead_time_days = CASE WHEN '{{this.params.leadTimeDays}}' = '' THEN NULL ELSE '{{this.params.leadTimeDays}}'::int END
+WHERE id = {{this.params.packageId}}
+  AND session_id = {{this.params.sessionId}};

@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_86f32679-72dc-4bb2-ae5a-7df630ef52a3",
+  "id": "Commerz (Cutting)_CommerzJS",
+  "unpublishedCollection": {
+    "name": "CommerzJS",
+    "pageId": "Commerz (Cutting)",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_pendingChanges",
+        "value": "{}"
+      }
+    ]
+  }
+}

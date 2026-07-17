@@ -1,0 +1,95 @@
+DO $$
+DECLARE
+  r RECORD;
+BEGIN
+  FOR r IN
+    SELECT division, string_agg(DISTINCT part_id || ' (' || delta_flag || ')', ', ' ORDER BY part_id || ' (' || delta_flag || ')') AS parts_desc
+    FROM (
+      SELECT 'COMMERZ' AS division, p.part_id, p.delta_flag
+      FROM upper_part_process pp
+      JOIN upper_part p ON p.part_id = pp.part_id AND p.session_id = pp.session_id
+      WHERE pp.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+        AND pp.cutting_type IS NOT NULL
+      UNION ALL
+      SELECT 'COS', p.part_id, p.delta_flag
+      FROM upper_part_process pp
+      JOIN upper_part p ON p.part_id = pp.part_id AND p.session_id = pp.session_id
+      WHERE pp.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+        AND pp.cos_type IS NOT NULL
+      UNION ALL
+      SELECT 'BLACKBOX', p.part_id, p.delta_flag
+      FROM upper_part_process pp
+      JOIN upper_part p ON p.part_id = pp.part_id AND p.session_id = pp.session_id
+      WHERE pp.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+        AND pp.laminating_machine IS NOT NULL
+      UNION ALL
+      SELECT 'UPPER_TOOLING', p.part_id, p.delta_flag
+      FROM upper_wip_input wi
+      JOIN upper_part p ON p.id = wi.input_ref AND wi.input_kind = 'PART'
+      JOIN upper_wip w ON w.id = wi.wip_id
+      WHERE w.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+      UNION ALL
+      SELECT 'BOTTOM_ENGINEERING', p.part_id, p.delta_flag
+      FROM bottom_wip_input wi
+      JOIN upper_part p ON p.id = wi.input_ref AND wi.input_kind = 'PART'
+      JOIN bottom_wip w ON w.id = wi.wip_id
+      WHERE w.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+    ) affected
+    GROUP BY division
+  LOOP
+    -- Cabang SUBMITTED: flip ke REWORK + concern (perilaku lama, tidak berubah)
+    IF EXISTS (
+      SELECT 1 FROM upper_division_status
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = r.division::division_enum
+        AND state = 'SUBMITTED'
+    ) THEN
+      INSERT INTO upper_concern (session_id, target_division, raised_by, reason, item_ref, concern_source)
+      VALUES (
+        {{this.params.sessionId}}::int,
+        r.division::division_enum,
+        'SYSTEM',
+        'BOM diperbarui — part terdampak: ' || r.parts_desc,
+        '',
+        'SYSTEM'
+      );
+      UPDATE upper_division_status
+      SET state = 'REWORK'
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = r.division::division_enum;
+    -- Cabang IN_WORK (BARU): concern saja, state TIDAK di-flip
+    ELSIF EXISTS (
+      SELECT 1 FROM upper_division_status
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = r.division::division_enum
+        AND state = 'IN_WORK'
+    ) THEN
+      INSERT INTO upper_concern (session_id, target_division, raised_by, reason, item_ref, concern_source)
+      VALUES (
+        {{this.params.sessionId}}::int,
+        r.division::division_enum,
+        'SYSTEM',
+        'BOM diperbarui — part terdampak: ' || r.parts_desc,
+        '',
+        'SYSTEM'
+      );
+      -- state sengaja tidak diubah, tetap IN_WORK
+    END IF;
+
+    -- BARU: khusus COS — reset packages_ready_at kalau sedang di fase ME
+    -- (berlaku baik cabang SUBMITTED maupun IN_WORK di atas, makanya ditaruh di luar IF/ELSIF)
+    IF r.division = 'COS' THEN
+      UPDATE upper_division_status
+      SET packages_ready_at = NULL
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = 'COS'::division_enum
+        AND packages_ready_at IS NOT NULL;
+    END IF;
+    -- NOT_STARTED: tidak masuk kedua cabang di atas, tidak terjadi apa-apa (perilaku lama)
+  END LOOP;
+END $$;

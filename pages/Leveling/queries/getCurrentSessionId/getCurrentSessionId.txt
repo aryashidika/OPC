@@ -1,0 +1,1 @@
+SELECT id FROM v_current_session WHERE article_id = {{this.params.articleId}};

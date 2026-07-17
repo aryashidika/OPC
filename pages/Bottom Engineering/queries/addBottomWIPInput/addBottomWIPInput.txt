@@ -1,0 +1,6 @@
+INSERT INTO bottom_wip_input (wip_id, input_kind, input_ref)
+VALUES (
+  {{this.params.wipId}},
+  '{{this.params.inputKind}}',
+  {{this.params.inputRef}}
+);

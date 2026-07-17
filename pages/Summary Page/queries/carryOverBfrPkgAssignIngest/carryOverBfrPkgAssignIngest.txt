@@ -1,0 +1,9 @@
+UPDATE upper_part_process
+SET cos_before_package_id = {{this.params.newPackageId}}
+WHERE session_id = {{this.params.newSessionId}}
+  AND part_id IN (
+    SELECT pp.part_id
+    FROM upper_part_process pp
+    WHERE pp.session_id = {{this.params.oldSessionId}}
+      AND pp.cos_before_package_id = {{this.params.oldPackageId}}
+  );

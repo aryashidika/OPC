@@ -1,0 +1,13 @@
+SELECT
+  id,
+  part_id,
+  part_name,
+  material_desc,
+  is_sockliner,
+  is_bought_ready
+FROM upper_part
+WHERE session_id = {{this.params.sessionId}}::int
+  AND (delta_flag IS NULL OR delta_flag != 'REMOVED')
+ORDER BY
+  SPLIT_PART(part_id, '-', 1)::int,
+  CASE WHEN part_id LIKE '%-%' THEN SPLIT_PART(part_id, '-', 2)::int ELSE 0 END;

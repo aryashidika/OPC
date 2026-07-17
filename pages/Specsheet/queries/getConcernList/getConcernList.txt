@@ -1,0 +1,14 @@
+SELECT 
+  c.id,
+  c.target_division,
+  c.raised_by,
+  c.reason,
+  c.item_ref,
+  c.is_closed,
+  c.concern_source,
+  TO_CHAR(c.created_at AT TIME ZONE 'Asia/Jakarta', 'DD Mon YYYY HH24:MI') AS created_at,
+  TO_CHAR(c.closed_at AT TIME ZONE 'Asia/Jakarta', 'DD Mon YYYY HH24:MI') AS closed_at,
+  c.closed_by
+FROM upper_concern c
+WHERE c.session_id = {{SpecsheetJS.getActiveSessionId()}}
+ORDER BY c.created_at DESC;

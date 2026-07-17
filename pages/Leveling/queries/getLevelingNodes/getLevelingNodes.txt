@@ -1,0 +1,9 @@
+SELECT
+  n.*,
+  s.name AS supplier_name
+FROM leveling_node_prb n
+LEFT JOIN bottom_wip bw ON n.dbref_type = 'bottom_wip' AND bw.id = n.dbref_id
+LEFT JOIN upper_wip  uw ON n.dbref_type = 'upper_wip'  AND uw.id = n.dbref_id
+LEFT JOIN supplier_master s ON s.id = COALESCE(bw.supplier_id, uw.supplier_id)
+WHERE n.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+ORDER BY n.level, n.id;

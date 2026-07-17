@@ -1,0 +1,30 @@
+SELECT
+  (
+    SELECT COUNT(*) FROM cos_package p
+    WHERE p.session_id = {{this.params.sessionId}}
+      AND (p.cos_type IS NULL OR p.lead_time_days IS NULL)
+      AND EXISTS (SELECT 1 FROM upper_part_process pp WHERE pp.cos_package_id = p.id)
+  ) AS unallocated_package_count,
+  (
+    SELECT COUNT(*) FROM cos_before_package p
+    WHERE p.session_id = {{this.params.sessionId}}
+      AND (p.cos_type IS NULL OR p.lead_time_days IS NULL)
+      AND EXISTS (SELECT 1 FROM upper_part_process pp WHERE pp.cos_before_package_id = p.id)
+  ) AS unallocated_before_package_count,
+  (
+    (
+      SELECT COUNT(*) FROM upper_part_process pp
+      JOIN cos_package cp ON cp.id = pp.cos_package_id
+      WHERE pp.session_id = {{this.params.sessionId}}
+        AND pp.cos_type IS NULL
+        AND cp.cos_type IS NOT NULL AND cp.lead_time_days IS NOT NULL
+    )
+    +
+    (
+      SELECT COUNT(*) FROM upper_part_process pp
+      JOIN cos_before_package cbp ON cbp.id = pp.cos_before_package_id
+      WHERE pp.session_id = {{this.params.sessionId}}
+        AND pp.cos_type IS NULL
+        AND cbp.cos_type IS NOT NULL AND cbp.lead_time_days IS NOT NULL
+    )
+  ) AS unallocated_part_count;

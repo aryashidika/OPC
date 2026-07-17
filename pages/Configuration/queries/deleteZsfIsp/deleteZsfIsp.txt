@@ -1,0 +1,1 @@
+DELETE FROM zsf_matgroup_isp WHERE id = {{tblZsfIsp.triggeredRow.id}};

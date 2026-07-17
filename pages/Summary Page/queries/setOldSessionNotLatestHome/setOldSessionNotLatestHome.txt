@@ -1,0 +1,3 @@
+UPDATE upper_article_session
+SET is_latest = FALSE
+WHERE id = {{this.params.sessionId}};

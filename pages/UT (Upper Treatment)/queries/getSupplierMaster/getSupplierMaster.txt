@@ -1,0 +1,4 @@
+SELECT sm.id, sm.name FROM supplier_master sm
+JOIN supplier_category sc ON sc.supplier_id = sm.id AND sc.category = 'UPPER'
+WHERE sm.is_active = TRUE
+ORDER BY sm.name;

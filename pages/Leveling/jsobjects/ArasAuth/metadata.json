@@ -1,0 +1,44 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_35acd5f3-5ce5-4869-b1fd-365fafaa88dc",
+  "id": "Leveling_ArasAuth",
+  "unpublishedCollection": {
+    "name": "ArasAuth",
+    "pageId": "Leveling",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "ARAS_GRANT_TYPE",
+        "value": "\"password\""
+      },
+      {
+        "name": "ARAS_CLIENT_ID",
+        "value": "\"AppSmith\""
+      },
+      {
+        "name": "ARAS_SCOPE",
+        "value": "\"openid Innovator offline_access\""
+      },
+      {
+        "name": "ARAS_DATABASE",
+        "value": "\"InnovatorSolutions\""
+      },
+      {
+        "name": "ARAS_USERNAME",
+        "value": "\"plmapi\""
+      },
+      {
+        "name": "ARAS_PASSWORD",
+        "value": "\"bFiFWgwKwAqolPxy\""
+      },
+      {
+        "name": "BEARER_TOKEN",
+        "value": "`Bearer ${appsmith.store['aras_access_token']}`"
+      },
+      {
+        "name": "IS_AUTHENTICATED",
+        "value": "Date.now() < appsmith.store['aras_token_expires_at']"
+      }
+    ]
+  }
+}

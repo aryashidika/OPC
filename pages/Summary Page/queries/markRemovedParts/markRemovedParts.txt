@@ -1,0 +1,8 @@
+UPDATE upper_part
+SET delta_flag = 'REMOVED'
+WHERE session_id = {{this.params.sessionId}}::int
+  AND part_id NOT IN (
+    SELECT value->>'part_id'
+    FROM json_array_elements('{{this.params.bomJson}}'::json)
+  )
+  AND (delta_flag IS NULL OR delta_flag = 'NEW');

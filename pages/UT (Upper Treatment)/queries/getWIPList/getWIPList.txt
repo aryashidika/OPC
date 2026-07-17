@@ -1,0 +1,32 @@
+SELECT 
+  w.id, w.label, w.supplier_id, w.lead_time_days, s.name AS supplier_name,
+  w.copied_from_session_id, src.article_id AS copied_from_article_id,
+  COALESCE(
+    json_agg(
+      json_build_object(
+        'kind', wi.input_kind, 'ref', wi.input_ref,
+        'label', CASE 
+          WHEN wi.input_kind = 'PART' THEN p.part_name
+          WHEN wi.input_kind = 'WIP' THEN wip2.label
+          ELSE 'Unknown'
+        END
+      )
+    ) FILTER (
+      WHERE wi.id IS NOT NULL
+        AND (wi.input_kind != 'PART' OR p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+    ),
+    '[]'
+  ) AS inputs
+FROM upper_wip w
+LEFT JOIN upper_wip_input wi ON wi.wip_id = w.id
+LEFT JOIN upper_part p ON p.id = wi.input_ref AND wi.input_kind = 'PART'
+LEFT JOIN upper_wip wip2 ON wip2.id = wi.input_ref AND wi.input_kind = 'WIP'
+LEFT JOIN supplier_master s ON s.id = w.supplier_id
+LEFT JOIN upper_article_session src ON src.id = w.copied_from_session_id
+WHERE w.session_id = (
+  SELECT id FROM v_current_session
+  WHERE article_id = {{sel_article.selectedOptionValue}}
+  LIMIT 1
+)
+GROUP BY w.id, w.label, w.supplier_id, w.lead_time_days, s.name, w.copied_from_session_id, src.article_id
+ORDER BY w.id;

@@ -1,0 +1,82 @@
+DO $$
+BEGIN
+	CREATE TEMP TABLE IF NOT EXISTS _affected_divisions (division TEXT) ON COMMIT DROP;
+	DELETE FROM _affected_divisions;
+
+	IF EXISTS (
+		SELECT 1 FROM json_array_elements('{{this.params.deltaJson}}'::json) AS d
+		WHERE d->>'delta_status' = 'NEW'
+	) THEN
+		INSERT INTO _affected_divisions (division)
+		VALUES ('BLACKBOX'), ('COMMERZ'), ('COS'), ('UPPER_TOOLING'), ('BOTTOM_ENGINEERING');
+	ELSE
+		INSERT INTO _affected_divisions (division)
+		SELECT DISTINCT 'COMMERZ'
+		FROM upper_part_process pp
+		WHERE pp.session_id = {{this.params.oldSessionId}}::int
+			AND pp.part_id IN (
+				SELECT d->>'part_id' FROM json_array_elements('{{this.params.deltaJson}}'::json) d
+				WHERE d->>'delta_status' = 'REMOVED'
+			)
+			AND pp.cutting_type IS NOT NULL
+
+		UNION
+
+		SELECT DISTINCT 'COS'
+		FROM upper_part_process pp
+		WHERE pp.session_id = {{this.params.oldSessionId}}::int
+			AND pp.part_id IN (
+				SELECT d->>'part_id' FROM json_array_elements('{{this.params.deltaJson}}'::json) d
+				WHERE d->>'delta_status' = 'REMOVED'
+			)
+			AND pp.cos_type IS NOT NULL
+
+		UNION
+
+		SELECT DISTINCT 'BLACKBOX'
+		FROM upper_part_process pp
+		WHERE pp.session_id = {{this.params.oldSessionId}}::int
+			AND pp.part_id IN (
+				SELECT d->>'part_id' FROM json_array_elements('{{this.params.deltaJson}}'::json) d
+				WHERE d->>'delta_status' = 'REMOVED'
+			)
+			AND pp.laminating_machine IS NOT NULL
+
+		UNION
+
+		SELECT DISTINCT 'UPPER_TOOLING'
+		FROM upper_wip_input wi
+		JOIN upper_part p ON p.id = wi.input_ref AND wi.input_kind = 'PART'
+		JOIN upper_wip w ON w.id = wi.wip_id
+		WHERE w.session_id = {{this.params.oldSessionId}}::int
+			AND p.part_id IN (
+				SELECT d->>'part_id' FROM json_array_elements('{{this.params.deltaJson}}'::json) d
+				WHERE d->>'delta_status' = 'REMOVED'
+			)
+
+		UNION
+
+		SELECT DISTINCT 'BOTTOM_ENGINEERING'
+		FROM bottom_wip_input wi
+		JOIN upper_part p ON p.id = wi.input_ref AND wi.input_kind = 'PART'
+		JOIN bottom_wip w ON w.id = wi.wip_id
+		WHERE w.session_id = {{this.params.oldSessionId}}::int
+			AND p.part_id IN (
+				SELECT d->>'part_id' FROM json_array_elements('{{this.params.deltaJson}}'::json) d
+				WHERE d->>'delta_status' = 'REMOVED'
+			);
+	END IF;
+
+	INSERT INTO upper_division_status (session_id, division, state, submitted_at, submitted_by)
+	SELECT
+		{{this.params.newSessionId}}::int,
+		v.division::division_enum,
+		CASE WHEN v.division IN (SELECT division FROM _affected_divisions)
+			THEN 'NOT_STARTED' ELSE 'SUBMITTED' END::division_state_enum,
+		CASE WHEN v.division IN (SELECT division FROM _affected_divisions)
+			THEN NULL ELSE NOW() END,
+		CASE WHEN v.division IN (SELECT division FROM _affected_divisions)
+			THEN NULL ELSE 'CARRIED_OVER:' || {{this.params.oldSessionId}} END
+	FROM (VALUES ('BLACKBOX'), ('COMMERZ'), ('COS'), ('UPPER_TOOLING'), ('BOTTOM_ENGINEERING')) AS v(division)
+	ON CONFLICT (session_id, division) DO NOTHING;
+END $$;

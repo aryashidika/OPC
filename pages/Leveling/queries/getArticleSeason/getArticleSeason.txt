@@ -1,0 +1,4 @@
+SELECT s.article_id, s.model_number, m.season
+FROM v_current_session s
+LEFT JOIN upper_model m ON m.model_number = s.model_number
+WHERE s.article_id = '{{sel_article.selectedOptionValue}}';

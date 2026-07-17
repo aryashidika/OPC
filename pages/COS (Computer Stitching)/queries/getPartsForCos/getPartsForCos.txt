@@ -1,0 +1,59 @@
+WITH RECURSIVE wip_chain AS (
+  SELECT 
+    w.id AS wip_id,
+    w.id AS root_wip_id,
+    w.label AS root_wip_label
+  FROM upper_wip w
+  WHERE w.session_id = (
+    SELECT id FROM upper_article_session
+    WHERE article_id = {{sel_article.selectedOptionValue}}
+    AND is_latest = TRUE
+    LIMIT 1
+  )
+    AND NOT EXISTS (
+      SELECT 1 FROM upper_wip_input wi2
+      WHERE wi2.input_kind = 'WIP' AND wi2.input_ref = w.id
+    )
+  UNION ALL
+  SELECT
+    wi.input_ref AS wip_id,
+    wc.root_wip_id,
+    wc.root_wip_label
+  FROM upper_wip_input wi
+  JOIN wip_chain wc ON wc.wip_id = wi.wip_id
+  WHERE wi.input_kind = 'WIP'
+)
+SELECT 
+  p.id,
+  p.part_id,
+  p.part_name,
+  p.material_desc,
+  p.prod_uom,
+  pp.cos_type,
+  pp.cos_package_id,
+  pp.cutting_type,
+  pp.cutting_process_name,
+  cp.package_no,
+  wc.root_wip_label AS wip_group,
+  pp.copied_from_session_id,
+  src.article_id AS copied_from_article_id
+FROM upper_part p
+LEFT JOIN upper_part_process pp 
+  ON pp.session_id = p.session_id AND pp.part_id = p.part_id
+LEFT JOIN cos_package cp
+  ON cp.id = pp.cos_package_id
+LEFT JOIN upper_wip_input wi
+  ON wi.input_kind = 'PART' AND wi.input_ref = p.id
+LEFT JOIN wip_chain wc
+  ON wc.wip_id = wi.wip_id
+LEFT JOIN upper_article_session src ON src.id = pp.copied_from_session_id
+WHERE p.session_id = (
+  SELECT id FROM upper_article_session
+  WHERE article_id = {{sel_article.selectedOptionValue}}
+  AND is_latest = TRUE
+  LIMIT 1
+)
+AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+ORDER BY
+  SPLIT_PART(p.part_id, '-', 1)::int,
+  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;

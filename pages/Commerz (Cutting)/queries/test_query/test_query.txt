@@ -1,0 +1,3 @@
+SELECT DISTINCT cutting_type, cutting_process_name 
+FROM upper_part_process 
+ORDER BY cutting_type;

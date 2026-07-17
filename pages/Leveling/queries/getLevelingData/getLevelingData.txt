@@ -1,0 +1,31 @@
+SELECT 
+  p.id AS part_db_id,
+  p.part_id,
+  p.part_name,
+  p.is_bought_ready,
+  p.is_sockliner,
+  pp.cutting_type,
+  pp.cutting_process_name,
+  pp.cos_type,
+  pp.cos_package_id,
+  wi_upper.wip_id AS upper_wip_id,
+  w_upper.label AS upper_wip_label,
+  wi_bottom.wip_id AS bottom_wip_id,
+  bw.wip_type AS bottom_wip_type,
+  bw.label AS bottom_wip_label
+FROM upper_part p
+LEFT JOIN upper_part_process pp 
+  ON pp.session_id = p.session_id AND pp.part_id = p.part_id
+LEFT JOIN upper_wip_input wi_upper 
+  ON wi_upper.input_kind = 'PART' AND wi_upper.input_ref = p.id
+LEFT JOIN upper_wip w_upper 
+  ON w_upper.id = wi_upper.wip_id AND w_upper.session_id = p.session_id
+LEFT JOIN bottom_wip_input wi_bottom 
+  ON wi_bottom.input_kind = 'PART' AND wi_bottom.input_ref = p.id
+LEFT JOIN bottom_wip bw 
+  ON bw.id = wi_bottom.wip_id AND bw.session_id = p.session_id
+WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+ORDER BY
+  SPLIT_PART(p.part_id, '-', 1)::int,
+  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;

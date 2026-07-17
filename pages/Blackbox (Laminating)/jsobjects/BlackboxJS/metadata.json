@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_05c209b5-e6d8-4e74-bc2d-b252acbfc537",
+  "id": "Blackbox (Laminating)_BlackboxJS",
+  "unpublishedCollection": {
+    "name": "BlackboxJS",
+    "pageId": "Blackbox (Laminating)",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_pendingChanges",
+        "value": "{}"
+      }
+    ]
+  }
+}

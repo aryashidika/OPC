@@ -1,0 +1,2 @@
+SELECT division, state FROM upper_division_status
+WHERE session_id = {{this.params.sessionId}};

@@ -1,0 +1,5 @@
+SELECT ds.*, s.revision_no
+FROM upper_division_status ds
+JOIN upper_article_session s ON s.id = ds.session_id
+WHERE ds.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+ORDER BY ds.division;

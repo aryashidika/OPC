@@ -1,0 +1,12 @@
+SELECT 
+  p.id,
+  p.part_id,
+  p.part_name,
+  p.material_desc,
+  p.prod_uom,
+  pp.laminating_machine
+FROM upper_part p
+LEFT JOIN upper_part_process pp 
+  ON pp.session_id = p.session_id AND pp.part_id = p.part_id
+WHERE p.session_id = {{appsmith.store.ingestActiveSessionId}}
+ORDER BY p.part_name;

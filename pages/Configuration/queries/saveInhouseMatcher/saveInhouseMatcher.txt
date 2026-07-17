@@ -1,0 +1,4 @@
+UPDATE inhouse_matcher
+SET config_type = {{tblInhouseMatcher.triggeredRow.config_type}},
+    pattern     = {{tblInhouseMatcher.triggeredRow.pattern}}
+WHERE id = {{tblInhouseMatcher.triggeredRow.id}};

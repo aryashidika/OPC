@@ -1,0 +1,56 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_ab448d2b-83e8-41e3-8be0-cc5893adf451",
+  "id": "Configuration_CatalogConfigJS",
+  "unpublishedCollection": {
+    "name": "CatalogConfigJS",
+    "pageId": "Configuration",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_editMode",
+        "value": "false"
+      },
+      {
+        "name": "_editId",
+        "value": "null"
+      },
+      {
+        "name": "_editOriginalName",
+        "value": "null"
+      },
+      {
+        "name": "_pendingRules",
+        "value": "[]"
+      },
+      {
+        "name": "LEVELING_BEHAVIORS",
+        "value": "['INLINE_GROUP', 'FEEDING_GROUP', 'NORMAL_CUTTING', 'WIP_CHAIN', 'LAMINATION', 'PASSTHROUGH']"
+      },
+      {
+        "name": "GROUP_BEHAVIORS",
+        "value": "['INLINE_GROUP', 'FEEDING_GROUP']"
+      },
+      {
+        "name": "ANCHORS",
+        "value": "['FG', 'S', 'SU', 'FS', 'SP']"
+      },
+      {
+        "name": "CONDITIONS",
+        "value": "[{\n  label: 'Tanpa kondisi (default)',\n  value: 'default',\n  key: null,\n  val: null\n}, {\n  label: 'cos_type = CENTRAL',\n  value: 'cos_type_CENTRAL',\n  key: 'cos_type',\n  val: 'CENTRAL'\n}, {\n  label: 'cos_type = LINE',\n  value: 'cos_type_LINE',\n  key: 'cos_type',\n  val: 'LINE'\n}, {\n  label: 'in_wip = true',\n  value: 'in_wip_true',\n  key: 'in_wip',\n  val: true\n}, {\n  label: 'in_wip = false',\n  value: 'in_wip_false',\n  key: 'in_wip',\n  val: false\n}]"
+      },
+      {
+        "name": "DIVISION_LABELS",
+        "value": "{\n  BLACKBOX: 'Blackbox (Laminating)',\n  COMMERZ: 'Commerz (Cutting)',\n  COS: 'COS (Computer Stitching)',\n  UPPER_TOOLING: 'Upper Tooling (UT)',\n  BOTTOM_ENGINEERING: 'Bottom Engineering (BE)'\n}"
+      },
+      {
+        "name": "WIP_BEHAVIOR_LABELS",
+        "value": "{\n  LAMINATION: 'Laminasi',\n  CUTTING_NORMAL: 'Cutting Normal',\n  CUTTING_INLINE: 'Cutting Inline',\n  BOOTIE: 'Bootie',\n  STITCHING: 'Stitching',\n  TREATMENT_SUBCONT: 'Treatment Subcont'\n}"
+      },
+      {
+        "name": "LEVELING_EFFECT_LABELS",
+        "value": "{\n  INLINE_GROUP: 'Grup Cutting Inline',\n  FEEDING_GROUP: 'Grup Feeding / Bootie'\n}"
+      }
+    ]
+  }
+}

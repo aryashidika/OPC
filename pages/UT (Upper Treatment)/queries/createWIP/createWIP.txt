@@ -1,0 +1,10 @@
+INSERT INTO upper_wip (session_id, process_id, label, supplier_id, lead_time_days, created_by)
+VALUES (
+  {{this.params.sessionId}},
+  {{this.params.processId}},
+  '{{this.params.label}}',
+  NULLIF('{{this.params.supplierId}}', '')::INT,
+  CASE WHEN '{{this.params.leadTimeDays}}' = '' THEN NULL ELSE '{{this.params.leadTimeDays}}'::int END,
+  '{{this.params.createdBy}}'
+)
+RETURNING id;

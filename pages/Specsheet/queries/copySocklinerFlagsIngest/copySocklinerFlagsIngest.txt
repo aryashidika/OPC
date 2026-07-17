@@ -1,0 +1,8 @@
+UPDATE upper_part np
+SET is_sockliner = op.is_sockliner,
+    is_bought_ready = op.is_bought_ready
+FROM upper_part op
+WHERE op.part_id = np.part_id
+  AND op.session_id = {{this.params.oldSessionId}}
+  AND np.session_id = {{this.params.newSessionId}}
+  AND (np.delta_flag IS NULL OR np.delta_flag <> 'REMOVED');

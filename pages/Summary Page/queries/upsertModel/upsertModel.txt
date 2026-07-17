@@ -1,0 +1,5 @@
+INSERT INTO upper_model (model_number, model_name, season, updated_at)
+VALUES ({{this.params.modelNumber}}, {{this.params.modelName}}, {{this.params.season}}, NOW())
+ON CONFLICT (model_number, season) DO UPDATE SET
+  model_name = EXCLUDED.model_name,
+  updated_at = NOW();

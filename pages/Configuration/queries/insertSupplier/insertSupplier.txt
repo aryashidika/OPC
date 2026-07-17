@@ -1,0 +1,17 @@
+DO $$
+DECLARE
+  v_id INT;
+  v_cat TEXT;
+BEGIN
+  INSERT INTO supplier_master (name, is_active, created_at)
+  VALUES ('{{this.params.name}}', {{this.params.isActive}}, NOW())
+  RETURNING id INTO v_id;
+
+  FOREACH v_cat IN ARRAY string_to_array('{{this.params.categories}}', ',')
+  LOOP
+    IF trim(v_cat) <> '' THEN
+      INSERT INTO supplier_category (supplier_id, category)
+      VALUES (v_id, trim(v_cat)::supplier_category);
+    END IF;
+  END LOOP;
+END $$;

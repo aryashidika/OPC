@@ -1,0 +1,24 @@
+SELECT
+  cbp.id,
+  cbp.package_no,
+  cbp.cos_type,
+  cbp.lead_time_days,
+  COALESCE(
+    json_agg(
+      json_build_object(
+        'part_id',   pp.part_id,
+        'part_name', up.part_name,
+        'remark',    pp.cos_remark_before
+      )
+    ) FILTER (WHERE pp.part_id IS NOT NULL
+                AND (up.delta_flag IS NULL OR up.delta_flag <> 'REMOVED')),
+    '[]'
+  ) AS parts,
+  COUNT(pp.part_id) FILTER (WHERE up.delta_flag IS NULL OR up.delta_flag <> 'REMOVED') AS jumlah_part,
+  COUNT(pp.part_id) FILTER (WHERE up.delta_flag IS NULL OR up.delta_flag <> 'REMOVED') = 0 AS is_empty
+FROM cos_before_package cbp
+LEFT JOIN upper_part_process pp ON pp.cos_before_package_id = cbp.id
+LEFT JOIN upper_part up ON up.part_id = pp.part_id AND up.session_id = cbp.session_id
+WHERE cbp.session_id = (SELECT id FROM v_current_session WHERE article_id = '{{sel_article.selectedOptionValue}}')
+GROUP BY cbp.id, cbp.package_no, cbp.cos_type, cbp.lead_time_days
+ORDER BY cbp.package_no;

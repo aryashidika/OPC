@@ -1,0 +1,2 @@
+UPDATE upper_part_process SET cos_package_id = NULL, cos_before_package_id = NULL
+WHERE session_id = {{this.params.newSessionId}};

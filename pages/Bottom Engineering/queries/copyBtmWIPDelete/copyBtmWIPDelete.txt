@@ -1,0 +1,1 @@
+DELETE FROM bottom_wip WHERE session_id = {{this.params.newSessionId}};

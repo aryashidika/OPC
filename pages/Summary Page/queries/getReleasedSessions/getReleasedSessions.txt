@@ -1,0 +1,18 @@
+SELECT
+  s.id            AS session_id,
+  s.article_id,
+  s.revision_no,
+  s.status,
+  s.created_at,
+  MAX(CASE WHEN ds.division = 'BLACKBOX'           THEN ds.state END) AS bb_state,
+  MAX(CASE WHEN ds.division = 'COMMERZ'            THEN ds.state END) AS cmz_state,
+  MAX(CASE WHEN ds.division = 'COS'                THEN ds.state END) AS cos_state,
+  MAX(CASE WHEN ds.division = 'UPPER_TOOLING'      THEN ds.state END) AS ut_state,
+  MAX(CASE WHEN ds.division = 'BOTTOM_ENGINEERING' THEN ds.state END) AS be_state
+FROM upper_article_session s
+LEFT JOIN upper_division_status ds ON ds.session_id = s.id
+WHERE s.is_latest = TRUE
+  AND s.status = 'RELEASED'
+GROUP BY s.id, s.article_id, s.revision_no, s.status, s.created_at
+ORDER BY s.created_at DESC
+LIMIT 50;

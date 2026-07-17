@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_eab9b71b-6d48-46b8-b40d-8eac7077b4b0",
+  "id": "Leveling_ArasApi",
+  "unpublishedCollection": {
+    "name": "ArasApi",
+    "pageId": "Leveling",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "ARAS_API_BASE_URL",
+        "value": "`${ArasConsts.ARAS_URL}/Server/OData`"
+      }
+    ]
+  }
+}

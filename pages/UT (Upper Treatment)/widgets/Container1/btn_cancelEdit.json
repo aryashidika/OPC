@@ -1,0 +1,68 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 50,
+  "bottomRowBeforeCollapse": 50,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "text"
+    },
+    {
+      "key": "isDisabled"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": "{{\n  !UTJS.isEditMode() && UTJS.getWIPDisplay().length === 0\n}}",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "q2j08x7jgn",
+  "leftColumn": 21,
+  "minWidth": 120,
+  "mobileBottomRow": 46,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 16,
+  "mobileTopRow": 42,
+  "needsErrorInfo": false,
+  "onClick": "{{UTJS.isEditMode() ? UTJS.onCancelEdit() : UTJS.onSubmit()}}",
+  "originalBottomRow": 50,
+  "originalTopRow": 46,
+  "parentColumnSpace": 19.9375,
+  "parentId": "i18kuw8dw9",
+  "parentRowSpace": 10,
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 41,
+  "text": "{{UTJS.isEditMode() ? \"Batal Edit\" : \"Submit Upper Treatment\"}}",
+  "topRow": 46,
+  "topRowBeforeCollapse": 46,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "zncyoajw42",
+  "widgetName": "btn_cancelEdit"
+}

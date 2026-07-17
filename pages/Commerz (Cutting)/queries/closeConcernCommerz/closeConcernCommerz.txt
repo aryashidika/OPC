@@ -1,0 +1,8 @@
+UPDATE upper_concern
+SET
+  is_closed = true,
+  closed_at = NOW(),
+  closed_by = '{{this.params.closedBy}}'
+WHERE id = {{this.params.concernId}}
+  AND target_division = 'COMMERZ'
+  AND is_closed = false;

@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_1ad11a5c-dae5-4895-a869-d0bbd8718e32",
+  "id": "Configuration_ConfigZsfJS",
+  "unpublishedCollection": {
+    "name": "ConfigZsfJS",
+    "pageId": "Configuration",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "STATIC_PROCESS_TYPES",
+        "value": "['SEMI F/G SHOES', 'SEMI F/G UPPER', 'SEMI F/G UPPER FEEDING SETTING', 'SEMI F/G CUTTING INLINE', 'CUTTING BOOTIE', 'CUTTING SENTRAL', 'CUTTING COMPONENT', 'COS AFTER TREATMENT', 'SOCKLINER SUBCONT']"
+      }
+    ]
+  }
+}

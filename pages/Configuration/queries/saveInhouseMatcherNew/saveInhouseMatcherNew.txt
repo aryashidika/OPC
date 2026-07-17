@@ -1,0 +1,6 @@
+INSERT INTO inhouse_matcher (module, config_type, pattern)
+VALUES (
+  'PRB',
+  {{tblInhouseMatcher.newRow.config_type}},
+  {{tblInhouseMatcher.newRow.pattern}}
+);

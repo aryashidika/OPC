@@ -1,0 +1,28 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_863a0a3c-55b6-429b-ade6-3f6be24f6e88",
+  "id": "Configuration_SupplierConfigJS",
+  "unpublishedCollection": {
+    "name": "SupplierConfigJS",
+    "pageId": "Configuration",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_editMode",
+        "value": "false"
+      },
+      {
+        "name": "_editId",
+        "value": "null"
+      },
+      {
+        "name": "_editOriginalName",
+        "value": "null"
+      },
+      {
+        "name": "CATEGORIES",
+        "value": "['UPPER', 'OUTSOLE', 'SOCKLINER']"
+      }
+    ]
+  }
+}

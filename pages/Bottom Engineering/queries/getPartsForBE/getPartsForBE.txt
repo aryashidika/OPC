@@ -1,0 +1,17 @@
+SELECT
+  p.id, p.part_id, p.part_name, p.material_desc, p.prod_uom, p.supplier_name, p.is_bought_ready,
+  wi.wip_id AS bottom_wip_id, bw.wip_type, bw.label AS wip_label
+FROM upper_part p
+LEFT JOIN bottom_wip_input wi 
+  ON wi.input_kind = 'PART' AND wi.input_ref = p.id
+LEFT JOIN bottom_wip bw 
+  ON bw.id = wi.wip_id AND bw.session_id = p.session_id
+WHERE p.session_id = (
+  SELECT id FROM v_current_session
+  WHERE article_id = {{sel_article.selectedOptionValue}}
+  LIMIT 1
+)
+AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+AND p.part_id NOT LIKE '%-%'
+AND p.is_sockliner = FALSE
+ORDER BY p.part_id::int;

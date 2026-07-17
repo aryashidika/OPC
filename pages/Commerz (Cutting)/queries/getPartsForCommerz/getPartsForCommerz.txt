@@ -1,0 +1,36 @@
+SELECT 
+  p.id,
+  p.part_id,
+  p.part_name,
+  p.material_desc,
+  p.prod_uom,
+  pp.cutting_type,
+  pp.cutting_type_source,
+  pp.cutting_process_name,
+  pp.cos_type,
+  pp.lead_time_cutting_override_days,
+  COALESCE(
+    pp.lead_time_cutting_override_days,
+    pc.default_lead_time_days
+  ) AS effective_lead_time_days,
+  pc.wip_behavior,
+  pp.copied_from_session_id,
+  src.article_id AS copied_from_article_id,
+  cp.package_no AS cos_after_package_no,
+  cp.cos_type AS cos_after_type,
+  (
+    SELECT STRING_AGG(w.label, ', ')
+    FROM upper_wip_input wi
+    JOIN upper_wip w ON w.id = wi.wip_id AND w.session_id = p.session_id
+    WHERE wi.input_kind = 'PART' AND wi.input_ref = p.id
+  ) AS ut_treatment_label
+FROM upper_part p
+LEFT JOIN upper_part_process pp 
+  ON pp.session_id = p.session_id AND pp.part_id = p.part_id
+LEFT JOIN upper_process_catalog pc
+  ON pc.process_name = pp.cutting_process_name AND pc.division = 'COMMERZ'
+LEFT JOIN upper_article_session src ON src.id = pp.copied_from_session_id
+LEFT JOIN cos_package cp ON cp.id = pp.cos_package_id
+WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+ORDER BY p.part_name;

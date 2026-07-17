@@ -1,0 +1,24 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_67bdae8e-691d-443a-a374-c57762933cd3",
+  "id": "COS (Computer Stitching)_COSJS",
+  "unpublishedCollection": {
+    "name": "COSJS",
+    "pageId": "COS (Computer Stitching)",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_pendingChanges",
+        "value": "{}"
+      },
+      {
+        "name": "_pendingBeforeChanges",
+        "value": "{}"
+      },
+      {
+        "name": "_validationErrors",
+        "value": "[]"
+      }
+    ]
+  }
+}

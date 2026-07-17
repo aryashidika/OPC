@@ -1,0 +1,22 @@
+INSERT INTO upper_part (session_id, part_id, part_name, material_desc,
+  supplier_name, prod_uom, section, delta_flag)
+SELECT
+  {{this.params.sessionId}}::int,
+  value->>'part_id',
+  value->>'part_name',
+  value->>'material_desc',
+  value->>'supplier_name',
+  value->>'prod_uom',
+  value->>'section',
+  'NEW'
+FROM json_array_elements('{{this.params.bomJson}}'::json)
+ON CONFLICT (session_id, part_id) DO UPDATE SET
+  part_name      = EXCLUDED.part_name,
+  material_desc  = EXCLUDED.material_desc,
+  supplier_name  = EXCLUDED.supplier_name,
+  prod_uom       = EXCLUDED.prod_uom,
+  section        = EXCLUDED.section,
+  delta_flag     = CASE
+                      WHEN upper_part.delta_flag = 'REMOVED' THEN 'NEW'
+                      ELSE upper_part.delta_flag
+                    END;

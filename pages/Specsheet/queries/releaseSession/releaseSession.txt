@@ -1,0 +1,7 @@
+UPDATE upper_article_session
+SET 
+  status = 'RELEASED',
+  released_at = NOW(),
+  released_by = '{{this.params.releasedBy}}'
+WHERE id = {{this.params.sessionId}}
+  AND status != 'RELEASED';

@@ -1,0 +1,1 @@
+SELECT config_class, size_page, age_group FROM aras_config_class;

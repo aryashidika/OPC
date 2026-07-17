@@ -1,0 +1,11 @@
+INSERT INTO upper_part (session_id, part_id, part_name, mlm_id, material_desc, supplier_name, prod_uom)
+SELECT
+  {{this.params.sessionId}}::int,
+  value->>'part_id',
+  value->>'part_name',
+  value->>'mlm_id',
+  value->>'material_desc',
+  value->>'supplier_name',
+  value->>'prod_uom'
+FROM json_array_elements('{{this.params.partsJson}}'::json)
+ON CONFLICT (session_id, part_id) DO NOTHING;

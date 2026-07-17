@@ -1,0 +1,13 @@
+INSERT INTO upper_division_status 
+  (session_id, division, state)
+SELECT 
+  {{this.params.newSessionId}},
+  division,
+  'NOT_STARTED'::division_state_enum
+FROM upper_division_status
+WHERE session_id = {{this.params.oldSessionId}}
+ON CONFLICT (session_id, division)
+DO UPDATE SET
+  state        = 'NOT_STARTED'::division_state_enum,
+  submitted_at = NULL,
+  submitted_by = NULL;

@@ -1,0 +1,10 @@
+INSERT INTO upper_concern
+  (session_id, target_division, raised_by, reason, item_ref, concern_source)
+VALUES (
+  {{this.params.sessionId}},
+  '{{this.params.targetDivision}}'::division_enum,
+  '{{this.params.raisedBy}}',
+  '{{this.params.reason}}',
+  '{{this.params.itemRef}}',
+  'MANUAL'
+);

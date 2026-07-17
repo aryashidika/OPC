@@ -1,0 +1,25 @@
+SELECT 
+  p.id,
+  p.part_id,
+  p.part_name,
+  p.material_desc,
+  p.prod_uom,
+  pp.laminating_machine,
+  pp.lead_time_lam_override_days,
+  COALESCE(
+		pp.lead_time_lam_override_days,
+		c.default_lead_time_days
+	) AS effective_lead_time_days,
+  pp.copied_from_session_id,
+  src.article_id AS copied_from_article_id
+FROM upper_part p
+LEFT JOIN upper_part_process pp 
+  ON pp.session_id = p.session_id AND pp.part_id = p.part_id
+LEFT JOIN upper_process_catalog c
+  ON c.process_name = pp.laminating_machine AND c.division = 'BLACKBOX'
+LEFT JOIN upper_article_session src ON src.id = pp.copied_from_session_id
+WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+ORDER BY 
+  CAST(SPLIT_PART(p.part_id, '-', 1) AS INTEGER),
+  CASE WHEN p.part_id LIKE '%-%' THEN CAST(SPLIT_PART(p.part_id, '-', 2) AS INTEGER) ELSE 0 END;

@@ -1,0 +1,48 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_623c2203-6086-4c33-9353-2ebb3fd6bc70",
+  "id": "Bottom Engineering_BEJS",
+  "unpublishedCollection": {
+    "name": "BEJS",
+    "pageId": "Bottom Engineering",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_submitConfirmed",
+        "value": "false"
+      },
+      {
+        "name": "_editWipId",
+        "value": "null"
+      },
+      {
+        "name": "_editWipType",
+        "value": "null"
+      },
+      {
+        "name": "_pendingAdd",
+        "value": "[]"
+      },
+      {
+        "name": "_pendingRemove",
+        "value": "[]"
+      },
+      {
+        "name": "_pendingBoughtReady",
+        "value": "{}"
+      },
+      {
+        "name": "_sockEditWipId",
+        "value": "null"
+      },
+      {
+        "name": "_sockPendingAdd",
+        "value": "[]"
+      },
+      {
+        "name": "_sockPendingRemove",
+        "value": "[]"
+      }
+    ]
+  }
+}

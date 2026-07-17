@@ -1,0 +1,4 @@
+UPDATE upper_article_session
+SET status = 'IN_PROGRESS'
+WHERE id = {{this.params.sessionId}}
+  AND status = 'RELEASED';

@@ -1,0 +1,4 @@
+SELECT u.username, u.role, g.division, g.family
+FROM app_users u
+LEFT JOIN app_user_grants g ON g.user_id = u.id
+ORDER BY u.username;

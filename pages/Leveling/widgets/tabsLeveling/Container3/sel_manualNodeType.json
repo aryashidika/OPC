@@ -1,0 +1,61 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 8,
+  "boxShadow": "none",
+  "defaultOptionValue": "GREEN",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "sourceData"
+    }
+  ],
+  "dynamicTriggerPathList": [],
+  "isDisabled": false,
+  "isFilterable": true,
+  "isLoading": false,
+  "isRequired": false,
+  "isVisible": true,
+  "key": "x0rmfem7yd",
+  "labelAlignment": "left",
+  "labelPosition": "Left",
+  "labelText": "Type",
+  "labelTextSize": "0.875rem",
+  "labelWidth": 5,
+  "leftColumn": 0,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 11,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 20,
+  "mobileTopRow": 4,
+  "needsErrorInfo": false,
+  "optionLabel": "label",
+  "optionValue": "value",
+  "originalBottomRow": 8,
+  "originalTopRow": 4,
+  "parentColumnSpace": 19.625,
+  "parentId": "uz0ixrwkng",
+  "parentRowSpace": 10,
+  "placeholderText": "Select option",
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 64,
+  "serverSideFiltering": false,
+  "sourceData": "[\n  { \"label\": \"Spine (struktur utama, mis. S/SU/FS)\", \"value\": \"spine\" },\n  { \"label\": \"COS Central (SP)\",                       \"value\": \"cos_central\" },\n  { \"label\": \"Cutting Group\",                          \"value\": \"cutting_group\" },\n  { \"label\": \"Cutting per Part\",                       \"value\": \"cutting_per_part\" },\n  { \"label\": \"WIP\",                                    \"value\": \"wip\" },\n  { \"label\": \"Stockfitting\",                           \"value\": \"stockfitting\" },\n  { \"label\": \"Part\",                                   \"value\": \"part\" }\n]",
+  "topRow": 4,
+  "type": "SELECT_WIDGET",
+  "version": 1,
+  "widgetId": "jvl2i00orm",
+  "widgetName": "sel_manualNodeType"
+}

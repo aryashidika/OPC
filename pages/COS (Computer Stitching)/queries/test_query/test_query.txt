@@ -1,0 +1,2 @@
+INSERT INTO app_users (username, display_name, dummy_password, role) VALUES
+  ('me', 'Manufacturing Excellence (ME)', 'me123', 'ME');

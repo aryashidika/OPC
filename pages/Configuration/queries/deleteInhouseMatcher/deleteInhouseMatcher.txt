@@ -1,0 +1,2 @@
+DELETE FROM inhouse_matcher
+WHERE id = {{tblInhouseMatcher.triggeredRow.id}};

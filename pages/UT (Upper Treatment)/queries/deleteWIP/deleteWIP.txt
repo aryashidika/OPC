@@ -1,0 +1,7 @@
+WITH delete_inputs AS (
+  DELETE FROM upper_wip_input
+  WHERE wip_id = {{this.params.wipId}}
+)
+DELETE FROM upper_wip
+WHERE id = {{this.params.wipId}}
+AND session_id = {{this.params.sessionId}};

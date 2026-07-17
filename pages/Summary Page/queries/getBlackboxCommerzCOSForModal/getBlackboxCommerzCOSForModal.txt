@@ -1,0 +1,21 @@
+SELECT
+  pp.part_id,
+  pp.laminating_machine,
+  COALESCE(pp.lead_time_lam_override_days, cbb.default_lead_time_days)     AS lam_lead_time_days,
+  pp.cutting_type,
+  pp.cutting_process_name,
+  COALESCE(pp.lead_time_cutting_override_days, ccm.default_lead_time_days) AS cutting_lead_time_days,
+  cbp.package_no     AS before_package_no,
+  cbp.cos_type       AS before_cos_type,
+  cbp.lead_time_days AS before_lead_time_days,
+  pp.cos_remark_before,
+  cp.package_no      AS after_package_no,
+  cp.cos_type        AS after_cos_type,
+  cp.lead_time_days  AS after_lead_time_days,
+  pp.cos_remark_after
+FROM upper_part_process pp
+LEFT JOIN cos_before_package cbp ON cbp.id = pp.cos_before_package_id
+LEFT JOIN cos_package        cp  ON cp.id  = pp.cos_package_id
+LEFT JOIN upper_process_catalog cbb ON cbb.process_name = pp.laminating_machine   AND cbb.division = 'BLACKBOX'
+LEFT JOIN upper_process_catalog ccm ON ccm.process_name = pp.cutting_process_name AND ccm.division = 'COMMERZ'
+WHERE pp.session_id = {{this.params.sessionId}}::int;

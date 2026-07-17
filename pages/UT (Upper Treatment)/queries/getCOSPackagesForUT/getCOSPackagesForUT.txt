@@ -1,0 +1,14 @@
+SELECT
+  cp.id AS package_id, cp.package_no, cp.cos_type,
+  pp.part_id, up.id AS part_db_id, up.part_name
+FROM cos_package cp
+LEFT JOIN upper_part_process pp ON pp.cos_package_id = cp.id
+  AND pp.session_id = cp.session_id
+LEFT JOIN upper_part up ON up.part_id = pp.part_id
+  AND up.session_id = cp.session_id
+WHERE cp.session_id = (
+  SELECT id FROM v_current_session
+  WHERE article_id = {{sel_article.selectedOptionValue}}
+  LIMIT 1
+)
+ORDER BY cp.package_no, up.part_name;

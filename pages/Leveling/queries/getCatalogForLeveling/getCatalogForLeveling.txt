@@ -1,0 +1,10 @@
+SELECT 
+  id,
+  process_name,
+  wip_behavior,
+  leveling_behavior,
+  leveling_code,
+  parent_rules,
+  division
+FROM upper_process_catalog
+WHERE is_active = TRUE;

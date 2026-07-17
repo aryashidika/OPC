@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_acbbb381-86a0-4c5f-8af8-fd311af906d4",
+  "id": "Configuration_AuthJS",
+  "unpublishedCollection": {
+    "name": "AuthJS",
+    "pageId": "Configuration",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

@@ -1,0 +1,14 @@
+WITH cur AS (
+	SELECT model_number, season FROM upper_article_session
+	WHERE article_id = {{sel_article.selectedOptionValue}} AND is_latest = TRUE
+	LIMIT 1
+)
+SELECT s.article_id, s.id AS session_id,
+       COALESCE(ds.state::text, 'NOT_STARTED') AS division_state
+FROM upper_article_session s
+JOIN cur ON cur.model_number = s.model_number AND cur.season = s.season
+LEFT JOIN upper_division_status ds
+       ON ds.session_id = s.id AND ds.division = 'UPPER_TOOLING'::division_enum
+WHERE s.is_latest = TRUE AND s.status <> 'RELEASED'
+  AND s.article_id <> {{sel_article.selectedOptionValue}}
+ORDER BY s.article_id;

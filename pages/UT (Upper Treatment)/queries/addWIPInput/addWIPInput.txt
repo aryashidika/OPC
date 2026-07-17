@@ -1,0 +1,6 @@
+INSERT INTO upper_wip_input (wip_id, input_kind, input_ref)
+VALUES (
+  {{this.params.wipId}},
+  '{{this.params.inputKind}}'::wip_input_kind_enum,
+  {{this.params.inputRef}}
+);

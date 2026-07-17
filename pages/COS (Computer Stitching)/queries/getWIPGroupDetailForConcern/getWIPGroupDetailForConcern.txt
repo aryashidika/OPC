@@ -1,0 +1,31 @@
+WITH RECURSIVE wip_chain AS (
+	SELECT w.id AS wip_id
+	FROM upper_wip w
+	WHERE w.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+	AND w.label = '{{this.params.wipGroupLabel}}'
+
+	UNION ALL
+
+	SELECT wi.input_ref AS wip_id
+	FROM upper_wip_input wi
+	JOIN wip_chain wc ON wc.wip_id = wi.wip_id
+	WHERE wi.input_kind = 'WIP'
+)
+SELECT
+  up.id AS part_db_id,
+  up.part_name,
+  up.part_id,
+  pp.cos_package_id,
+  cp.package_no,
+  CASE 
+    WHEN pp.cos_package_id = {{this.params.packageId}} THEN true 
+    ELSE false 
+  END AS in_target_package
+FROM wip_chain wc
+JOIN upper_wip_input wi ON wi.wip_id = wc.wip_id AND wi.input_kind = 'PART'
+JOIN upper_part up ON up.id = wi.input_ref
+LEFT JOIN upper_part_process pp ON pp.part_id = up.part_id 
+  AND pp.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+LEFT JOIN cos_package cp ON cp.id = pp.cos_package_id
+WHERE up.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+ORDER BY up.part_name;

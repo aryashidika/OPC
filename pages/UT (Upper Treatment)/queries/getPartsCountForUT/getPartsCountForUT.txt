@@ -1,0 +1,8 @@
+SELECT COUNT(*) AS part_count
+FROM upper_part
+WHERE session_id = (
+  SELECT id FROM v_current_session
+  WHERE article_id = {{sel_article.selectedOptionValue}}
+  LIMIT 1
+)
+AND (delta_flag IS NULL OR delta_flag != 'REMOVED');

@@ -1,0 +1,21 @@
+SELECT
+  w.id,
+  w.label,
+  COALESCE(
+    json_agg(
+      json_build_object(
+        'kind', wi.input_kind,
+        'ref', wi.input_ref
+      )
+    ) FILTER (
+      WHERE wi.id IS NOT NULL
+        AND (wi.input_kind != 'PART' OR up.delta_flag IS NULL OR up.delta_flag != 'REMOVED')
+    ),
+    '[]'
+  ) AS inputs
+FROM upper_wip w
+LEFT JOIN upper_wip_input wi ON wi.wip_id = w.id
+LEFT JOIN upper_part up ON up.id = wi.input_ref AND wi.input_kind = 'PART'
+WHERE w.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+GROUP BY w.id, w.label
+ORDER BY w.id;

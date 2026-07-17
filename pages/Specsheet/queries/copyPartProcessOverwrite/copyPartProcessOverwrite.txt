@@ -1,0 +1,31 @@
+INSERT INTO upper_part_process
+  (session_id, part_id,
+   laminating_machine, lead_time_lam_override_days,
+   cutting_type, cutting_type_source, cutting_process_name, cutting_override_reason, lead_time_cutting_override_days,
+   cos_type, lead_time_cos_override_days,
+   cos_remark_before, cos_remark_after,
+   copied_from_session_id)
+SELECT
+  {{this.params.newSessionId}}, pp.part_id,
+  pp.laminating_machine, pp.lead_time_lam_override_days,
+  pp.cutting_type, pp.cutting_type_source, pp.cutting_process_name, pp.cutting_override_reason, pp.lead_time_cutting_override_days,
+  pp.cos_type, pp.lead_time_cos_override_days,
+  pp.cos_remark_before, pp.cos_remark_after,
+  {{this.params.oldSessionId}}
+FROM upper_part_process pp
+JOIN upper_part np ON np.part_id = pp.part_id AND np.session_id = {{this.params.newSessionId}}
+WHERE pp.session_id = {{this.params.oldSessionId}}
+ON CONFLICT (session_id, part_id) DO UPDATE SET
+  laminating_machine = EXCLUDED.laminating_machine,
+  lead_time_lam_override_days = EXCLUDED.lead_time_lam_override_days,
+  cutting_type = EXCLUDED.cutting_type,
+  cutting_type_source = EXCLUDED.cutting_type_source,
+  cutting_process_name = EXCLUDED.cutting_process_name,
+  cutting_override_reason = EXCLUDED.cutting_override_reason,
+  lead_time_cutting_override_days = EXCLUDED.lead_time_cutting_override_days,
+  cos_type = EXCLUDED.cos_type,
+  lead_time_cos_override_days = EXCLUDED.lead_time_cos_override_days,
+  cos_remark_before = EXCLUDED.cos_remark_before,
+  cos_remark_after = EXCLUDED.cos_remark_after,
+  copied_from_session_id = EXCLUDED.copied_from_session_id,
+  updated_at = NOW();

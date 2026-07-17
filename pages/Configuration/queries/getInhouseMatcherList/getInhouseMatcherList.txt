@@ -1,0 +1,4 @@
+SELECT id, module, config_type, pattern
+FROM inhouse_matcher
+WHERE module = 'PRB'
+ORDER BY config_type, pattern;

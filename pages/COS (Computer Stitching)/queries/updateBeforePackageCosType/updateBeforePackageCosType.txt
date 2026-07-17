@@ -1,0 +1,4 @@
+UPDATE cos_before_package
+SET cos_type = NULLIF('{{this.params.cosType}}', '')::cos_type_enum
+WHERE id = {{this.params.packageId}}
+  AND session_id = {{this.params.sessionId}};

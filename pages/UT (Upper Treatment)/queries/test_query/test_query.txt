@@ -1,0 +1,2 @@
+INSERT INTO inhouse_matcher (module, config_type, pattern)
+VALUES ('PRB', 'IBT');

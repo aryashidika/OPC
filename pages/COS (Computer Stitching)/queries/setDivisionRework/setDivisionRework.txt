@@ -1,0 +1,16 @@
+DO $$
+BEGIN
+  UPDATE upper_division_status
+  SET state = 'REWORK'
+  WHERE session_id = {{this.params.sessionId}}
+    AND division = '{{this.params.division}}'::division_enum
+    AND state = 'SUBMITTED';
+
+  IF '{{this.params.division}}' = 'COS' THEN
+    UPDATE upper_division_status
+    SET packages_ready_at = NULL
+    WHERE session_id = {{this.params.sessionId}}
+      AND division = 'COS'::division_enum
+      AND packages_ready_at IS NOT NULL;
+  END IF;
+END $$;

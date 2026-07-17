@@ -1,0 +1,4 @@
+UPDATE upper_part
+SET is_sockliner = {{this.params.isSockliner}}
+WHERE id = ANY(ARRAY[{{this.params.partIds}}]::int[])
+  AND session_id = {{this.params.sessionId}}::int;

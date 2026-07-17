@@ -1,0 +1,31 @@
+INSERT INTO upper_wip_input (wip_id, input_kind, input_ref)
+SELECT wip_id, input_kind, input_ref
+FROM (
+  SELECT
+    new_w.id AS wip_id,
+    wi.input_kind,
+    CASE
+      WHEN wi.input_kind = 'PART' THEN (
+        SELECT np.id
+        FROM upper_part np
+        JOIN upper_part op ON op.part_id = np.part_id
+        WHERE op.id = wi.input_ref
+        AND np.session_id = {{this.params.newSessionId}}
+        LIMIT 1
+      )
+      WHEN wi.input_kind = 'WIP' THEN (
+        SELECT new_w2.id
+        FROM upper_wip new_w2
+        JOIN upper_wip old_w2 ON old_w2.label = new_w2.label
+        WHERE old_w2.id = wi.input_ref
+        AND new_w2.session_id = {{this.params.newSessionId}}
+        LIMIT 1
+      )
+    END AS input_ref
+  FROM upper_wip_input wi
+  JOIN upper_wip old_w ON old_w.id = wi.wip_id
+  JOIN upper_wip new_w ON new_w.label = old_w.label
+    AND new_w.session_id = {{this.params.newSessionId}}
+  WHERE old_w.session_id = {{this.params.oldSessionId}}
+) sub
+WHERE input_ref IS NOT NULL;

@@ -1,0 +1,2 @@
+DELETE FROM cos_package WHERE session_id = {{this.params.newSessionId}};
+DELETE FROM cos_before_package WHERE session_id = {{this.params.newSessionId}};

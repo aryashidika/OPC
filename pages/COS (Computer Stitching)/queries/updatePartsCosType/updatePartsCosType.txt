@@ -1,0 +1,6 @@
+UPDATE upper_part_process
+SET
+  cos_type   = '{{this.params.cosType}}'::cos_type_enum,
+  updated_at = NOW()
+WHERE session_id   = {{this.params.sessionId}}
+  AND cos_package_id = {{this.params.packageId}};

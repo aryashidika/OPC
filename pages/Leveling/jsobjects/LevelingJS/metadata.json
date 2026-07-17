@@ -1,0 +1,36 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_ac2c723a-9f4a-4ad6-aa9e-90c1966b2dc8",
+  "id": "Leveling_LevelingJS",
+  "unpublishedCollection": {
+    "name": "LevelingJS",
+    "pageId": "Leveling",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_counters",
+        "value": "{\n  ISP: 0,\n  CS: 0,\n  OSP: 0,\n  IC: 0,\n  IBT: 0\n}"
+      },
+      {
+        "name": "_nodes",
+        "value": "[]"
+      },
+      {
+        "name": "_edges",
+        "value": "[]"
+      },
+      {
+        "name": "_anchorMap",
+        "value": "{}"
+      },
+      {
+        "name": "_nodeId",
+        "value": "1"
+      },
+      {
+        "name": "_slCount",
+        "value": "0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_2bca9604-855b-43bb-aee9-49ac7de56d34",
+  "id": "Leveling_ArasConsts",
+  "unpublishedCollection": {
+    "name": "ArasConsts",
+    "pageId": "Leveling",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "ARAS_URL",
+        "value": "\"https://aras.panarub.co.id/InnovatorServer\""
+      },
+      {
+        "name": "ARAS_ACCESS_TOKEN",
+        "value": "\"ARAS_ACCESS_TOKEN\""
+      },
+      {
+        "name": "ARAS_TOKEN_EXPIRES_AT",
+        "value": "\"ARAS_TOKEN_EXPIRES_AT\""
+      }
+    ]
+  }
+}

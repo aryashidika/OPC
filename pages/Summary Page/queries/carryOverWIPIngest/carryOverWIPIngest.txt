@@ -1,0 +1,10 @@
+INSERT INTO upper_wip (session_id, process_id, label, supplier_id, lead_time_days, created_by)
+SELECT
+  {{this.params.newSessionId}},
+  w.process_id,
+  w.label,
+  w.supplier_id,
+  w.lead_time_days,
+  w.created_by
+FROM upper_wip w
+WHERE w.session_id = {{this.params.oldSessionId}};

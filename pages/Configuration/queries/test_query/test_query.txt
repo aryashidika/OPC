@@ -1,0 +1,5 @@
+SELECT n.nspname AS schema, t.typname AS type_name, t.typtype
+FROM pg_type t
+JOIN pg_namespace n ON n.oid = t.typnamespace
+WHERE t.typname ILIKE '%wip%' OR t.typname ILIKE '%behavior%'
+ORDER BY 1, 2;

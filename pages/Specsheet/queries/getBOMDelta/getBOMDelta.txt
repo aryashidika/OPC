@@ -1,0 +1,26 @@
+SELECT DISTINCT * FROM (
+  SELECT
+    COALESCE(old_p.part_id, new_p.part_id) AS part_id,
+    COALESCE(old_p.part_name, new_p.part_name) AS part_name,
+    COALESCE(old_p.material_desc, new_p.material_desc) AS material_desc,
+    COALESCE(old_p.supplier_name, new_p.supplier_name) AS supplier_name,
+    CASE
+      WHEN old_p.id IS NULL THEN 'NEW'
+      WHEN new_p.id IS NULL THEN 'REMOVED'
+      ELSE 'SAME'
+    END AS delta_status
+  FROM (
+    SELECT id, part_id, part_name, material_desc, supplier_name
+    FROM upper_part WHERE session_id = {{this.params.oldSessionId}}
+    UNION
+    SELECT id, part_id, part_name, material_desc, supplier_name
+    FROM upper_part WHERE session_id = {{this.params.newSessionId}}
+  ) p
+  LEFT JOIN upper_part old_p 
+    ON old_p.part_id = p.part_id 
+    AND old_p.session_id = {{this.params.oldSessionId}}
+  LEFT JOIN upper_part new_p 
+    ON new_p.part_id = p.part_id 
+    AND new_p.session_id = {{this.params.newSessionId}}
+) AS delta
+ORDER BY delta_status, part_name;

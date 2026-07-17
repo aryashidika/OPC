@@ -1,0 +1,19 @@
+SELECT p.part_id, p.part_name
+FROM upper_part p
+LEFT JOIN upper_part_process pp ON pp.part_id = p.part_id AND pp.session_id = p.session_id
+LEFT JOIN upper_wip_input wi ON wi.input_kind = 'PART' AND wi.input_ref = p.id
+LEFT JOIN bottom_wip_input bwi ON bwi.input_kind = 'PART' AND bwi.input_ref = p.id
+WHERE p.session_id = {{this.params.sessionId}}
+  AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+  AND (
+    pp.id IS NULL
+    OR (
+      pp.laminating_machine IS NULL
+      AND pp.cutting_type IS NULL
+      AND pp.cos_type IS NULL
+      AND pp.cos_package_id IS NULL
+      AND pp.cos_before_package_id IS NULL
+    )
+  )
+  AND wi.id IS NULL
+  AND bwi.id IS NULL;

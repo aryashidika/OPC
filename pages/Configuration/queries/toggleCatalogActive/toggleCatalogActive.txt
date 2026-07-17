@@ -1,0 +1,3 @@
+UPDATE upper_process_catalog
+SET is_active = {{this.params.isActive}}
+WHERE id = {{this.params.id}};

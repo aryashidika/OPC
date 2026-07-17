@@ -1,0 +1,21 @@
+WITH reps AS (
+	SELECT DISTINCT s.article_id, s.model_number
+	FROM upper_article_session s
+	WHERE s.is_latest = TRUE AND s.status NOT IN ('RELEASED')
+),
+needy AS (
+	SELECT DISTINCT s.article_id
+	FROM upper_article_session s
+	JOIN upper_division_status ds ON ds.session_id = s.id
+	LEFT JOIN upper_concern c
+	ON c.session_id = s.id
+	AND c.target_division = 'BLACKBOX'::division_enum
+	AND c.is_closed = false
+	WHERE s.is_latest = TRUE AND s.status NOT IN ('RELEASED')
+	AND ( c.id IS NOT NULL
+			 OR (ds.division = 'BLACKBOX'::division_enum AND ds.state = 'REWORK'::division_state_enum) )
+)
+SELECT r.article_id, r.model_number, (n.article_id IS NOT NULL) AS needs_attention
+FROM reps r
+LEFT JOIN needy n ON n.article_id = r.article_id
+ORDER BY r.model_number NULLS LAST, r.article_id;

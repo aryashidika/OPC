@@ -1,0 +1,3 @@
+UPDATE supplier_master
+SET is_active = ({{this.params.isActive}})::boolean
+WHERE id = ({{this.params.id}})::int;

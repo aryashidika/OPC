@@ -1,0 +1,62 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 20,
+  "boxShadow": "none",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  appsmith.store.catalogEditWipBehavior || '' ))(sel_wipBehavior.options, sel_wipBehavior.serverSideFiltering) }}",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "defaultOptionValue"
+    }
+  ],
+  "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "sourceData"
+    }
+  ],
+  "dynamicTriggerPathList": [],
+  "isDisabled": false,
+  "isFilterable": true,
+  "isLoading": false,
+  "isRequired": false,
+  "isVisible": true,
+  "key": "3rvbdk4rd7",
+  "labelAlignment": "left",
+  "labelPosition": "Left",
+  "labelText": "Package Behaviour",
+  "labelTextSize": "0.875rem",
+  "labelWidth": "11",
+  "leftColumn": 0,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 19,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 20,
+  "mobileTopRow": 12,
+  "needsErrorInfo": false,
+  "optionLabel": "label",
+  "optionValue": "value",
+  "parentColumnSpace": 16.53125,
+  "parentId": "3e55gssvsp",
+  "parentRowSpace": 10,
+  "placeholderText": "Select option",
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 64,
+  "serverSideFiltering": false,
+  "sourceData": "[\n  { \"label\": \"Laminasi\",           \"value\": \"LAMINATION\" },\n  { \"label\": \"Cutting Normal\",     \"value\": \"CUTTING_NORMAL\" },\n  { \"label\": \"Cutting Inline\",     \"value\": \"CUTTING_INLINE\" },\n  { \"label\": \"Bootie\",             \"value\": \"BOOTIE\" },\n  { \"label\": \"Stitching\",          \"value\": \"STITCHING\" },\n  { \"label\": \"Treatment Subcont\",  \"value\": \"TREATMENT_SUBCONT\" }\n]",
+  "topRow": 16,
+  "type": "SELECT_WIDGET",
+  "version": 1,
+  "widgetId": "629j0ijwj9",
+  "widgetName": "sel_wipBehavior"
+}

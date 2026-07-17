@@ -1,0 +1,40 @@
+SELECT * FROM (
+	SELECT
+	'PART' AS kind,
+	p.id AS ref,
+	p.part_id AS code,
+	p.part_id AS part_number,
+	p.part_name AS part_name,
+	p.part_name AS label,
+	CASE WHEN wi_edit.id IS NOT NULL THEN true ELSE false END AS is_current_wip
+	FROM upper_part p
+	LEFT JOIN bottom_wip_input wi_edit
+	ON wi_edit.input_kind = 'PART'
+	AND wi_edit.input_ref = p.id
+	AND wi_edit.wip_id = NULLIF({{appsmith.store.sockEditWipId}}, 0)
+	WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = '{{sel_article.selectedOptionValue}}')
+	AND p.is_bought_ready = FALSE
+	AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
+	AND p.part_id NOT LIKE '%-%'
+	AND NOT EXISTS (
+		SELECT 1 FROM bottom_wip_input wi
+		JOIN bottom_wip bw ON bw.id = wi.wip_id
+		WHERE wi.input_kind = 'PART'
+		AND wi.input_ref = p.id
+		AND bw.session_id = p.session_id
+		AND bw.is_sockliner_wip = FALSE
+	)
+	AND (
+		NOT EXISTS (
+			SELECT 1 FROM bottom_wip_input wi
+			WHERE wi.input_kind = 'PART'
+			AND wi.input_ref = p.id
+			AND wi.wip_id IS DISTINCT FROM NULLIF({{appsmith.store.sockEditWipId}}, 0)
+		)
+		OR wi_edit.id IS NOT NULL
+	)
+) AS pool
+ORDER BY
+  is_current_wip DESC,
+  SPLIT_PART(code, '-', 1)::int,
+  CASE WHEN code LIKE '%-%' THEN SPLIT_PART(code, '-', 2)::int ELSE 0 END;

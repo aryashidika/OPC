@@ -1,0 +1,19 @@
+DO $$
+DECLARE
+  v_cat TEXT;
+BEGIN
+  UPDATE supplier_master
+  SET name = '{{this.params.name}}',
+      is_active = {{this.params.isActive}}
+  WHERE id = {{this.params.id}};
+
+  DELETE FROM supplier_category WHERE supplier_id = {{this.params.id}};
+
+  FOREACH v_cat IN ARRAY string_to_array('{{this.params.categories}}', ',')
+  LOOP
+    IF trim(v_cat) <> '' THEN
+      INSERT INTO supplier_category (supplier_id, category)
+      VALUES ({{this.params.id}}, trim(v_cat)::supplier_category);
+    END IF;
+  END LOOP;
+END $$;

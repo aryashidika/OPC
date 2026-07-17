@@ -1,0 +1,24 @@
+SELECT 
+  p.id,
+  p.package_no,
+  p.cos_type,
+  p.lead_time_days,
+  TO_CHAR(p.created_at AT TIME ZONE 'Asia/Jakarta', 'DD Mon YYYY HH24:MI') AS created_at,
+  COALESCE(
+		json_agg(
+			json_build_object(
+				'part_id', pp.part_id,
+				'part_name', up.part_name,
+				'remark', pp.cos_remark_after
+			)
+		) FILTER (WHERE pp.part_id IS NOT NULL),
+		'[]'
+	) AS parts,
+  COUNT(pp.part_id) AS jumlah_part,
+  CASE WHEN COUNT(pp.part_id) = 0 THEN true ELSE false END AS is_empty
+FROM cos_package p
+LEFT JOIN upper_part_process pp ON pp.cos_package_id = p.id
+LEFT JOIN upper_part up ON up.part_id = pp.part_id AND up.session_id = p.session_id
+WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+GROUP BY p.id, p.package_no, p.cos_type, p.lead_time_days, p.created_at
+ORDER BY p.package_no;

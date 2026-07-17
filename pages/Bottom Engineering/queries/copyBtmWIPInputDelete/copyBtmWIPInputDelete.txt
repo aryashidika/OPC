@@ -1,0 +1,2 @@
+DELETE FROM bottom_wip_input
+WHERE wip_id IN (SELECT id FROM bottom_wip WHERE session_id = {{this.params.newSessionId}});

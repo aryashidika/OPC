@@ -1,0 +1,1 @@
+DELETE FROM zsf_matgroup WHERE id = {{tblZsfStatic.triggeredRow.id}};

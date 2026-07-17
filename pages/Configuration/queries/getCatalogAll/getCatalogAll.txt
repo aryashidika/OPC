@@ -1,0 +1,12 @@
+SELECT 
+  id,
+  process_name,
+  division,
+  wip_behavior,
+  leveling_behavior,
+  leveling_code,
+  default_lead_time_days,
+  parent_rules,
+  is_active
+FROM upper_process_catalog
+ORDER BY division, process_name;

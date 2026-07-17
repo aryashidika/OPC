@@ -1,0 +1,8 @@
+SELECT 
+  ds.division,
+  ds.state,
+  ds.submitted_at,
+  ds.submitted_by
+FROM upper_division_status ds
+WHERE ds.session_id = {{SpecsheetJS.getActiveSessionId()}}
+ORDER BY ds.division;

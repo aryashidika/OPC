@@ -1,0 +1,2 @@
+DELETE FROM bottom_wip_input
+WHERE wip_id = {{this.params.wipId}};

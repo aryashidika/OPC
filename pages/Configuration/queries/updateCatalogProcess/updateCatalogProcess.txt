@@ -1,0 +1,11 @@
+UPDATE upper_process_catalog
+SET
+  process_name           = '{{this.params.processName}}',
+  division               = '{{this.params.division}}'::division_enum,
+  wip_behavior           = '{{this.params.wipBehavior}}'::wip_behavior_enum,
+  leveling_behavior      = '{{this.params.levelingBehavior}}',
+  leveling_code          = '{{this.params.levelingCode}}',
+  default_lead_time_days = NULLIF('{{this.params.defaultLeadTime}}', '')::int,
+  parent_rules           = '{{this.params.parentRules}}'::JSONB,
+  is_active              = {{this.params.isActive}}
+WHERE id = {{this.params.id}};

@@ -1,0 +1,14 @@
+INSERT INTO upper_part_process
+  (session_id, part_id, cos_type, lead_time_cos_override_days, cos_remark_before, cos_remark_after)
+SELECT
+  {{this.params.newSessionId}}, pp.part_id, pp.cos_type, pp.lead_time_cos_override_days,
+  pp.cos_remark_before, pp.cos_remark_after
+FROM upper_part_process pp
+JOIN upper_part np ON np.part_id = pp.part_id AND np.session_id = {{this.params.newSessionId}}
+WHERE pp.session_id = {{this.params.oldSessionId}}
+ON CONFLICT (session_id, part_id) DO UPDATE SET
+  cos_type                    = EXCLUDED.cos_type,
+  lead_time_cos_override_days = EXCLUDED.lead_time_cos_override_days,
+  cos_remark_before           = EXCLUDED.cos_remark_before,
+  cos_remark_after            = EXCLUDED.cos_remark_after,
+  updated_at = NOW();

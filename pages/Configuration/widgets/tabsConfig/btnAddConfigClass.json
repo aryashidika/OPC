@@ -1,0 +1,55 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 131,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": false,
+  "isLoading": false,
+  "isVisible": true,
+  "key": "8kzxlefbmy",
+  "leftColumn": 0,
+  "minWidth": 120,
+  "mobileBottomRow": 131,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 16,
+  "mobileTopRow": 127,
+  "needsErrorInfo": false,
+  "onClick": "{{storeValue('isNewConfigClass', true).then(() => showModal('modalEditConfigClass'))}}",
+  "parentColumnSpace": 19.9375,
+  "parentId": "co4urki54j",
+  "parentRowSpace": 10,
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 16,
+  "text": "Add New",
+  "topRow": 127,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "aot5rktnzr",
+  "widgetName": "btnAddConfigClass"
+}

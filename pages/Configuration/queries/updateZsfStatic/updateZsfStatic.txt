@@ -1,0 +1,16 @@
+UPDATE zsf_matgroup
+SET process_type = {{tblZsfStatic.triggeredRow.process_type}},
+    prefix       = {{tblZsfStatic.triggeredRow.prefix}},
+    matgroup     = {{tblZsfStatic.triggeredRow.matgroup}},
+    valclass     = {{tblZsfStatic.triggeredRow.valclass}},
+    mrp          = {{tblZsfStatic.triggeredRow.mrp}},
+    grt          = {{tblZsfStatic.triggeredRow.grt || null}},
+    iht          = {{tblZsfStatic.triggeredRow.iht || null}},
+    pdt          = {{tblZsfStatic.triggeredRow.pdt || null}},
+    purgroup     = {{tblZsfStatic.triggeredRow.purgroup}},
+    sloc         = {{tblZsfStatic.triggeredRow.sloc}},
+    specprocur   = {{tblZsfStatic.triggeredRow.specprocur}},
+    proctype     = {{tblZsfStatic.triggeredRow.proctype}},
+    lotsizing    = {{tblZsfStatic.triggeredRow.lotsizing}},
+    description  = {{tblZsfStatic.triggeredRow.description}}
+WHERE id = {{tblZsfStatic.triggeredRow.id}};

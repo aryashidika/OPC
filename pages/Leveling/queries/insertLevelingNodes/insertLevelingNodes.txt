@@ -1,0 +1,5 @@
+INSERT INTO leveling_node_prb
+  (session_id, level, node_code, node_type, node_name, part_id, parent_code, is_manual, lead_time_days, dbref_type, dbref_id)
+VALUES
+{{this.params.values}}
+;

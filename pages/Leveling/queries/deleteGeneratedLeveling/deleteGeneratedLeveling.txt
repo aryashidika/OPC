@@ -1,0 +1,1 @@
+DELETE FROM leveling_node_prb WHERE session_id = {{this.params.sessionId}};

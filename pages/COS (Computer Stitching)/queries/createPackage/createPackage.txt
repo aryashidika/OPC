@@ -1,0 +1,9 @@
+INSERT INTO cos_package (session_id, package_no, cos_type, lead_time_days, created_by)
+VALUES (
+	{{this.params.sessionId}},
+	{{this.params.packageNo}},
+	NULLIF('{{this.params.cosType}}', '')::cos_type_enum,
+	NULLIF('{{this.params.leadTimeDays}}', '')::int,
+	'{{this.params.createdBy}}'
+)
+RETURNING id, package_no, cos_type, lead_time_days;

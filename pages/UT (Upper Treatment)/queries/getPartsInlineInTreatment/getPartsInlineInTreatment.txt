@@ -1,0 +1,15 @@
+SELECT DISTINCT
+  p.id AS part_db_id,
+  p.part_id,
+  p.part_name,
+  pp.cutting_type
+FROM upper_part p
+JOIN upper_part_process pp
+  ON pp.session_id = p.session_id AND pp.part_id = p.part_id
+JOIN upper_wip_input wi
+  ON wi.input_kind = 'PART' AND wi.input_ref = p.id
+JOIN upper_wip w
+  ON w.id = wi.wip_id AND w.session_id = p.session_id
+WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+  AND pp.cutting_type = 'INLINE'
+  AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED');

@@ -1,0 +1,4 @@
+SELECT
+  (SELECT COUNT(*) FROM upper_wip  WHERE supplier_id = {{this.params.id}})
++ (SELECT COUNT(*) FROM bottom_wip WHERE supplier_id = {{this.params.id}})
+  AS n;

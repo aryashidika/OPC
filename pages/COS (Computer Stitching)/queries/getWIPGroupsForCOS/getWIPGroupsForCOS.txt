@@ -1,0 +1,19 @@
+SELECT
+  w.id AS wip_id,
+  w.label AS wip_label,
+  wi.input_kind,
+  wi.input_ref,
+  CASE
+    WHEN wi.input_kind = 'PART' THEN up.part_name
+    WHEN wi.input_kind = 'WIP' THEN w2.label
+  END AS input_label,
+  CASE
+    WHEN wi.input_kind = 'PART' THEN up.id
+    ELSE NULL
+  END AS part_db_id
+FROM upper_wip w
+LEFT JOIN upper_wip_input wi ON wi.wip_id = w.id
+LEFT JOIN upper_part up ON up.id = wi.input_ref AND wi.input_kind = 'PART'
+LEFT JOIN upper_wip w2 ON w2.id = wi.input_ref AND wi.input_kind = 'WIP'
+WHERE w.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+ORDER BY w.id;

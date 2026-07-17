@@ -1,0 +1,19 @@
+INSERT INTO zsf_matgroup
+  (process_type, prefix, matgroup, valclass, mrp, grt, iht, pdt,
+   purgroup, sloc, specprocur, proctype, lotsizing, description)
+VALUES (
+  {{tblZsfStatic.newRow.process_type}},
+  {{tblZsfStatic.newRow.prefix}},
+  {{tblZsfStatic.newRow.matgroup}},
+  {{tblZsfStatic.newRow.valclass}},
+  {{tblZsfStatic.newRow.mrp}},
+  {{tblZsfStatic.newRow.grt || null}},
+  {{tblZsfStatic.newRow.iht || null}},
+  {{tblZsfStatic.newRow.pdt || null}},
+  {{tblZsfStatic.newRow.purgroup}},
+  {{tblZsfStatic.newRow.sloc}},
+  {{tblZsfStatic.newRow.specprocur}},
+  {{tblZsfStatic.newRow.proctype}},
+  {{tblZsfStatic.newRow.lotsizing}},
+  {{tblZsfStatic.newRow.description}}
+);

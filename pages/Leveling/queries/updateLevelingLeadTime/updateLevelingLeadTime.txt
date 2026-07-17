@@ -1,0 +1,3 @@
+UPDATE leveling_node_prb
+SET lead_time_days = {{this.params.lt}}
+WHERE id = {{this.params.id}};

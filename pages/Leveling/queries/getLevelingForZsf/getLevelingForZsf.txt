@@ -1,0 +1,54 @@
+SELECT
+  n.id,
+  n.level,
+  n.node_code                                     AS process_code,
+  n.node_name                                     AS part_name,
+  n.part_id,
+  n.parent_code,
+  n.is_manual,
+  n.lead_time_days                                AS lead_time,
+  n.dbref_type,
+  n.dbref_id,
+  s.name                                          AS node_supplier,
+  COALESCE(bw.lead_time_days, uw.lead_time_days)  AS node_supplier_lt,
+  CASE
+    WHEN n.node_type = 'part'         THEN 'RAW MATERIAL'
+    WHEN n.node_type = 'fg'           THEN 'FG SHOES'
+    WHEN n.node_type = 'cos_central'  THEN 'COS AFTER TREATMENT'
+    WHEN n.node_type = 'stockfitting' THEN 'STOCKFITTING BOTTOM'
+    WHEN n.node_type = 'cutting_per_part' THEN
+      CASE
+        WHEN n.node_code LIKE 'OSP%' THEN 'OUTGOING SUBCONT'
+        ELSE 'CUTTING COMPONENT'
+      END
+    WHEN n.node_type = 'spine' THEN
+      CASE
+        WHEN n.node_code LIKE 'S-%'  THEN 'SEMI F/G SHOES'
+        WHEN n.node_code LIKE 'SU-%' THEN 'SEMI F/G UPPER'
+        WHEN n.node_code LIKE 'FS-%' THEN 'SEMI F/G UPPER FEEDING SETTING'
+        ELSE UPPER(n.node_name)
+      END
+    WHEN n.node_type = 'cutting_group' THEN
+      CASE
+        WHEN UPPER(n.node_name) = 'CUTTING INLINE' THEN 'SEMI F/G CUTTING INLINE'
+        WHEN UPPER(n.node_name) = 'CUTTING NORMAL' THEN 'CUTTING SENTRAL'
+        ELSE 'CUTTING BOOTIE'
+      END
+    WHEN n.node_type = 'wip' THEN
+      CASE
+        WHEN n.node_code LIKE 'SL%'          THEN 'SL RUBBER PROCESS'
+        WHEN n.dbref_type = 'upper_wip'      THEN 'INCOMING SUBCONT'
+        WHEN n.node_code LIKE 'ZSS-%'        THEN 'SOCKLINER SUBCONT'
+        WHEN bw.is_sockliner_wip = TRUE      THEN 'SOCKLINER TREATMENT BOTTOM'
+        ELSE 'TREATMENT BOTTOM'
+      END
+    ELSE UPPER(n.node_type)
+  END                                             AS process_type
+FROM leveling_node_prb n
+LEFT JOIN bottom_wip bw ON n.dbref_type = 'bottom_wip' AND bw.id = n.dbref_id
+LEFT JOIN upper_wip  uw ON n.dbref_type = 'upper_wip'  AND uw.id = n.dbref_id
+LEFT JOIN supplier_master s ON s.id = COALESCE(bw.supplier_id, uw.supplier_id)
+WHERE n.session_id = (
+	SELECT id FROM v_current_session WHERE article_id = '{{sel_article.selectedOptionValue}}'
+)
+ORDER BY n.level, n.id;

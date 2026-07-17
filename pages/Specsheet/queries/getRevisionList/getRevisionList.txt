@@ -1,0 +1,14 @@
+SELECT
+  s.id AS session_id,
+  s.revision_no,
+  s.status,
+  s.is_latest,
+  s.parent_session_id,
+  TO_CHAR(s.created_at AT TIME ZONE 'Asia/Jakarta', 'DD Mon YYYY HH24:MI') AS created_at,
+  TO_CHAR(s.released_at AT TIME ZONE 'Asia/Jakarta', 'DD Mon YYYY HH24:MI') AS released_at,
+  s.released_by
+FROM upper_article_session s
+WHERE s.article_id = {{sel_specArticle.selectedOptionValue}}
+GROUP BY s.id, s.revision_no, s.status, s.is_latest,
+         s.parent_session_id, s.created_at, s.released_at, s.released_by
+ORDER BY s.revision_no DESC;

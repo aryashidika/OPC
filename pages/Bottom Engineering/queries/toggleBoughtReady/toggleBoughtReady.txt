@@ -1,0 +1,4 @@
+UPDATE upper_part
+SET is_bought_ready = {{this.params.isBoughtReady}}
+WHERE id = {{this.params.partId}}::int
+  AND session_id = {{this.params.sessionId}}::int;

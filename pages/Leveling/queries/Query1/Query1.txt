@@ -1,0 +1,3 @@
+UPDATE zsf_matgroup
+SET process_type = 'SL RUBBER PROCESS'
+WHERE id = 10;

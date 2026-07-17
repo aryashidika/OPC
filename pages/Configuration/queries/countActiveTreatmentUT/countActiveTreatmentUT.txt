@@ -1,0 +1,5 @@
+SELECT COUNT(*)::int AS n
+FROM upper_process_catalog
+WHERE wip_behavior = 'TREATMENT_SUBCONT'
+  AND division = 'UPPER_TOOLING'
+  AND is_active = TRUE;

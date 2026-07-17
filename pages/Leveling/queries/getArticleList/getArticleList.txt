@@ -1,0 +1,4 @@
+SELECT s.article_id, s.model_number
+FROM upper_article_session s
+WHERE s.is_latest = TRUE
+ORDER BY s.model_number NULLS LAST, s.article_id;

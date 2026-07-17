@@ -1,0 +1,71 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 10,
+  "bottomRowBeforeCollapse": 10,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "isVisible"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
+    },
+    {
+      "key": "isVisible"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": "{{COSJS.isLocked()}}",
+  "isLoading": false,
+  "isVisible": "{{ !COSJS.isPackagesReady() && COSJS.getCOSStatus() !== 'SUBMITTED' }}",
+  "key": "cqc0ijazos",
+  "leftColumn": 21,
+  "minWidth": 120,
+  "mobileBottomRow": 43,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 16,
+  "mobileTopRow": 39,
+  "needsErrorInfo": false,
+  "onClick": "{{ COSJS.onSubmitPackage() }}",
+  "originalBottomRow": 10,
+  "originalTopRow": 6,
+  "parentColumnSpace": 20.25,
+  "parentId": "dmq8gdp1o7",
+  "parentRowSpace": 10,
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 41,
+  "text": "Submit Package",
+  "topRow": 6,
+  "topRowBeforeCollapse": 6,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "9m558hra8p",
+  "widgetName": "btn_submitPackageCos"
+}

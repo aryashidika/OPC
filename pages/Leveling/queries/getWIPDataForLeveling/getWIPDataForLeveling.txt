@@ -1,0 +1,79 @@
+SELECT
+  'U' || w.id AS id,
+  w.id AS raw_id,
+  w.label,
+  'upper' AS wip_source,
+  NULL AS wip_type,
+  NULL::boolean AS is_sockliner_wip,
+  w.lead_time_days,
+  sm.name AS supplier_name,
+  COALESCE(
+		json_agg(
+			json_build_object(
+				'kind', wi.input_kind,
+				'ref', CASE 
+				WHEN wi.input_kind = 'PART' THEN wi.input_ref
+				ELSE wi.input_ref
+				END,
+				'ref_prefixed', CASE
+				WHEN wi.input_kind = 'WIP' THEN 'U' || wi.input_ref
+				ELSE 'P' || wi.input_ref
+				END,
+				'cos_type', CASE
+				WHEN wi.input_kind = 'PART' THEN pp.cos_type::TEXT
+				ELSE NULL
+				END
+			)
+		) FILTER (
+			WHERE wi.id IS NOT NULL
+				AND (wi.input_kind != 'PART' OR up.delta_flag IS NULL OR up.delta_flag != 'REMOVED')
+		),
+		'[]'
+	) AS inputs
+FROM upper_wip w
+LEFT JOIN upper_wip_input wi ON wi.wip_id = w.id
+LEFT JOIN upper_part up 
+  ON up.id = wi.input_ref 
+  AND wi.input_kind = 'PART'
+  AND up.session_id = w.session_id
+LEFT JOIN upper_part_process pp 
+  ON pp.part_id = up.part_id 
+  AND pp.session_id = w.session_id
+LEFT JOIN supplier_master sm ON sm.id = w.supplier_id
+WHERE w.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+GROUP BY w.id, w.label, w.lead_time_days, sm.name
+UNION ALL
+SELECT
+  'B' || bw.id AS id,
+  bw.id AS raw_id,
+  bw.label,
+  'bottom' AS wip_source,
+  bw.wip_type,
+  bw.is_sockliner_wip,
+  bw.lead_time_days,
+  sm2.name AS supplier_name,
+  COALESCE(
+		json_agg(
+			json_build_object(
+				'kind', wi.input_kind,
+				'ref', wi.input_ref,
+				'ref_prefixed', CASE
+				WHEN wi.input_kind = 'WIP' THEN 'B' || wi.input_ref
+				ELSE 'P' || wi.input_ref
+				END,
+				'cos_type', NULL,
+				'wip_type', bw.wip_type
+			)
+		) FILTER (
+			WHERE wi.id IS NOT NULL
+				AND (wi.input_kind != 'PART' OR up2.delta_flag IS NULL OR up2.delta_flag != 'REMOVED')
+		),
+		'[]'
+	) AS inputs
+FROM bottom_wip bw
+LEFT JOIN bottom_wip_input wi ON wi.wip_id = bw.id
+LEFT JOIN upper_part up2 ON up2.id = wi.input_ref AND wi.input_kind = 'PART'
+LEFT JOIN supplier_master sm2 ON sm2.id = bw.supplier_id
+WHERE bw.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+GROUP BY bw.id, bw.label, bw.wip_type, bw.is_sockliner_wip, bw.lead_time_days, sm2.name
+ORDER BY wip_source, raw_id;

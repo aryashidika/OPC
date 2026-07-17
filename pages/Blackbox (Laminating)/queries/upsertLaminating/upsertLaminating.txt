@@ -1,0 +1,13 @@
+INSERT INTO upper_part_process (session_id, part_id, laminating_machine, lead_time_lam_override_days)
+VALUES (
+  {{this.params.sessionId}},
+  '{{this.params.partId}}',
+  NULLIF('{{this.params.laminatingMachine}}', ''),
+  NULLIF('{{this.params.leadTimeOverride}}', '')::int
+)
+ON CONFLICT (session_id, part_id) 
+DO UPDATE SET 
+  laminating_machine = NULLIF('{{this.params.laminatingMachine}}', ''),
+  lead_time_lam_override_days = NULLIF('{{this.params.leadTimeOverride}}', '')::int,
+  copied_from_session_id = NULL,
+  updated_at = NOW();

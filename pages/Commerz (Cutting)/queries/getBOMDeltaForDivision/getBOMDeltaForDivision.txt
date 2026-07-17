@@ -1,0 +1,13 @@
+SELECT
+  p.part_id,
+  p.part_name,
+  COALESCE(p.delta_flag, 'SAME') AS delta_status
+FROM upper_part p
+WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = '{{this.params.articleId}}')
+ORDER BY
+  CASE WHEN p.delta_flag IN ('NEW', 'REMOVED') THEN 0 ELSE 1 END,
+  CAST(SPLIT_PART(p.part_id::TEXT, '-', 1) AS INTEGER),
+  CASE
+    WHEN POSITION('-' IN p.part_id::TEXT) = 0 THEN 0
+    ELSE CAST(SPLIT_PART(p.part_id::TEXT, '-', 2) AS INTEGER)
+  END;

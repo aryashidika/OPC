@@ -1,0 +1,14 @@
+INSERT INTO upper_article_session
+  (article_id, revision_no, status, parent_session_id, model_number, is_latest)
+VALUES (
+  '{{this.params.articleId}}',
+  COALESCE(
+    (SELECT MAX(revision_no) + 1 FROM upper_article_session WHERE article_id = '{{this.params.articleId}}'),
+    1
+  ),
+  'DRAFT',
+  {{this.params.parentSessionId}},
+  NULLIF('{{this.params.modelNumber}}', 'null'),
+  TRUE
+)
+RETURNING id, article_id, revision_no, status, parent_session_id, model_number;

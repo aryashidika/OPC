@@ -1,0 +1,38 @@
+SELECT
+  w.id,
+  w.wip_type,
+  w.is_sockliner_wip,                                                        
+  CASE WHEN w.is_sockliner_wip THEN 'Sockliner' ELSE 'Outsole' END AS category,
+  w.label,
+  w.supplier_id,
+  w.lead_time_days,
+  s.name AS supplier_name,
+  w.copied_from_session_id,
+  src.article_id AS copied_from_article_id,
+  COALESCE(
+    json_agg(
+      json_build_object(
+        'kind', wi.input_kind,
+        'ref', wi.input_ref,
+        'label', CASE
+          WHEN wi.input_kind = 'PART' THEN up.part_name
+          WHEN wi.input_kind = 'WIP' THEN bw2.label
+          ELSE 'Unknown'
+        END
+      )
+    ) FILTER (
+      WHERE wi.id IS NOT NULL
+        AND (wi.input_kind != 'PART' OR up.delta_flag IS NULL OR up.delta_flag != 'REMOVED')
+    ),
+    '[]'
+  ) AS inputs
+FROM bottom_wip w
+LEFT JOIN bottom_wip_input wi ON wi.wip_id = w.id
+LEFT JOIN upper_part up ON up.id = wi.input_ref AND wi.input_kind = 'PART'
+LEFT JOIN bottom_wip bw2 ON bw2.id = wi.input_ref AND wi.input_kind = 'WIP'
+LEFT JOIN supplier_master s ON s.id = w.supplier_id
+LEFT JOIN upper_article_session src ON src.id = w.copied_from_session_id
+WHERE w.session_id = (SELECT id FROM v_current_session WHERE article_id = '{{sel_article.selectedOptionValue}}')
+GROUP BY w.id, w.wip_type, w.is_sockliner_wip, w.label, w.supplier_id, w.lead_time_days,
+         s.name, w.copied_from_session_id, src.article_id
+ORDER BY w.is_sockliner_wip, w.wip_type, w.id;

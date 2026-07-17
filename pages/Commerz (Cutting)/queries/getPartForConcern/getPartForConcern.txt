@@ -1,0 +1,8 @@
+SELECT 
+  pp.cutting_type,
+  pp.cos_type
+FROM upper_part_process pp
+JOIN upper_part p ON p.part_id = pp.part_id
+  AND p.session_id = pp.session_id
+WHERE pp.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+  AND pp.part_id = '{{this.params.partId}}';

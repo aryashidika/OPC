@@ -1,0 +1,4 @@
+UPDATE upper_division_status
+SET packages_ready_at = NOW()
+WHERE session_id = {{this.params.sessionId}}
+  AND division = 'COS'::division_enum;

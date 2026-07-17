@@ -1,0 +1,10 @@
+INSERT INTO cos_before_package (session_id, package_no, cos_type, lead_time_days, created_by)
+VALUES (
+  {{this.params.sessionId}}::int,
+  {{this.params.packageNo}}::int,
+  NULLIF('{{this.params.cosType}}', '')::cos_type_enum,
+  NULLIF('{{this.params.leadTimeDays}}', '')::int,
+  '{{this.params.createdBy}}'
+)
+ON CONFLICT (session_id, package_no) DO NOTHING
+RETURNING id, package_no, cos_type, lead_time_days;

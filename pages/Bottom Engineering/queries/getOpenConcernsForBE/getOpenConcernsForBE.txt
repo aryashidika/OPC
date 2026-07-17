@@ -1,0 +1,12 @@
+SELECT 
+  c.id,
+  c.reason,
+  c.item_ref,
+  c.raised_by,
+  c.concern_source,
+  TO_CHAR(c.created_at AT TIME ZONE 'Asia/Jakarta', 'DD Mon YYYY HH24:MI') AS created_at
+FROM upper_concern c
+WHERE c.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
+  AND c.target_division = 'BOTTOM_ENGINEERING'
+  AND c.is_closed = false
+ORDER BY c.created_at DESC;

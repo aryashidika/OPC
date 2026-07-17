@@ -1,0 +1,752 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderColor": "#E0DEDE",
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "borderWidth": "1",
+  "bottomRow": 45,
+  "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
+  "cachedTableData": {},
+  "canFreezeColumn": true,
+  "childStylesheet": {
+    "button": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "buttonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "editActions": {
+      "discardBorderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "discardButtonColor": "{{appsmith.theme.colors.primaryColor}}",
+      "saveBorderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "saveButtonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "iconButton": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "buttonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "menuButton": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "menuColor": "{{appsmith.theme.colors.primaryColor}}"
+    }
+  },
+  "columnOrder": [
+    "season",
+    "model_number",
+    "model_name",
+    "session_id",
+    "article_id",
+    "revision_no",
+    "status",
+    "created_at",
+    "bb_state",
+    "cmz_state",
+    "cos_state",
+    "ut_state",
+    "be_state",
+    "customColumn1"
+  ],
+  "columnUpdatedAt": 1783590363137,
+  "columnWidthMap": {},
+  "customIsLoading": false,
+  "customIsLoadingValue": "",
+  "defaultPageSize": 0,
+  "defaultSelectedRowIndex": 0,
+  "defaultSelectedRowIndices": [
+    0
+  ],
+  "delimiter": ",",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "boxShadow"
+    },
+    {
+      "key": "primaryColumns.session_id.computedValue"
+    },
+    {
+      "key": "primaryColumns.article_id.computedValue"
+    },
+    {
+      "key": "primaryColumns.revision_no.computedValue"
+    },
+    {
+      "key": "primaryColumns.status.computedValue"
+    },
+    {
+      "key": "primaryColumns.created_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.bb_state.computedValue"
+    },
+    {
+      "key": "primaryColumns.cmz_state.computedValue"
+    },
+    {
+      "key": "primaryColumns.cos_state.computedValue"
+    },
+    {
+      "key": "primaryColumns.ut_state.computedValue"
+    },
+    {
+      "key": "primaryColumns.be_state.computedValue"
+    },
+    {
+      "key": "primaryColumns.bb_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.bb_state.borderRadius"
+    },
+    {
+      "key": "primaryColumns.bb_state.boxShadow"
+    },
+    {
+      "key": "primaryColumns.cmz_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.cmz_state.borderRadius"
+    },
+    {
+      "key": "primaryColumns.cmz_state.boxShadow"
+    },
+    {
+      "key": "primaryColumns.cos_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.cos_state.borderRadius"
+    },
+    {
+      "key": "primaryColumns.cos_state.boxShadow"
+    },
+    {
+      "key": "primaryColumns.ut_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.ut_state.borderRadius"
+    },
+    {
+      "key": "primaryColumns.ut_state.boxShadow"
+    },
+    {
+      "key": "primaryColumns.ut_state.buttonLabel"
+    },
+    {
+      "key": "primaryColumns.be_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.be_state.borderRadius"
+    },
+    {
+      "key": "primaryColumns.be_state.boxShadow"
+    },
+    {
+      "key": "primaryColumns.model_number.computedValue"
+    },
+    {
+      "key": "primaryColumns.bb_state.buttonLabel"
+    },
+    {
+      "key": "primaryColumns.cmz_state.buttonLabel"
+    },
+    {
+      "key": "primaryColumns.cos_state.buttonLabel"
+    },
+    {
+      "key": "primaryColumns.be_state.buttonLabel"
+    },
+    {
+      "key": "primaryColumns.customColumn1.computedValue"
+    },
+    {
+      "key": "primaryColumns.model_name.computedValue"
+    },
+    {
+      "key": "primaryColumns.season.computedValue"
+    },
+    {
+      "key": "tableData"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "tableData"
+    },
+    {
+      "key": "primaryColumns.bb_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.cmz_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.cos_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.ut_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.be_state.buttonColor"
+    },
+    {
+      "key": "primaryColumns.bb_state.onClick"
+    },
+    {
+      "key": "primaryColumns.cmz_state.onClick"
+    },
+    {
+      "key": "primaryColumns.cos_state.onClick"
+    },
+    {
+      "key": "primaryColumns.ut_state.onClick"
+    },
+    {
+      "key": "primaryColumns.be_state.onClick"
+    },
+    {
+      "key": "onRowSelected"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "primaryColumns.bb_state.onClick"
+    },
+    {
+      "key": "primaryColumns.cmz_state.onClick"
+    },
+    {
+      "key": "primaryColumns.cos_state.onClick"
+    },
+    {
+      "key": "primaryColumns.ut_state.onClick"
+    },
+    {
+      "key": "primaryColumns.be_state.onClick"
+    },
+    {
+      "key": "onRowSelected"
+    }
+  ],
+  "enableClientSideSearch": true,
+  "endOfData": false,
+  "flexVerticalAlignment": "start",
+  "horizontalAlignment": "LEFT",
+  "inlineEditingSaveOption": "ROW_LEVEL",
+  "isLoading": false,
+  "isSortable": true,
+  "isVisible": true,
+  "isVisibleDownload": true,
+  "isVisibleFilters": false,
+  "isVisiblePagination": true,
+  "isVisibleSearch": true,
+  "key": "xl85g9lt4d",
+  "label": "Data",
+  "leftColumn": 0,
+  "minWidth": 450,
+  "mobileBottomRow": 32,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 34,
+  "mobileTopRow": 4,
+  "needsErrorInfo": false,
+  "onRowSelected": "{{ HomeJS.openArticleDetailModal(tbl_activeArticles.selectedRow.session_id, tbl_activeArticles.selectedRow.article_id) }}",
+  "originalBottomRow": 45,
+  "originalTopRow": 4,
+  "parentColumnSpace": 19.9375,
+  "parentId": "u973a9kgb2",
+  "parentRowSpace": 10,
+  "primaryColumns": {
+    "article_id": {
+      "alias": "article_id",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"article_id\"])) : article_id })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "article_id",
+      "index": 1,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Article",
+      "notation": "standard",
+      "originalId": "article_id",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "bb_state": {
+      "alias": "bb_state",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "borderRadius": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
+      "boxShadow": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
+      "buttonColor": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.bb_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.bb_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.bb_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n)) : \n  currentRow.bb_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.bb_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.bb_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n })()}}",
+      "buttonLabel": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.bb_state === 'SUBMITTED' && currentRow.bb_submitted_by && currentRow.bb_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.bb_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.bb_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.bb_state === 'REWORK'    ? '↩ Rework' :\n'—')) : currentRow.bb_state === 'SUBMITTED' && currentRow.bb_submitted_by && currentRow.bb_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.bb_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.bb_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.bb_state === 'REWORK'    ? '↩ Rework' :\n'—' })()}}",
+      "columnType": "button",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"bb_state\"])) : currentRow[\"bb_state\"] })()}}",
+      "currencyCode": "USD",
+      "customAlias": "",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "bb_state",
+      "index": 5,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Blackbox",
+      "notation": "standard",
+      "onClick": "{{HomeJS.navigateToDivision(currentRow.session_id, currentRow.article_id, 'BLACKBOX')}}",
+      "originalId": "bb_state",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "be_state": {
+      "alias": "be_state",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "borderRadius": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
+      "boxShadow": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
+      "buttonColor": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.be_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.be_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.be_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n)) : \n  currentRow.be_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.be_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.be_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n })()}}",
+      "buttonLabel": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.be_state === 'SUBMITTED' && currentRow.be_submitted_by && currentRow.be_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.be_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.be_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.be_state === 'REWORK'    ? '↩ Rework' :\n'—')) : currentRow.be_state === 'SUBMITTED' && currentRow.be_submitted_by && currentRow.be_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.be_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.be_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.be_state === 'REWORK'    ? '↩ Rework' :\n'—' })()}}",
+      "columnType": "button",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ('')) : '' })()}}",
+      "currencyCode": "USD",
+      "customAlias": "",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "be_state",
+      "index": 9,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "BE",
+      "notation": "standard",
+      "onClick": "{{HomeJS.navigateToDivision(currentRow.session_id, currentRow.article_id, 'BOTTOM_ENGINEERING')}}",
+      "originalId": "be_state",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "cmz_state": {
+      "alias": "cmz_state",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "borderRadius": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
+      "boxShadow": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
+      "buttonColor": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.cmz_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.cmz_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.cmz_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n)) : \n  currentRow.cmz_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.cmz_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.cmz_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n })()}}",
+      "buttonLabel": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.cmz_state === 'SUBMITTED' && currentRow.cmz_submitted_by && currentRow.cmz_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.cmz_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.cmz_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.cmz_state === 'REWORK'    ? '↩ Rework' :\n'—')) : currentRow.cmz_state === 'SUBMITTED' && currentRow.cmz_submitted_by && currentRow.cmz_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.cmz_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.cmz_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.cmz_state === 'REWORK'    ? '↩ Rework' :\n'—' })()}}",
+      "columnType": "button",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.bb_state === 'SUBMITTED'   ? '✓ Done'   :\n  currentRow.bb_state === 'IN_WORK'     ? '● Kerja'  :\n  currentRow.bb_state === 'REWORK'      ? '↩ Rework' :\n  '—'\n)) : \n  currentRow.bb_state === 'SUBMITTED'   ? '✓ Done'   :\n  currentRow.bb_state === 'IN_WORK'     ? '● Kerja'  :\n  currentRow.bb_state === 'REWORK'      ? '↩ Rework' :\n  '—'\n })()}}",
+      "currencyCode": "USD",
+      "customAlias": "",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "cmz_state",
+      "index": 6,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Commerz",
+      "notation": "standard",
+      "onClick": "{{HomeJS.navigateToDivision(currentRow.session_id, currentRow.article_id, 'COMMERZ')}}",
+      "originalId": "cmz_state",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "cos_state": {
+      "alias": "cos_state",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "borderRadius": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
+      "boxShadow": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
+      "buttonColor": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.cos_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.cos_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.cos_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n)) : \n  currentRow.cos_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.cos_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.cos_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n })()}}",
+      "buttonLabel": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.cos_state === 'SUBMITTED' && currentRow.cos_submitted_by && currentRow.cos_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.cos_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.cos_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.cos_state === 'REWORK'    ? '↩ Rework' :\n'—')) : currentRow.cos_state === 'SUBMITTED' && currentRow.cos_submitted_by && currentRow.cos_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.cos_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.cos_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.cos_state === 'REWORK'    ? '↩ Rework' :\n'—' })()}}",
+      "columnType": "button",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"cos_state\"])) : cos_state })()}}",
+      "currencyCode": "USD",
+      "customAlias": "",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "cos_state",
+      "index": 7,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "COS & ME",
+      "notation": "standard",
+      "onClick": "{{HomeJS.navigateToDivision(currentRow.session_id, currentRow.article_id, 'COS')}}",
+      "originalId": "cos_state",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "created_at": {
+      "alias": "created_at",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"created_at\"])) : created_at })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "created_at",
+      "index": 4,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "created_at",
+      "notation": "standard",
+      "originalId": "created_at",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "customColumn1": {
+      "alias": "Attention",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "buttonStyle": "rgb(3, 179, 101)",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.hidden_needs_attention_count > 0 ? '⚠ ' + currentRow.hidden_needs_attention_count : '' )) :  currentRow.hidden_needs_attention_count > 0 ? '⚠ ' + currentRow.hidden_needs_attention_count : ''  })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "customColumn1",
+      "index": 10,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": true,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Attention",
+      "labelColor": "#FFFFFF",
+      "notation": "standard",
+      "originalId": "customColumn1",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "model_name": {
+      "alias": "model_name",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"model_name\"])) : model_name })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "model_name",
+      "index": 3,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Model Name",
+      "notation": "standard",
+      "originalId": "model_name",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "model_number": {
+      "alias": "model_number",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"model_number\"])) : model_number })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "model_number",
+      "index": 10,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Model Number",
+      "notation": "standard",
+      "originalId": "model_number",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "revision_no": {
+      "alias": "revision_no",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"revision_no\"])) : revision_no })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "revision_no",
+      "index": 2,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Revision Number",
+      "notation": "standard",
+      "originalId": "revision_no",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "season": {
+      "alias": "season",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"season\"])) : season })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "season",
+      "index": 4,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Season",
+      "notation": "standard",
+      "originalId": "season",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "session_id": {
+      "alias": "session_id",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"session_id\"])) : session_id })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "session_id",
+      "index": 0,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "session_id",
+      "notation": "standard",
+      "originalId": "session_id",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "status": {
+      "alias": "status",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"status\"])) : status })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "status",
+      "index": 3,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Status",
+      "notation": "standard",
+      "originalId": "status",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "ut_state": {
+      "alias": "ut_state",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "borderRadius": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
+      "boxShadow": "{{tbl_activeArticles.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
+      "buttonColor": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.ut_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.ut_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.ut_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n)) : \n  currentRow.ut_state === 'SUBMITTED' ? '#3B6D11' :\n  currentRow.ut_state === 'IN_WORK'   ? '#854F0B' :\n  currentRow.ut_state === 'REWORK'    ? '#A32D2D' :\n  '#888780'\n })()}}",
+      "buttonLabel": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.ut_state === 'SUBMITTED' && currentRow.ut_submitted_by && currentRow.ut_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.ut_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.ut_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.ut_state === 'REWORK'    ? '↩ Rework' :\n'—'\n)) : \n  currentRow.ut_state === 'SUBMITTED' && currentRow.ut_submitted_by && currentRow.ut_submitted_by.startsWith('COPY:') ? '⧉ Submitted' :\ncurrentRow.ut_state === 'SUBMITTED' ? '✓ Submitted' :\ncurrentRow.ut_state === 'IN_WORK'   ? '● In Work' :\ncurrentRow.ut_state === 'REWORK'    ? '↩ Rework' :\n'—'\n })()}}",
+      "columnType": "button",
+      "computedValue": "{{(() => { const tableData = tbl_activeArticles.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"ut_state\"])) : ut_state })()}}",
+      "currencyCode": "USD",
+      "customAlias": "",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "ut_state",
+      "index": 8,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "UT",
+      "notation": "standard",
+      "onClick": "{{HomeJS.navigateToDivision(currentRow.session_id, currentRow.article_id, 'UPPER_TOOLING')}}",
+      "originalId": "ut_state",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    }
+  },
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 64,
+  "searchKey": "",
+  "tableData": "{{getAllActiveSessions.data}}",
+  "textSize": "0.875rem",
+  "topRow": 4,
+  "totalRecordsCount": 0,
+  "type": "TABLE_WIDGET_V2",
+  "version": 2,
+  "verticalAlignment": "CENTER",
+  "widgetId": "z4cnn4ed7q",
+  "widgetName": "tbl_activeArticles"
+}

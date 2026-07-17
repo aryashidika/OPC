@@ -1,0 +1,2 @@
+SELECT product_type, sports_category, material_group, valuation_class
+FROM aras_material_group;

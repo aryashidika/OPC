@@ -1,0 +1,14 @@
+INSERT INTO bottom_wip (session_id, wip_type, label, supplier_id, lead_time_days, created_by, is_sockliner_wip)
+VALUES (
+  {{this.params.sessionId}},
+  '{{this.params.wipType}}',
+  '{{this.params.label}}',
+  CASE
+    WHEN '{{this.params.supplierId}}' = 'NULL' THEN NULL
+    ELSE '{{this.params.supplierId}}'::INT
+  END,
+  CASE WHEN '{{this.params.leadTimeDays}}' = '' THEN NULL ELSE '{{this.params.leadTimeDays}}'::int END,
+  '{{this.params.createdBy}}',
+  COALESCE(NULLIF(NULLIF('{{this.params.isSocklinerWip}}', ''), 'null')::boolean, FALSE)
+)
+RETURNING id;

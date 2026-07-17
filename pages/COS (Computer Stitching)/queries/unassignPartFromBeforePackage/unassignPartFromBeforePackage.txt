@@ -1,0 +1,4 @@
+UPDATE upper_part_process
+SET cos_before_package_id = NULL
+WHERE session_id = {{this.params.sessionId}}
+  AND part_id = '{{this.params.partId}}';
