@@ -205,7 +205,7 @@ export default {
 		if (!msg || msg.type !== 'UPDATE_LEAD_TIME') return;
 
 		const u = appsmith.store.currentUser;
-		if (!u || u.role !== 'SPECSHEET') {
+		if (!u || !['SPECSHEET_ADMIN', 'SPECSHEET_STAFF'].includes(u.role)) {
 			showAlert('Anda tidak punya akses untuk mengubah lead time.', 'error');
 			return;
 		}
