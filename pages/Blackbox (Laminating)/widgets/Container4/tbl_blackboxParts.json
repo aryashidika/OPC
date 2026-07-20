@@ -144,10 +144,6 @@
   "parentId": "qg5l6k6fo6",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "Copy": {
-      "isCellEditable": true,
-      "isEditable": true
-    },
     "customColumn1": {
       "alias": "Copy",
       "allowCellWrapping": false,
@@ -507,10 +503,6 @@
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
-    },
-    "undefined": {
-      "isCellEditable": true,
-      "isEditable": true
     }
   },
   "renderMode": "CANVAS",
