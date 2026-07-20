@@ -1,7 +1,5 @@
 export default {
 
-	// ─── STATE ────────────────────────────────────────────
-	// Outsole
 	_submitConfirmed: false,
 	_editWipId: null,
 	_editWipType: null,
@@ -9,22 +7,12 @@ export default {
 	_pendingRemove: [],
 	_pendingBoughtReady: {},
 
-	// Sockliner
 	_sockEditWipId: null,
 	_sockPendingAdd: [],
 	_sockPendingRemove: [],
 
-	// ─── PAGE LOAD ────────────────────────────────────────
-
 	onPageLoad: async function () {
-		const u = appsmith.store.currentUser;
-		const SESSION_HOURS = 12;
-		const expired = !u || !u.loginAt || (Date.now() - u.loginAt) > SESSION_HOURS * 3600 * 1000;
-		if (expired) {
-			await storeValue('currentUser', null);
-			navigateTo('Login');
-			return;
-		}
+		if (!AuthJS.checkAuthGuard(null, 'PRB')) return;
 
 		BEJS._editWipId = null;
 		BEJS._editWipType = null;
@@ -47,8 +35,6 @@ export default {
 			await BEJS.onArticleSelect();
 		}
 	},
-
-	// ─── SHARED HELPERS ───────────────────────────────────
 
 	getSessionId: function () {
 		return getDivisionStatus.data[0]?.session_id;
@@ -80,8 +66,6 @@ export default {
 		return missing;
 	},
 
-	// ─── ARTICLE SELECT ───────────────────────────────────
-
 	onArticleSelect: async function () {
 		if (!sel_article.selectedOptionValue) return;
 		BEJS._editWipId = null;
@@ -107,8 +91,6 @@ export default {
 		]);
 	},
 
-	// ─── SUBMIT ───────────────────────────────────────────
-
 	onSubmit: async function () {
 		if (appsmith.store.currentUser?.role !== 'BOTTOM_ENGINEERING') {
 			showAlert("Hanya role BOTTOM_ENGINEERING  yang bisa melakukan aksi ini.", "warning");
@@ -119,7 +101,6 @@ export default {
 			return;
 		}
 
-		// Validasi outsole WIP kosong
 		const wipDisplay = BEJS.getWIPDisplay();
 		const emptyWIPs = wipDisplay.filter(function (w) { return w.is_empty && !w.is_sockliner_wip; });
 		if (emptyWIPs.length > 0) {
@@ -132,7 +113,6 @@ export default {
 			return;
 		}
 
-		// Validasi sockliner WIP kosong
 		const sockDisplay = BEJS.getSockWIPDisplay();
 		const emptySockWIPs = sockDisplay.filter(function (w) { return w.is_empty && w.is_sockliner_wip; });
 		if (emptySockWIPs.length > 0) {
@@ -178,10 +158,6 @@ export default {
 		BEJS._submitConfirmed = false;
 		closeModal('mdl_confirmSubmitBE');
 	},
-
-	// ═══════════════════════════════════════════════════════
-	// OUTSOLE TAB
-	// ═══════════════════════════════════════════════════════
 
 	isEditMode: function () {
 		return BEJS._editWipId !== null || BEJS._editWipType !== null;
@@ -623,10 +599,6 @@ export default {
 		}
 	},
 
-	// ═══════════════════════════════════════════════════════
-	// SOCKLINER TAB
-	// ═══════════════════════════════════════════════════════
-
 	isSockEditMode: function () {
 		return BEJS._sockEditWipId !== null;
 	},
@@ -944,10 +916,9 @@ export default {
 				showAlert("Package Sockliner berhasil diupdate.", "success");
 
 			} else {
-				// ── Create mode ──
 				const result = await createBottomWIP.run({
 					sessionId: sid,
-					wipType: 'ZSS',            // placeholder; leveling derives IS/ZSS from cutting
+					wipType: 'ZSS',        
 					label: label,
 					supplierId: supplierParam,
 					leadTimeDays: leadTimeDays,

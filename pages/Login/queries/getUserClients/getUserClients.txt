@@ -1,0 +1,1 @@
+SELECT client FROM app_user_clients WHERE user_id = {{this.params.userId}} ORDER BY client;

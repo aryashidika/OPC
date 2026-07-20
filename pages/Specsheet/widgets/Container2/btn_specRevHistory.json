@@ -43,6 +43,8 @@
   "mobileTopRow": 7,
   "needsErrorInfo": false,
   "onClick": "{{showModal('mdl_revisionHistory')}}",
+  "originalBottomRow": 11,
+  "originalTopRow": 7,
   "parentColumnSpace": 19.9375,
   "parentId": "g75y3dwa6n",
   "parentRowSpace": 10,

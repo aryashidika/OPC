@@ -146,16 +146,12 @@
   "mobileRightColumn": 34,
   "mobileTopRow": 5,
   "needsErrorInfo": false,
-  "originalBottomRow": 32,
-  "originalTopRow": 4,
+  "originalBottomRow": 52,
+  "originalTopRow": 24,
   "parentColumnSpace": 9.8125,
   "parentId": "hzz4wwoc25",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "Beli Jadi": {
-      "isCellEditable": true,
-      "isEditable": true
-    },
     "bottom_wip_id": {
       "alias": "bottom_wip_id",
       "allowCellWrapping": false,
@@ -441,10 +437,6 @@
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
-    },
-    "undefined": {
-      "isCellEditable": true,
-      "isEditable": true
     },
     "wip_label": {
       "alias": "wip_label",

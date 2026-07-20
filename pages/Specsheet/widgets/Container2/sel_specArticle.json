@@ -53,6 +53,8 @@
   "onOptionChange": "{{SpecsheetJS.onArticleSelect()}}",
   "optionLabel": "label",
   "optionValue": "value",
+  "originalBottomRow": 11,
+  "originalTopRow": 4,
   "parentColumnSpace": 19.9375,
   "parentId": "g75y3dwa6n",
   "parentRowSpace": 10,

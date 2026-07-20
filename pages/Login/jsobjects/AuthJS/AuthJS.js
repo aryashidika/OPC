@@ -12,18 +12,53 @@ export default {
 				showAlert("Username atau password salah", "error");
 				return;
 			}
-			const user = result[0];
-			await storeValue('currentUser', {
-				id: user.id,
-				username: user.username,
-				display_name: user.display_name,
-				role: user.role,
-				loginAt: Date.now()
-			});
-			navigateTo('Summary Page');
+			await this.resolveClientAndProceed(result[0]);
 		} catch (e) {
 			showAlert("Gagal login: " + e.message, "error");
 		}
+	},
+
+	async resolveClientAndProceed(user) {
+		const clients = await getUserClients.run({ userId: user.id });
+		const clientList = (clients || []).map(function (c) { return c.client; });
+		if (clientList.length === 0) {
+			showAlert("Akun belum punya akses client, hubungi admin", "error");
+			return;
+		}
+		await storeValue('pendingClientList', clientList);
+		if (clientList.length === 1) {
+			await this.finalizeLogin(user, clientList[0]);
+			return;
+		}
+		await storeValue('pendingLoginUser', user);
+		showModal('modal_clientPicker');
+	},
+
+	async selectClient(client) {
+		const user = appsmith.store.pendingLoginUser;
+		if (!user) {
+			showAlert("Sesi login kadaluarsa, silakan login ulang", "error");
+			closeModal('modal_clientPicker');
+			return;
+		}
+		closeModal('modal_clientPicker');
+		await storeValue('pendingLoginUser', null);
+		await this.finalizeLogin(user, client);
+	},
+
+	async finalizeLogin(user, client) {
+		const clientList = appsmith.store.pendingClientList || [client];
+		await storeValue('currentUser', {
+			id: user.id,
+			username: user.username,
+			display_name: user.display_name,
+			role: user.role,
+			currentClient: client,
+			clients: clientList,
+			loginAt: Date.now()
+		});
+		await storeValue('pendingClientList', null);
+		navigateTo('Summary Page');
 	},
 
 	onLogout() {

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT DISTINCT cutting_type, cutting_process_name \nFROM upper_part_process \nORDER BY cutting_type;",
+      "body": "SELECT indexname, indexdef FROM pg_indexes\nWHERE tablename IN (\n  'upper_article_session','upper_part','upper_part_process','bottom_wip','bottom_wip_input',\n  'upper_wip','upper_wip_input','upper_division_status','upper_concern','leveling_node_prb'\n)\nORDER BY tablename;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

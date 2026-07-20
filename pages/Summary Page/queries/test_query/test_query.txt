@@ -1,1 +1,1 @@
-ALTER TABLE upper_part ADD COLUMN section TEXT;
+SELECT to_regclass('public.v_pbb_current_session') AS view_exists;

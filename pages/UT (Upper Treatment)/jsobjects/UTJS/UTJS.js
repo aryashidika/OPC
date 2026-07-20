@@ -36,14 +36,7 @@ export default {
 	// ─── PAGE LOAD ────────────────────────────────────────
 
 	async onPageLoad() {
-		const u = appsmith.store.currentUser;
-		const SESSION_HOURS = 12;
-		const expired = !u || !u.loginAt || (Date.now() - u.loginAt) > SESSION_HOURS * 3600 * 1000;
-		if (expired) {
-			await storeValue('currentUser', null);
-			navigateTo('Login');
-			return;
-		}
+		if (!AuthJS.checkAuthGuard(null, 'PRB')) return;
 
 		await UTJS._resetEditState();
 		await getSupplierMaster.run();

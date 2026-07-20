@@ -1,3 +1,6 @@
-SELECT DISTINCT cutting_type, cutting_process_name 
-FROM upper_part_process 
-ORDER BY cutting_type;
+SELECT indexname, indexdef FROM pg_indexes
+WHERE tablename IN (
+  'upper_article_session','upper_part','upper_part_process','bottom_wip','bottom_wip_input',
+  'upper_wip','upper_wip_input','upper_division_status','upper_concern','leveling_node_prb'
+)
+ORDER BY tablename;

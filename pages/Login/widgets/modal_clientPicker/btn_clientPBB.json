@@ -1,9 +1,10 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 8,
+  "bottomRow": 9,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
   "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
@@ -14,7 +15,11 @@
       "key": "borderRadius"
     }
   ],
-  "dynamicPropertyPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "dynamicTriggerPathList": [
     {
       "key": "onClick"
@@ -24,28 +29,26 @@
   "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
-  "key": "esajlen9h2",
-  "leftColumn": 57,
+  "key": "a938t6qirw",
+  "leftColumn": 33,
   "minWidth": 120,
-  "mobileBottomRow": 4,
-  "mobileLeftColumn": 48,
-  "mobileRightColumn": 64,
-  "mobileTopRow": 0,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{AuthJS.onLogout();}}",
-  "parentColumnSpace": 19.9375,
-  "parentId": "hzw9aed3v2",
-  "parentRowSpace": 10,
+  "onClick": "{{AuthJS.selectClient('PBB')}}",
+  "parentId": "m3cmq411xi",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
   "rightColumn": 64,
-  "text": "Logout",
-  "topRow": 0,
+  "text": "PBB",
+  "topRow": 5,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "312bi53rbw",
-  "widgetName": "btn_logout"
+  "widgetId": "5z7askd27l",
+  "widgetName": "btn_clientPBB"
 }

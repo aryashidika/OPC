@@ -9,6 +9,9 @@
       "jsArguments": [
         {
           "name": "allowedRoles"
+        },
+        {
+          "name": "requiredClient"
         }
       ],
       "paginationType": "NONE",
