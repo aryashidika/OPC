@@ -74,7 +74,7 @@ export default {
 	// ─── WIP SELECT ───────────────────────────────────────
 
 	async onSelectWIP() {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') return;
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) return;
 		if (UTJS.isLocked()) return;
 
 		const selected = tbl_WIPList.selectedRow;
@@ -103,7 +103,7 @@ export default {
 	// ─── PENDING INPUT MANAGEMENT ─────────────────────────
 
 	onMoveToInputs() {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') return;
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) return;
 		if (UTJS.isLocked()) return;
 		const selectedRows = tbl_availablePool.selectedRows.filter(function(row) {
 			return row && row.kind && row.ref != null;
@@ -126,7 +126,7 @@ export default {
 	},
 
 	onMoveToPool() {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') return;
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) return;
 		if (UTJS.isLocked()) return;
 		const selectedRows = tbl_currentInputs.selectedRows.filter(function(row) {
 			return row && row.kind && row.ref != null;
@@ -163,7 +163,7 @@ export default {
 	},
 
 	async onCreateProcess() {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') {
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role UPPER_TOOLING  yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -249,7 +249,7 @@ export default {
 	// ─── DELETE WIP ───────────────────────────────────────
 
 	async onDeleteWIP(wipId) {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') {
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role UPPER_TOOLING  yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -363,7 +363,7 @@ export default {
 	},
 
 	async onCopyDivisionConfig() {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') {
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role UPPER_TOOLING yang bisa melakukan aksi ini.", "warning"); return;
 		}
 		const sourceSessionId = UTJS.getSessionId();
@@ -397,7 +397,7 @@ export default {
 	},
 
 	async onSubmit() {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') {
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role UPPER_TOOLING  yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -481,15 +481,15 @@ export default {
 	},
 
 	isEditMode() {
-		return UTJS._editWipId !== null;
+		return !!appsmith.store.editWipId;
 	},
 
 	getFormLabel() {
-		return UTJS._editWipId !== null ? 'Simpan Perubahan' : 'Buat Proses';
+		return appsmith.store.editWipId ? 'Simpan Perubahan' : 'Buat Proses';
 	},
 
 	onCloseAllConcernsUT: async function () {
-		if (appsmith.store.currentUser?.role !== 'UPPER_TOOLING') {
+		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role UPPER_TOOLING yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
