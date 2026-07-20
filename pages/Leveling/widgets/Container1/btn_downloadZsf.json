@@ -33,7 +33,7 @@
   "isDefaultClickDisabled": true,
   "isDisabled": false,
   "isLoading": false,
-  "isVisible": "{{ appsmith.store.currentUser?.role === 'SPECSHEET' || appsmith.store.currentUser?.role === 'ADMIN' }}",
+  "isVisible": "{{ ['SPECSHEET_ADMIN','SPECSHEET_STAFF','ADMIN'].includes(appsmith.store.currentUser?.role) }}",
   "key": "fycnn09cjr",
   "leftColumn": 38,
   "minWidth": 120,
