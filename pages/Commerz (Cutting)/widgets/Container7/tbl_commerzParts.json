@@ -163,10 +163,6 @@
   "parentId": "594444f34b",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "Copy Status": {
-      "isCellEditable": true,
-      "isEditable": true
-    },
     "cos_after": {
       "alias": "cos_after",
       "allowCellWrapping": false,
@@ -588,10 +584,6 @@
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
-    },
-    "undefined": {
-      "isCellEditable": true,
-      "isEditable": true
     },
     "ut_treatment": {
       "alias": "ut_treatment",

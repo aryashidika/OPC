@@ -222,25 +222,6 @@ export default {
 			return;
 		}
 
-		const parts = getPartsForCommerz.data || [];
-		const conflicts = partIds.filter(function (partId) {
-			const change = changes[partId];
-			if (!change || change.cuttingType !== 'INLINE') return false;
-			const dbRow = parts.find(function (p) {
-				return p.part_id === partId;
-			});
-			return dbRow && dbRow.cos_type === 'CENTRAL';
-		});
-
-		if (conflicts.length > 0) {
-			showAlert(
-				conflicts.length + " part tidak bisa di-assign INLINE karena COS sudah CENTRAL: " +
-				conflicts.join(', ') + ". Ganti ke tipe cutting lain.",
-				"warning"
-			);
-			return;
-		}
-
 		try {
 			await Promise.all(partIds.map(function (partId) {
 				const change = changes[partId];
@@ -286,6 +267,11 @@ export default {
 			showAlert("Tutup semua concern dulu sebelum submit ulang.", "warning");
 			return;
 		}
+
+		if (Object.keys(CommerzJS._pendingChanges).length > 0) {
+			await CommerzJS.onSaveDraft();
+		}
+
 		const parts = getPartsForCommerz.data || [];
 		const stillConflict = parts.some(function (p) {
 			return p.cutting_type === 'INLINE' && p.cos_type === 'CENTRAL';
@@ -308,9 +294,6 @@ export default {
 			}
 		}
 
-		if (Object.keys(CommerzJS._pendingChanges).length > 0) {
-			await CommerzJS.onSaveDraft();
-		}
 		try {
 			await submitDivision.run({
 				sessionId: getDivisionStatus.data[0]?.session_id,
