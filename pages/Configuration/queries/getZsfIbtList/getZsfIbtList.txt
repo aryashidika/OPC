@@ -1,0 +1,4 @@
+SELECT id, is_inhouse, lt_min, lt_max, matgroup, valclass, mrp,
+       grt, iht, pdt, purgroup, sloc, specprocur, proctype, lotsizing, description
+FROM zsf_matgroup_ibt
+ORDER BY is_inhouse DESC, lt_min NULLS FIRST;

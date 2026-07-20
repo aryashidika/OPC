@@ -1,4 +1,4 @@
-UPDATE zsf_matgroup_isp
+UPDATE zsf_matgroup_sb
 SET is_inhouse  = {{tblZsfSb.triggeredRow.is_inhouse}},
     lt_min      = {{tblZsfSb.triggeredRow.lt_min || null}},
     lt_max      = {{tblZsfSb.triggeredRow.lt_max || null}},

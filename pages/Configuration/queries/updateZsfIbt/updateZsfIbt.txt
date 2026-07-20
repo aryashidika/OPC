@@ -1,0 +1,17 @@
+UPDATE zsf_matgroup_ibt
+SET is_inhouse  = {{tblZsfIbt.triggeredRow.is_inhouse}},
+    lt_min      = {{tblZsfIbt.triggeredRow.lt_min || null}},
+    lt_max      = {{tblZsfIbt.triggeredRow.lt_max || null}},
+    matgroup    = {{tblZsfIbt.triggeredRow.matgroup}},
+    valclass    = {{tblZsfIbt.triggeredRow.valclass}},
+    mrp         = {{tblZsfIbt.triggeredRow.mrp}},
+    grt         = {{tblZsfIbt.triggeredRow.grt || null}},
+    iht         = {{tblZsfIbt.triggeredRow.iht || null}},
+    pdt         = {{tblZsfIbt.triggeredRow.pdt || null}},
+    purgroup    = {{tblZsfIbt.triggeredRow.purgroup}},
+    sloc        = {{tblZsfIbt.triggeredRow.sloc}},
+    specprocur  = {{tblZsfIbt.triggeredRow.specprocur}},
+    proctype    = {{tblZsfIbt.triggeredRow.proctype}},
+    lotsizing   = {{tblZsfIbt.triggeredRow.lotsizing}},
+    description = {{tblZsfIbt.triggeredRow.description}}
+WHERE id = {{tblZsfIbt.triggeredRow.id}};

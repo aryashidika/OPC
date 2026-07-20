@@ -1,0 +1,1 @@
+DELETE FROM zsf_matgroup_ibt WHERE id = {{tblZsfIbt.triggeredRow.id}};

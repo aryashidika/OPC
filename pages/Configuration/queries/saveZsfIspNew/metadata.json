@@ -1,6 +1,6 @@
 {
   "gitSyncId": "6a451c9013289e1331252fc8_97501c88-56c2-4de4-911b-de450ecf5078",
-  "id": "Configuration_saveZsfIspNew_",
+  "id": "Configuration_saveZsfIspNew",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "saveZsfIspNew_",
+    "name": "saveZsfIspNew",
     "pageId": "Configuration",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

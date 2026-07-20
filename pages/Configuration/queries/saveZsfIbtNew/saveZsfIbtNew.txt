@@ -1,0 +1,20 @@
+INSERT INTO zsf_matgroup_ibt
+  (is_inhouse, lt_min, lt_max, matgroup, valclass, mrp, grt, iht, pdt,
+   purgroup, sloc, specprocur, proctype, lotsizing, description)
+VALUES (
+  {{tblZsfIbt.newRow.is_inhouse}},
+  {{tblZsfIbt.newRow.lt_min || null}},
+  {{tblZsfIbt.newRow.lt_max || null}},
+  {{tblZsfIbt.newRow.matgroup}},
+  {{tblZsfIbt.newRow.valclass}},
+  {{tblZsfIbt.newRow.mrp}},
+  {{tblZsfIbt.newRow.grt || null}},
+  {{tblZsfIbt.newRow.iht || null}},
+  {{tblZsfIbt.newRow.pdt || null}},
+  {{tblZsfIbt.newRow.purgroup}},
+  {{tblZsfIbt.newRow.sloc}},
+  {{tblZsfIbt.newRow.specprocur}},
+  {{tblZsfIbt.newRow.proctype}},
+  {{tblZsfIbt.newRow.lotsizing}},
+  {{tblZsfIbt.newRow.description}}
+);

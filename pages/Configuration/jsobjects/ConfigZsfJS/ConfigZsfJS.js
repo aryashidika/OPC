@@ -1,31 +1,27 @@
 export default {
 
-	// ─────────────────────── Inhouse matching (shared) ───────────────────────
-	// Logika yang sama persis dengan ZsfJS.isSupplierInhouse di halaman Leveling.
-	// Di-inline ulang di sini karena JSObject tidak bisa dipanggil lintas halaman.
 	isSupplierInhouse: function (supplier, matcherRows, module, configType) {
 		const patterns = (matcherRows || [])
-			.filter(function (r) { return r.module === module && r.config_type === configType; })
-			.map(function (r) { return String(r.pattern || '').toLowerCase(); });
+		.filter(function (r) { return r.module === module && r.config_type === configType; })
+		.map(function (r) { return String(r.pattern || '').toLowerCase(); });
 		const sup = String(supplier || '').toLowerCase();
 		return patterns.some(function (p) { return p !== '' && sup.indexOf(p) !== -1; });
 	},
 
-	// Label deteksi untuk satu nama supplier — dipakai penguji (Tab Inhouse Matcher)
-	// dan kolom "Deteksi ZSF" di tabel Supplier.
 	detectInhouseLabel: function (supplierName) {
 		const rows = getInhouseMatcherList.data || [];
 		const name = String(supplierName || '').trim();
 		if (name === '') return '—';
 		const isp = ConfigZsfJS.isSupplierInhouse(name, rows, 'PRB', 'ISP');
 		const sb  = ConfigZsfJS.isSupplierInhouse(name, rows, 'PRB', 'SB');
+		const ibt = ConfigZsfJS.isSupplierInhouse(name, rows, 'PRB', 'IBT');
 		const hit = [];
 		if (isp) hit.push('Inhouse (ISP)');
 		if (sb)  hit.push('Inhouse (SB)');
+		if (ibt) hit.push('Inhouse (IBT)');
 		return hit.length > 0 ? hit.join(' + ') : 'Subcont';
 	},
 
-	// Teks hasil penguji, lengkap dengan pola yang cocok.
 	getMatcherTestResult: function () {
 		const name = String(inp_testSupplierName.text || '').trim();
 		if (name === '') return 'Ketik nama supplier untuk menguji.';
@@ -36,33 +32,30 @@ export default {
 		const matched = function (cfgType) {
 			return rows
 				.filter(function (r) {
-					return r.module === 'PRB'
-						&& r.config_type === cfgType
-						&& String(r.pattern || '') !== ''
-						&& low.indexOf(String(r.pattern).toLowerCase()) !== -1;
-				})
+				return r.module === 'PRB'
+				&& r.config_type === cfgType
+				&& String(r.pattern || '') !== ''
+				&& low.indexOf(String(r.pattern).toLowerCase()) !== -1;
+			})
 				.map(function (r) { return r.pattern; });
 		};
 
 		const ispHits = matched('ISP');
 		const sbHits  = matched('SB');
+		const ibtHits = matched('IBT');
 
 		const line = function (label, hits) {
 			return hits.length > 0
 				? label + ' : INHOUSE  (cocok pola: ' + hits.join(', ') + ')'
-				: label + ' : SUBCONT  (tidak ada pola yang cocok)';
+			: label + ' : SUBCONT  (tidak ada pola yang cocok)';
 		};
 
 		return 'Hasil untuk "' + name + '"\n'
 			+ line('ISP (Incoming Subcont / upper)', ispHits) + '\n'
-			+ line('SB  (Stockfitting / treatment bottom)', sbHits);
+			+ line('SB  (Stockfitting / sockliner treatment)', sbHits) + '\n'
+			+ line('IBT (Treatment Bottom)', ibtHits);
 	},
 
-	// ─────────────────────── ZSF Static (zsf_matgroup) ───────────────────────
-
-	// Semua process_type yang benar-benar dihasilkan getLevelingForZsf dan di-route
-	// ke zsf_matgroup (static). Tiga yang lain (INCOMING SUBCONT, TREATMENT BOTTOM,
-	// STOCKFITTING BOTTOM) di-route ke tabel ISP/SB, jadi TIDAK termasuk di sini.
 	STATIC_PROCESS_TYPES: [
 		'SEMI F/G SHOES',
 		'SEMI F/G UPPER',
@@ -109,10 +102,9 @@ export default {
 			return;
 		}
 
-		// duplikat process_type
 		const dup = (getZsfStaticList.data || []).find(function (r) {
 			return String(r.process_type || '').trim().toUpperCase() === pt
-				&& r.id !== edited.id;
+			&& r.id !== edited.id;
 		});
 		if (dup) {
 			showAlert("Process Type '" + pt + "' sudah punya baris (id " + dup.id + "). Satu tipe hanya boleh satu baris.", "error");
@@ -138,23 +130,20 @@ export default {
 		}
 	},
 
-	// ──────────── ZSF Dinamis (zsf_matgroup_isp / zsf_matgroup_sb) ────────────
-
-	// Deteksi CELAH pada bucket LT. (JSZsfValidator hanya mendeteksi tumpang tindih.)
 	checkLtCoverage: function (rows) {
 		const report = [];
 
 		[true, false].forEach(function (inhouse) {
 			const label = inhouse ? 'Inhouse' : 'Subcont';
 			const buckets = (rows || [])
-				.filter(function (r) { return !!r.is_inhouse === inhouse; })
-				.map(function (r) {
-					return {
-						lo: (r.lt_min === null || r.lt_min === undefined) ? -Infinity : Number(r.lt_min),
-						hi: (r.lt_max === null || r.lt_max === undefined) ?  Infinity : Number(r.lt_max)
-					};
-				})
-				.sort(function (a, b) { return a.lo - b.lo; });
+			.filter(function (r) { return !!r.is_inhouse === inhouse; })
+			.map(function (r) {
+				return {
+					lo: (r.lt_min === null || r.lt_min === undefined) ? -Infinity : Number(r.lt_min),
+					hi: (r.lt_max === null || r.lt_max === undefined) ?  Infinity : Number(r.lt_max)
+				};
+			})
+			.sort(function (a, b) { return a.lo - b.lo; });
 
 			if (buckets.length === 0) {
 				report.push('⚠ ' + label + ' : tidak ada bucket sama sekali — semua node ' + label + ' akan HILANG dari ZSF.');
@@ -195,6 +184,40 @@ export default {
 
 	checkIspCoverage: function () { return ConfigZsfJS.checkLtCoverage(getZsfIspList.data || []); },
 	checkSbCoverage:  function () { return ConfigZsfJS.checkLtCoverage(getZsfSbList.data  || []); },
+	checkIbtCoverage: function () { return ConfigZsfJS.checkLtCoverage(getZsfIbtList.data || []); },
+
+	onSaveIbtRow: async function (isNew) {
+		const rows = getZsfIbtList.data || [];
+		const edited = isNew ? tblZsfIbt.newRow : tblZsfIbt.triggeredRow;
+		const clash = JSZsfValidator.validateLtOverlap(rows, edited);
+		if (clash.length > 0) {
+			const c = clash[0];
+			showAlert(
+				"Bucket LT tumpang tindih dengan baris id " + c.id
+				+ " (" + (c.is_inhouse ? 'Inhouse' : 'Subcont') + ", LT "
+				+ (c.lt_min ?? 0) + "–" + (c.lt_max ?? '∞') + "). Perbaiki dulu.",
+				"error"
+			);
+			return;
+		}
+		try {
+			if (isNew) { await saveZsfIbtNew.run(); } else { await updateZsfIbt.run(); }
+			await getZsfIbtList.run();
+			showAlert("Tersimpan.", "success");
+		} catch (e) {
+			showAlert("Gagal simpan: " + e.message, "error");
+		}
+	},
+
+	onDeleteIbtRow: async function () {
+		try {
+			await deleteZsfIbt.run();
+			await getZsfIbtList.run();
+			showAlert("Baris dihapus.", "success");
+		} catch (e) {
+			showAlert("Gagal hapus: " + e.message, "error");
+		}
+	},
 
 	onSaveIspRow: async function (isNew) {
 		const rows = getZsfIspList.data || [];
@@ -262,7 +285,6 @@ export default {
 		}
 	},
 
-	// ───────────────────────────── tab loaders ─────────────────────────────
 
 	onTabInhouseMatcher: async function () {
 		await getInhouseMatcherList.run();
@@ -273,7 +295,7 @@ export default {
 	},
 
 	onTabZsfDinamis: async function () {
-		await Promise.all([getZsfIspList.run(), getZsfSbList.run()]);
+		await Promise.all([getZsfIspList.run(), getZsfSbList.run(), getZsfIbtList.run()]);
 	}
 
 }

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "DELETE FROM zsf_matgroup_isp WHERE id = {{tblZsfISb.triggeredRow.id}};",
+      "body": "DELETE FROM zsf_matgroup_sb WHERE id = {{tblZsfSb.triggeredRow.id}};",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
