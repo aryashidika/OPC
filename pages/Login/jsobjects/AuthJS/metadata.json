@@ -6,6 +6,19 @@
     "pageId": "Login",
     "pluginId": "js-plugin",
     "pluginType": "JS",
-    "variables": []
+    "variables": [
+      {
+        "name": "CLIENT_ID",
+        "value": "\"PRB-Dev-OPC\""
+      },
+      {
+        "name": "AUTH_ENDPOINT",
+        "value": "\"https://sso.panarub.co.id/realms/aci.co.id/protocol/openid-connect/auth\""
+      },
+      {
+        "name": "REDIRECT_URI",
+        "value": "\"https://apps.panarub.co.id/app/opc/login-6a4a1f1c3d9aec1fb68eafea/edit/widgets?branch=master\""
+      }
+    ]
   }
 }

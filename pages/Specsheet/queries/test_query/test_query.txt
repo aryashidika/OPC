@@ -1,64 +1,12 @@
--- §10.3(b) — draft. Paste ke test_query (Summary Page) dulu untuk divalidasi.
--- Menambahkan kolom hidden_needs_attention_count ke atas getAllActiveSessions yang ada.
-
-WITH base AS (
-  SELECT
-    s.id AS session_id,
-    s.article_id,
-    s.model_number,
-    COALESCE(s.model_number, s.article_id) AS group_key,
-    s.revision_no,
-    s.status,
-    s.created_at
-  FROM upper_article_session s
-  WHERE s.is_latest = TRUE
-    AND s.status != 'RELEASED'
-),
-rep AS (
-  SELECT DISTINCT ON (group_key)
-    session_id, article_id, model_number, group_key, revision_no, status, created_at
-  FROM base
-  ORDER BY group_key, created_at ASC, article_id ASC
-),
-needy_sessions AS (
-  SELECT DISTINCT b.session_id, b.group_key
-  FROM base b
-  LEFT JOIN upper_concern c
-         ON c.session_id = b.session_id
-        AND c.is_closed = false
-  LEFT JOIN upper_division_status ds
-         ON ds.session_id = b.session_id
-        AND ds.state = 'REWORK'::division_state_enum
-  WHERE c.id IS NOT NULL OR ds.session_id IS NOT NULL
-),
-hidden_counts AS (
-  SELECT r.group_key, COUNT(DISTINCT n.session_id) AS hidden_needs_attention_count
-  FROM rep r
-  JOIN needy_sessions n
-    ON n.group_key = r.group_key
-   AND n.session_id != r.session_id
-  GROUP BY r.group_key
-)
 SELECT
-  r.session_id,
-  r.article_id,
-  COALESCE(r.model_number, '(No Model)') AS model_number,
-  r.revision_no,
-  r.status,
-  r.created_at,
-  MAX(CASE WHEN ds.division = 'BLACKBOX'           THEN ds.state END) AS bb_state,
-  MAX(CASE WHEN ds.division = 'COMMERZ'            THEN ds.state END) AS cmz_state,
-  MAX(CASE WHEN ds.division = 'COS'                THEN ds.state END) AS cos_state,
-  MAX(CASE WHEN ds.division = 'UPPER_TOOLING'      THEN ds.state END) AS ut_state,
-  MAX(CASE WHEN ds.division = 'BOTTOM_ENGINEERING' THEN ds.state END) AS be_state,
-  MAX(CASE WHEN ds.division = 'BLACKBOX'           THEN ds.submitted_by END) AS bb_submitted_by,
-  MAX(CASE WHEN ds.division = 'COMMERZ'            THEN ds.submitted_by END) AS cmz_submitted_by,
-  MAX(CASE WHEN ds.division = 'COS'                THEN ds.submitted_by END) AS cos_submitted_by,
-  MAX(CASE WHEN ds.division = 'UPPER_TOOLING'      THEN ds.submitted_by END) AS ut_submitted_by,
-  MAX(CASE WHEN ds.division = 'BOTTOM_ENGINEERING' THEN ds.submitted_by END) AS be_submitted_by,
-  COALESCE(hc.hidden_needs_attention_count, 0) AS hidden_needs_attention_count
-FROM rep r
-LEFT JOIN upper_division_status ds ON ds.session_id = r.session_id
-LEFT JOIN hidden_counts hc ON hc.group_key = r.group_key
-GROUP BY r.session_id, r.article_id, r.model_number, r.revision_no, r.status, r.created_at, hc.hidden_needs_attention_count
-ORDER BY r.model_number NULLS LAST, r.created_at DESC;
+    tc.constraint_name,
+    tc.constraint_type,
+    kcu.column_name
+FROM information_schema.table_constraints tc
+JOIN information_schema.key_column_usage kcu
+    ON tc.constraint_name = kcu.constraint_name
+    AND tc.table_schema = kcu.table_schema
+WHERE tc.table_name = 'app_users'
+    AND tc.table_schema = 'public'
+    AND tc.constraint_type IN ('UNIQUE', 'PRIMARY KEY')
+ORDER BY tc.constraint_type, kcu.column_name;

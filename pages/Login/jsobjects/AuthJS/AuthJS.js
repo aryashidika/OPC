@@ -1,4 +1,8 @@
 export default {
+	CLIENT_ID: "PRB-Dev-OPC",
+	AUTH_ENDPOINT: "https://sso.panarub.co.id/realms/aci.co.id/protocol/openid-connect/auth",
+	REDIRECT_URI: "https://apps.panarub.co.id/app/opc/login-6a4a1f1c3d9aec1fb68eafea/edit/widgets?branch=master",
+
 	async onLogin() {
 		const username = custom_login.model.username?.trim();
 		const password = custom_login.model.password;
@@ -83,5 +87,47 @@ export default {
 			showAlert("Anda tidak punya akses ke halaman ini", "error");
 			navigateTo('Summary Page');
 		}
+	},
+
+	async redirectToKeycloak() {
+		const redirectUri = encodeURIComponent(this.REDIRECT_URI);
+		const scope = encodeURIComponent("openid profile email");
+		const authUrl = `${this.AUTH_ENDPOINT}?client_id=${this.CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+		navigateTo(authUrl, {}, "SAME_WINDOW");
+	},
+
+	async checkCallbackAndLogin() {
+		const code = appsmith.URL.queryParams.code;
+		if (!code) return;
+
+		try {
+			showAlert("Otentikasi SSO berhasil, memverifikasi akun Anda...", "info");
+
+			const tokenData = await exchangeCodeForToken.run({ code, redirectUri: this.REDIRECT_URI });
+			if (!tokenData || !tokenData.access_token) {
+				showAlert("Gagal menukarkan kode otentikasi dari Keycloak.", "error");
+				return;
+			}
+
+			const keycloakUser = await getUserInfo.run({ accessToken: tokenData.access_token });
+			const nik = keycloakUser.preferred_username || keycloakUser.username;
+			const email = keycloakUser.email || "";
+			const keycloakSub = keycloakUser.sub || "";
+
+			const syncResult = await syncSSOUser.run({ nik, keycloakSub, email });
+			if (!syncResult || syncResult.length === 0) {
+				showAlert(`Login ditolak. NIK "${nik}" tidak terdaftar atau tidak aktif di whitelist.`, "error");
+				return;
+			}
+
+			await this.resolveClientAndProceed(syncResult[0]);
+		} catch (error) {
+			console.log("SSO LOGIN ERROR:", error);
+			showAlert("Login gagal. Terjadi kesalahan saat verifikasi.", "error");
+		}
+	},
+
+	async onPageLoad() {
+		await this.checkCallbackAndLogin();
 	}
 };

@@ -1,4 +1,5 @@
-SELECT column_name, data_type
-FROM information_schema.columns
-WHERE table_name = 'pbb_division_status'
-ORDER BY ordinal_position;
+SELECT u.id, u.username, u.display_name, u.role, c.client, c.created_at
+FROM app_users u
+LEFT JOIN app_user_clients c ON c.user_id = u.id
+WHERE u.id = 11
+ORDER BY c.client;

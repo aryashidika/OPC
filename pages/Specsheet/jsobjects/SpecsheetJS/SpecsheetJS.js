@@ -1,7 +1,7 @@
 export default {
 
 	async onPageLoad() {
-		if (!AuthJS.checkAuthGuard(['SPECSHEET_ADMIN', 'SPECSHEET_STAFF'])) return;
+		if (!AuthJS.checkAuthGuard(['SPECSHEET_ADMIN', 'SPECSHEET_STAFF'], 'PRB')) return;
 		await getSessionList.run();
 		await getAllActiveSessions.run();
 	},

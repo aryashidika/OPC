@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "DELETE FROM app_user_clients WHERE user_id = (SELECT id FROM app_users WHERE username = 'blackbox') AND client = 'PBB';",
+      "body": "SELECT u.username, array_agg(c.client ORDER BY c.client) AS clients\nFROM app_users u\nLEFT JOIN app_user_clients c ON c.user_id = u.id\nWHERE u.username = '20250810003'\nGROUP BY u.username;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

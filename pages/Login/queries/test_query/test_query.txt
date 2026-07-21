@@ -1,1 +1,5 @@
-DELETE FROM app_user_clients WHERE user_id = (SELECT id FROM app_users WHERE username = 'blackbox') AND client = 'PBB';
+SELECT u.username, array_agg(c.client ORDER BY c.client) AS clients
+FROM app_users u
+LEFT JOIN app_user_clients c ON c.user_id = u.id
+WHERE u.username = '20250810003'
+GROUP BY u.username;

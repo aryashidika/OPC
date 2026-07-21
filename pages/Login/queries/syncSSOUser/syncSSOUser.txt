@@ -1,0 +1,10 @@
+SELECT * FROM public."absensi_cfg" LIMIT 10;UPDATE app_users
+SET
+    keycloak_sub  = {{this.params.keycloakSub}},
+    email         = {{this.params.email}},
+    last_accessed = CURRENT_TIMESTAMP,
+    last_updated  = CURRENT_TIMESTAMP
+WHERE
+    username = {{this.params.nik}}
+    AND is_active = true
+RETURNING id, username, display_name, role;
