@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT * FROM public.\"absensi_cfg\" LIMIT 10;UPDATE app_users\nSET\n    keycloak_sub  = {{this.params.keycloakSub}},\n    email         = {{this.params.email}},\n    last_accessed = CURRENT_TIMESTAMP,\n    last_updated  = CURRENT_TIMESTAMP\nWHERE\n    username = {{this.params.nik}}\n    AND is_active = true\nRETURNING id, username, display_name, role;",
+      "body": "UPDATE app_users\nSET\n    keycloak_sub  = {{this.params.keycloakSub}},\n    email         = {{this.params.email}},\n    last_accessed = CURRENT_TIMESTAMP,\n    last_updated  = CURRENT_TIMESTAMP\nWHERE\n    username = {{this.params.nik}}\n    AND is_active = true\nRETURNING id, username, display_name, role;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

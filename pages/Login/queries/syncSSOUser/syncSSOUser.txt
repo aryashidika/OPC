@@ -1,4 +1,4 @@
-SELECT * FROM public."absensi_cfg" LIMIT 10;UPDATE app_users
+UPDATE app_users
 SET
     keycloak_sub  = {{this.params.keycloakSub}},
     email         = {{this.params.email}},

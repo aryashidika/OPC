@@ -1,7 +1,7 @@
 export default {
 	CLIENT_ID: "PRB-Dev-OPC",
 	AUTH_ENDPOINT: "https://sso.panarub.co.id/realms/aci.co.id/protocol/openid-connect/auth",
-	REDIRECT_URI: "https://apps.panarub.co.id/app/opc/login-6a4a1f1c3d9aec1fb68eafea/edit/widgets?branch=master",
+	REDIRECT_URI: "https://apps.panarub.co.id/app/opc/login-6a4a1f1c3d9aec1fb68eafea",
 
 	async onLogin() {
 		const username = custom_login.model.username?.trim();

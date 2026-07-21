@@ -17,7 +17,7 @@
       },
       {
         "name": "REDIRECT_URI",
-        "value": "\"https://apps.panarub.co.id/app/opc/login-6a4a1f1c3d9aec1fb68eafea/edit/widgets?branch=master\""
+        "value": "\"https://apps.panarub.co.id/app/opc/login-6a4a1f1c3d9aec1fb68eafea\""
       }
     ]
   }
