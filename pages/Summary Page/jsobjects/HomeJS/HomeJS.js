@@ -504,7 +504,7 @@ export default {
 	},
 
 	async onConfirmModelUpdate() {
-		if (appsmith.store.currentUser?.role !== 'DEVELOPER') {
+		if (!AuthJS.checkAuthGuard(['DEVELOPER'])) {
 			showAlert("Hanya role Developer yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -554,7 +554,7 @@ export default {
 
 
 	async onIngestModel() {
-		if (appsmith.store.currentUser?.role !== 'DEVELOPER') {
+		if (!AuthJS.checkAuthGuard(['DEVELOPER'])) {
 			showAlert("Hanya role Developer yang bisa melakukan aksi ini.", "warning");
 			return;
 		}
@@ -592,7 +592,11 @@ export default {
 			"): memproses " + modelData.articles.length + " artikel...",
 			"info"
 		);
-		await this.ingestModel(modelData);
+		if (appsmith.store.currentUser?.currentClient === 'PBB') {
+			await this.pbb_ingestModel(modelData);
+		} else {
+			await this.ingestModel(modelData);
+		}
 	},
 
 	async openArticleDetailModal(sessionId, articleId) {
@@ -757,7 +761,7 @@ export default {
 	},
 
 	onForceResyncPartInfo: async function () {
-		if (appsmith.store.currentUser?.role !== 'DEVELOPER') {
+		if (!AuthJS.checkAuthGuard(['DEVELOPER'])) {
 			showAlert('Hanya DEVELOPER yang bisa melakukan resync.', 'warning');
 			return;
 		}
@@ -800,4 +804,97 @@ export default {
 		showAlert('Info part berhasil di-resync.', 'success');
 	},
 
+	async pbb_createNewSession(articleId, parts, modelNumber, season) {
+		showAlert("Membuat session PBB...", "info");
+
+		let session;
+		try {
+			const sessionResult = await pbb_createSessionAtomic.run({
+				articleId,
+				parentSessionId: '',
+				modelNumber: modelNumber ?? null,
+				season: season ?? null
+			});
+			session = sessionResult[0];
+		} catch (e) {
+			showAlert("Gagal buat session PBB: " + e.message, "error");
+			return;
+		}
+
+		try {
+			await pbb_saveParts.run({
+				sessionId: session.id,
+				partsJson: JSON.stringify(parts)
+			});
+		} catch (e) {
+			showAlert("Gagal save parts PBB: " + e.message, "error");
+			return;
+		}
+
+		try {
+			await pbb_initDivisionStatus.run({ sessionId: session.id });
+		} catch (e) {
+			showAlert("Gagal set division status PBB: " + e.message, "error");
+			return;
+		}
+
+		showAlert(
+			"Session PBB Rev." + session.revision_no + " berhasil dibuat. " + parts.length + " part loaded.",
+			"success"
+		);
+	},
+
+	async pbb_ingestModel(modelData) {
+		const { model_number, season, articles } = modelData;
+
+		if (!model_number) {
+			showAlert("Model number kosong, tidak bisa lanjut ingest", "error");
+			return;
+		}
+		if (!articles || articles.length === 0) {
+			showAlert("Tidak ada artikel terbaca dari model ini", "warning");
+			return;
+		}
+
+		const created = [];
+		const skippedEmpty = [];
+		const skippedExisting = [];
+		const errors = [];
+
+		for (const art of articles) {
+			const { article_id, parts } = art;
+
+			if (!parts || parts.length === 0) {
+				skippedEmpty.push(article_id);
+				continue;
+			}
+
+			try {
+				const existing = await pbb_checkExistingSession.run({ articleId: article_id });
+
+				if (existing && existing.length > 0) {
+					skippedExisting.push(article_id);
+					continue;
+				}
+
+				await this.pbb_createNewSession(article_id, parts, model_number, season);
+				created.push(article_id);
+			} catch (e) {
+				errors.push(article_id + ': ' + e.message);
+			}
+		}
+
+		let summary = 'Model ' + model_number + ' (PBB): ' + created.length + ' artikel dibuat baru (' + created.join(', ') + ').';
+		if (skippedExisting.length > 0) {
+			summary += ' ' + skippedExisting.length + ' artikel sudah ada, revisi PBB belum didukung (' + skippedExisting.join(', ') + ').';
+		}
+		if (skippedEmpty.length > 0) {
+			summary += ' ' + skippedEmpty.length + ' artikel dilewati (parts kosong).';
+		}
+		if (errors.length > 0) {
+			showAlert('Error: ' + errors.join('; '), 'error');
+		} else {
+			showAlert(summary, 'success');
+		}
+	},
 }

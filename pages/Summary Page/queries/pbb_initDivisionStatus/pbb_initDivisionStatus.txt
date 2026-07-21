@@ -1,0 +1,8 @@
+INSERT INTO pbb_division_status (session_id, division, state)
+VALUES
+  ({{this.params.sessionId}}, 'BLACKBOX',           'NOT_STARTED'),
+  ({{this.params.sessionId}}, 'COMMERZ',            'NOT_STARTED'),
+  ({{this.params.sessionId}}, 'COS',                'NOT_STARTED'),
+  ({{this.params.sessionId}}, 'UPPER_TOOLING',      'NOT_STARTED'),
+  ({{this.params.sessionId}}, 'BOTTOM_ENGINEERING', 'NOT_STARTED')
+ON CONFLICT (session_id, division) DO NOTHING;

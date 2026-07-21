@@ -1,0 +1,34 @@
+WITH db_parts AS (
+	SELECT part_id, part_name
+	FROM pbb_part
+	WHERE session_id = {{this.params.sessionId}}
+	AND (delta_flag IS NULL OR delta_flag != 'REMOVED')
+),
+api_parts AS (
+	SELECT
+	value->>'part_id' AS part_id,
+	value->>'part_name' AS part_name
+	FROM json_array_elements('{{this.params.bomJson}}'::json)
+)
+SELECT
+  COALESCE(a.part_id, d.part_id) AS part_id,
+  COALESCE(a.part_name, d.part_name) AS part_name,
+  CASE
+    WHEN d.part_id IS NULL THEN 'NEW'
+    WHEN a.part_id IS NULL THEN 'REMOVED'
+    ELSE 'SAME'
+  END AS delta_status
+FROM api_parts a
+FULL OUTER JOIN db_parts d ON d.part_id = a.part_id
+ORDER BY
+  CASE
+    WHEN d.part_id IS NULL THEN 0
+    WHEN a.part_id IS NULL THEN 1
+    ELSE 2
+  END,
+  SPLIT_PART(COALESCE(a.part_id, d.part_id), '-', 1)::int,
+  CASE
+    WHEN COALESCE(a.part_id, d.part_id) LIKE '%-%'
+    THEN SPLIT_PART(COALESCE(a.part_id, d.part_id), '-', 2)::int
+    ELSE 0
+  END;

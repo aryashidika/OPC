@@ -1,0 +1,4 @@
+SELECT id, revision_no, status
+FROM v_pbb_current_session
+WHERE article_id = {{this.params.articleId}}
+LIMIT 1;

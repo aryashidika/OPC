@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a451c9013289e1331252fc8_dbf83f21-c90f-4e79-8551-620f5feaf353",
-  "id": "UT (Upper Treatment)_test_query",
+  "gitSyncId": "6a451c9013289e1331252fc8_47275a0f-84eb-4293-8589-5208869522ce",
+  "id": "Summary Page_pbb_checkExistingSession",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT conrelid::regclass AS table_name, conname, contype, pg_get_constraintdef(oid)\nFROM pg_constraint\nWHERE conrelid = 'pbb_division_status'::regclass;",
+      "body": "SELECT id, revision_no, status\nFROM v_pbb_current_session\nWHERE article_id = {{this.params.articleId}}\nLIMIT 1;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,9 +22,13 @@
       "name": "Panarub",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [],
-    "name": "test_query",
-    "pageId": "UT (Upper Treatment)",
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "pbb_checkExistingSession",
+    "pageId": "Summary Page",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }

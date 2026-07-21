@@ -1,16 +1,16 @@
 {
-  "gitSyncId": "6a451c9013289e1331252fc8_8ad6f8a4-ce8c-4b56-8f16-e6d73320e41b",
-  "id": "Summary Page_test_query",
+  "gitSyncId": "6a451c9013289e1331252fc8_3d089ed1-ce9e-4052-8df5-3ae36a206c74",
+  "id": "Summary Page_pbb_markRemovedParts",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT column_name, data_type\nFROM information_schema.columns\nWHERE table_name = 'pbb_division_status'\nORDER BY ordinal_position;",
+      "body": "UPDATE pbb_part\nSET delta_flag = 'REMOVED'\nWHERE session_id = {{this.params.sessionId}}::int\n  AND part_id NOT IN (\n    SELECT value->>'part_id'\n    FROM json_array_elements('{{this.params.bomJson}}'::json)\n  )\n  AND (delta_flag IS NULL OR delta_flag = 'NEW');",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
         {
-          "value": false
+          "value": true
         }
       ],
       "timeoutInMillisecond": 10000
@@ -22,8 +22,12 @@
       "name": "Panarub",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [],
-    "name": "test_query",
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "pbb_markRemovedParts",
     "pageId": "Summary Page",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
