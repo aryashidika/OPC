@@ -5,7 +5,7 @@ WITH flipped AS (
 	RETURNING id
 )
 INSERT INTO pbb_article_session
-  (article_id, revision_no, status, parent_session_id, model_number, season, is_latest)
+  (article_id, revision_no, status, parent_session_id, model_number, season, colorway, is_latest)
 SELECT
   '{{this.params.articleId}}',
   COALESCE(
@@ -16,5 +16,6 @@ SELECT
   NULLIF('{{this.params.parentSessionId}}', '')::int,
   NULLIF('{{this.params.modelNumber}}', 'null'),
   NULLIF('{{this.params.season}}', 'null'),
+  NULLIF('{{this.params.colorway}}', 'null'),
   TRUE
-RETURNING id, article_id, revision_no, status, parent_session_id, model_number;
+RETURNING id, article_id, revision_no, status, parent_session_id, model_number, colorway;

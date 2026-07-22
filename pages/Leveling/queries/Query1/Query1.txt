@@ -1,3 +1,1 @@
-SELECT a.attname, a.attnotnull
-FROM pg_attribute a JOIN pg_class c ON c.oid = a.attrelid
-WHERE c.relname = 'app_users' AND a.attname = 'dummy_password';
+SELECT * FROM pbb_parts LIMIT 10;

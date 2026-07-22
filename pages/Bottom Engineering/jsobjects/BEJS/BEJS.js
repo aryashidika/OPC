@@ -24,6 +24,7 @@ export default {
 		BEJS._sockPendingRemove = [];
 		await storeValue('beEditWipId', 0);
 		await storeValue('sockEditWipId', 0);
+		await storeValue('beCheckedWipIds', []);
 		await getOutsoleSupplierMaster.run();
 		await getSocklinerSupplierMaster.run();
 		await getArticleList.run();
@@ -66,6 +67,21 @@ export default {
 		return missing;
 	},
 
+	getUncheckedPackages: function () {
+		const checked = appsmith.store.beCheckedWipIds || [];
+		const outsole = BEJS.getWIPDisplay().filter(function (w) { return !w.is_sockliner_wip; });
+		return outsole.filter(function (w) { return !checked.includes(w.id); });
+	},
+	
+	onToggleWipCheck: async function (wipId) {
+		if (BEJS.isLocked()) return;
+		const current = appsmith.store.beCheckedWipIds || [];
+		const next = current.includes(wipId)
+		? current.filter(function (id) { return id !== wipId; })
+		: current.concat([wipId]);
+		await storeValue('beCheckedWipIds', next);
+	},
+
 	onArticleSelect: async function () {
 		if (!sel_article.selectedOptionValue) return;
 		BEJS._editWipId = null;
@@ -79,6 +95,7 @@ export default {
 		BEJS._submitConfirmed = false;
 		await storeValue('beEditWipId', 0);
 		await storeValue('sockEditWipId', 0);
+		await storeValue('beCheckedWipIds', []);
 		await Promise.all([
 			getModelInfoForArticle.run(),
 			getDivisionStatus.run(),
@@ -120,6 +137,16 @@ export default {
 				'Package Sockliner berikut tidak punya raw part: ' +
 				emptySockWIPs.map(function (w) { return w.label; }).join(', ') +
 				'. Hapus atau assign input dulu.',
+				'warning'
+			);
+			return;
+		}
+
+		const unchecked = BEJS.getUncheckedPackages();
+		if (unchecked.length > 0) {
+			showAlert(
+				'Semua package (Outsole & Sockliner) harus dicentang/di-review dulu sebelum submit: ' +
+				unchecked.map(function (w) { return w.label; }).join(', '),
 				'warning'
 			);
 			return;
@@ -222,6 +249,7 @@ export default {
 
 	getWIPDisplay: function () {
 		const wips = getWIPListBE.data || [];
+		const checked = appsmith.store.beCheckedWipIds || [];
 		return wips.map(function (w) {
 			const inputs = typeof w.inputs === 'string' ? JSON.parse(w.inputs) : w.inputs;
 			const inputLabels = inputs.map(function (i) { return i.label + ' (' + (i.kind === 'WIP' ? 'Package' : i.kind) + ')'; }).join(', ');
@@ -257,7 +285,8 @@ export default {
 				lead_time_days: w.lead_time_days !== null && w.lead_time_days !== undefined ? w.lead_time_days : '-',
 				inputs_label: inputLabels || '-',
 				is_empty: !hasRawPart,
-				copied_from_article_id: w.copied_from_article_id || null
+				copied_from_article_id: w.copied_from_article_id || null,
+				is_checked: checked.includes(w.id)
 			};
 		});
 	},
@@ -637,6 +666,7 @@ export default {
 
 	getSockWIPDisplay: function () {
 		const wips = getWIPListSockliner.data || [];
+		const checked = appsmith.store.beCheckedWipIds || [];
 		return wips.map(function (w) {
 			const inputs = typeof w.inputs === 'string' ? JSON.parse(w.inputs) : w.inputs;
 			const inputLabels = inputs.map(function (i) { return i.label + ' (' + (i.kind === 'WIP' ? 'Package' : i.kind) + ')'; }).join(', ');
@@ -671,7 +701,8 @@ export default {
 				? w.lead_time_days : '-',
 				inputs_label: inputLabels || '-',
 				is_empty: !hasRawPart,
-				copied_from_article_id: w.copied_from_article_id || null
+				copied_from_article_id: w.copied_from_article_id || null,
+				is_checked: checked.includes(w.id)
 			};
 		});
 	},

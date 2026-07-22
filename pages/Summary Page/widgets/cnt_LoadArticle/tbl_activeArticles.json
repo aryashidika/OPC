@@ -47,8 +47,10 @@
     "be_state",
     "customColumn1"
   ],
-  "columnUpdatedAt": 1783590363137,
-  "columnWidthMap": {},
+  "columnUpdatedAt": 1784694150546,
+  "columnWidthMap": {
+    "model_name": 317
+  },
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
@@ -687,7 +689,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "Status",
       "notation": "standard",
       "originalId": "status",

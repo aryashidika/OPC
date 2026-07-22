@@ -297,7 +297,7 @@
     },
     "inputs_label": {
       "alias": "inputs_label",
-      "allowCellWrapping": false,
+      "allowCellWrapping": true,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",

@@ -1,4 +1,4 @@
-SELECT s.article_id, s.model_number, m.model_name, s.season
+SELECT s.article_id, s.model_number, m.model_name, s.season, s.colorway
 FROM upper_article_session s
 LEFT JOIN upper_model m ON m.model_number = s.model_number AND m.season = s.season
 WHERE s.article_id = {{sel_article.selectedOptionValue}}

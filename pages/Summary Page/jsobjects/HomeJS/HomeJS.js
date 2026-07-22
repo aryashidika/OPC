@@ -19,7 +19,7 @@ export default {
 		}
 	},
 
-	async createNewSession(articleId, parts, parentSessionId, modelNumber, deltaResult, season) {
+	async createNewSession(articleId, parts, parentSessionId, modelNumber, deltaResult, season, colorway) {
 		showAlert("Membuat session...", "info");
 
 		let session;
@@ -28,7 +28,8 @@ export default {
 				articleId,
 				parentSessionId: parentSessionId ?? '',
 				modelNumber: modelNumber ?? null,
-				season: season ?? null
+				season: season ?? null,
+				colorway: colorway ?? null
 			});
 			session = sessionResult[0];
 		} catch (e) {
@@ -278,7 +279,10 @@ export default {
 					throw new Error(`Header grup artikel tidak sesuai format "desc | ARTICLE_ID | status" di baris ${r + 1}, kolom ${b.colorCol}: "${text}"`);
 				}
 				const article_id = segments[segments.length - 2].trim();
-				articleSlots.push({ article_id, block: b });
+				const rawGroupName = segments[0];
+				const dashIdx = rawGroupName.indexOf(' - ');
+				const colorway = (dashIdx !== -1 ? rawGroupName.slice(dashIdx + 3) : rawGroupName).trim();
+				articleSlots.push({ article_id, colorway, block: b });
 			});
 		});
 
@@ -335,7 +339,7 @@ export default {
 			groupsByPartId[r.part_id].push(r);
 		});
 
-		const articles = articleSlots.map((s) => ({ article_id: s.article_id, parts: [] }));
+		const articles = articleSlots.map((s) => ({ article_id: s.article_id, colorway: s.colorway, parts: [] }));
 
 		const toFields = (partId, nameRow, dataRow) => ({
 			part_id: partId,
@@ -408,12 +412,17 @@ export default {
 				const existing = await checkExistingSession.run({ articleId: article_id });
 
 				if (!existing || existing.length === 0) {
-					await this.createNewSession(article_id, parts, null, model_number, null, season);
+					await this.createNewSession(article_id, parts, null, model_number, null, season, art.colorway);
 					created.push(article_id);
 					continue;
 				}
 
 				const session = existing[0];
+
+				if (art.colorway) {
+					await updateSessionColorway.run({ sessionId: session.id, colorway: art.colorway });
+				}
+
 				const deltaResult = await getBOMDeltaIngest.run({
 					sessionId: session.id,
 					bomJson: JSON.stringify(parts)
@@ -431,7 +440,8 @@ export default {
 					session_id: session.id,
 					bomData: parts,
 					deltaResult,
-					ingestMode
+					ingestMode,
+					colorway: art.colorway
 				});
 			} catch (e) {
 				errors.push(article_id + ': ' + e.message);
@@ -475,7 +485,8 @@ export default {
 					session_id: d.session_id,
 					bomData: d.bomData,
 					ingestMode: d.ingestMode,
-					deltaResult: d.deltaResult 
+					deltaResult: d.deltaResult,
+					colorway: d.colorway
 				})),
 				combinedRows,
 				releasedSummary
@@ -526,7 +537,7 @@ export default {
 						skippedReleased.push(d.article_id);
 						continue;
 					}
-					await this.createNewSession(d.article_id, d.bomData, d.session_id, pending.model_number, d.deltaResult, pending.season);
+					await this.createNewSession(d.article_id, d.bomData, d.session_id, pending.model_number, d.deltaResult, pending.season, d.colorway);
 					revised.push(d.article_id);
 				} else {
 					await markRemovedParts.run({ sessionId: d.session_id, bomJson: JSON.stringify(d.bomData) });
@@ -804,7 +815,7 @@ export default {
 		showAlert('Info part berhasil di-resync.', 'success');
 	},
 
-	async pbb_createNewSession(articleId, parts, modelNumber, season) {
+	async pbb_createNewSession(articleId, parts, modelNumber, season, colorway) {
 		showAlert("Membuat session PBB...", "info");
 
 		let session;
@@ -813,7 +824,8 @@ export default {
 				articleId,
 				parentSessionId: '',
 				modelNumber: modelNumber ?? null,
-				season: season ?? null
+				season: season ?? null,
+				colorway: colorway ?? null
 			});
 			session = sessionResult[0];
 		} catch (e) {
@@ -877,7 +889,7 @@ export default {
 					continue;
 				}
 
-				await this.pbb_createNewSession(article_id, parts, model_number, season);
+				await this.pbb_createNewSession(article_id, parts, model_number, season, art.colorway);
 				created.push(article_id);
 			} catch (e) {
 				errors.push(article_id + ': ' + e.message);

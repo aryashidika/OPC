@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT s.article_id, s.model_number, m.model_name, s.season\nFROM upper_article_session s\nLEFT JOIN upper_model m ON m.model_number = s.model_number AND m.season = s.season\nWHERE s.article_id = {{sel_article.selectedOptionValue}}\n  AND s.is_latest = TRUE\nLIMIT 1;",
+      "body": "SELECT s.article_id, s.model_number, m.model_name, s.season, s.colorway\nFROM upper_article_session s\nLEFT JOIN upper_model m ON m.model_number = s.model_number AND m.season = s.season\nWHERE s.article_id = {{sel_article.selectedOptionValue}}\n  AND s.is_latest = TRUE\nLIMIT 1;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

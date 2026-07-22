@@ -1,5 +1,5 @@
-SELECT u.id, u.username, u.display_name, u.role, c.client, c.created_at
-FROM app_users u
-LEFT JOIN app_user_clients c ON c.user_id = u.id
-WHERE u.id = 11
-ORDER BY c.client;
+DO $$
+BEGIN
+  ALTER TABLE upper_article_session ADD COLUMN colorway TEXT;
+  ALTER TABLE pbb_article_session   ADD COLUMN colorway TEXT;
+END $$;

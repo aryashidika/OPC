@@ -1,16 +1,16 @@
 {
-  "gitSyncId": "6a451c9013289e1331252fc8_8ad6f8a4-ce8c-4b56-8f16-e6d73320e41b",
-  "id": "Summary Page_test_query",
+  "gitSyncId": "6a451c9013289e1331252fc8_15e4c58e-6f44-4057-b3a0-d608dfb7e7d4",
+  "id": "Summary Page_updateSessionColorway",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "DO $$\nBEGIN\n  ALTER TABLE upper_article_session ADD COLUMN colorway TEXT;\n  ALTER TABLE pbb_article_session   ADD COLUMN colorway TEXT;\nEND $$;",
+      "body": "UPDATE upper_article_session\nSET colorway = NULLIF('{{this.params.colorway}}', 'null')\nWHERE id = {{this.params.sessionId}};",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
         {
-          "value": false
+          "value": true
         }
       ],
       "timeoutInMillisecond": 10000
@@ -22,8 +22,12 @@
       "name": "Panarub",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [],
-    "name": "test_query",
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "updateSessionColorway",
     "pageId": "Summary Page",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT a.attname, a.attnotnull\nFROM pg_attribute a JOIN pg_class c ON c.oid = a.attrelid\nWHERE c.relname = 'app_users' AND a.attname = 'dummy_password';",
+      "body": "SELECT * FROM pbb_parts LIMIT 10;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
