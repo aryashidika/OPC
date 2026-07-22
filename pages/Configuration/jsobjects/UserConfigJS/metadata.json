@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_d404d886-5511-4767-940a-cc1d4f147f29",
+  "id": "Configuration_UserConfigJS",
+  "unpublishedCollection": {
+    "name": "UserConfigJS",
+    "pageId": "Configuration",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "ROLES",
+        "value": "['ADMIN', 'DEVELOPER', 'SPECSHEET_ADMIN', 'SPECSHEET_STAFF', 'ME', 'BLACKBOX', 'COMMERZ', 'COS', 'UPPER_TOOLING', 'BOTTOM_ENGINEERING']"
+      }
+    ]
+  }
+}

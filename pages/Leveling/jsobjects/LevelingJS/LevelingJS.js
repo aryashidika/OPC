@@ -544,7 +544,12 @@ export default {
 						nodeName = 'SL RUBBER PROCESS_' + artikel;
 					} else if (!wip.is_sockliner_wip) {
 						const seq = ibtOrder.indexOf(wip.id) + 1;
-						nodeName = 'IN.SUB OUTSOLE LOGO' + (ibtOrder.length > 1 ? ' ' + seq : '');
+						const firstIbtPart = partInputs.length > 0
+						? parts.find(function(p) { return p.part_db_id === partInputs[0].ref; })
+						: null;
+						const isMidsole = firstIbtPart && (firstIbtPart.part_name || '').toUpperCase().includes('MIDSOLE');
+						const ibtLabel = isMidsole ? 'IN.SUB MIDSOLE LOGO' : 'IN.SUB OUTSOLE LOGO';
+						nodeName = ibtLabel + (ibtOrder.length > 1 ? ' ' + seq : '');
 					} else if (chainPartName) {
 						const seq = inSubOrder.indexOf(wip.id) + 1;
 						nodeName = chainPartName + ' LOGO' + (inSubOrder.length > 1 ? ' ' + seq : '');

@@ -1,0 +1,1 @@
+DELETE FROM app_users WHERE id = {{this.params.id}};

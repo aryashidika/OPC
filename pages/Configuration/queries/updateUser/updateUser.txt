@@ -1,0 +1,7 @@
+UPDATE app_users
+SET username     = '{{this.params.username}}',
+    display_name = '{{this.params.displayName}}',
+    role         = '{{this.params.role}}'::app_role_enum,
+    is_active    = ({{this.params.isActive}})::boolean,
+    last_updated = CURRENT_TIMESTAMP
+WHERE id = ({{this.params.id}})::int;

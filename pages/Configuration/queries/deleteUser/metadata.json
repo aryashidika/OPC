@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a451c9013289e1331252fc8_acb381a6-6f4f-4941-b4f8-d510c530c49d",
-  "id": "Leveling_Query1",
+  "gitSyncId": "6a451c9013289e1331252fc8_cc2dd0ba-ccc6-4645-a3bc-7c78e87f1101",
+  "id": "Configuration_deleteUser",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT a.attname, a.attnotnull\nFROM pg_attribute a JOIN pg_class c ON c.oid = a.attrelid\nWHERE c.relname = 'app_users' AND a.attname = 'dummy_password';",
+      "body": "DELETE FROM app_users WHERE id = {{this.params.id}};",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,9 +22,13 @@
       "name": "Panarub",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [],
-    "name": "Query1",
-    "pageId": "Leveling",
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "deleteUser",
+    "pageId": "Configuration",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }

@@ -264,11 +264,16 @@ export default {
 			}
 			if (!cfg) continue;
 
-			const materialDesc = (node.process_type === 'INCOMING SUBCONT' ||
-														node.process_type === 'OUTGOING SUBCONT' ||
-														node.process_type === 'CUTTING COMPONENT')
-			? ((cfg.description ?? '') + (node.part_name ?? '')).toUpperCase()
-			: (cfg.description ?? '') + articleCode;
+			let materialDesc;
+			if (node.process_type === 'INCOMING SUBCONT' ||
+					node.process_type === 'OUTGOING SUBCONT' ||
+					node.process_type === 'CUTTING COMPONENT') {
+				materialDesc = ((cfg.description ?? '') + (node.part_name ?? '')).toUpperCase();
+			} else if (node.process_type === 'TREATMENT BOTTOM') {
+				materialDesc = (node.part_name ?? '').toUpperCase();
+			} else {
+				materialDesc = (cfg.description ?? '') + articleCode;
+			}
 
 			for (const size of sizeList) {
 				const row = [...BASE];

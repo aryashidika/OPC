@@ -1,0 +1,20 @@
+DO $$
+DECLARE
+  v_user_id INT     := ({{this.params.userId}})::int;
+  v_prb     BOOLEAN := ('{{this.params.hasPrb}}')::boolean;
+  v_pbb     BOOLEAN := ('{{this.params.hasPbb}}')::boolean;
+BEGIN
+  IF v_prb THEN
+    INSERT INTO app_user_clients (user_id, client) VALUES (v_user_id, 'PRB')
+    ON CONFLICT (user_id, client) DO NOTHING;
+  ELSE
+    DELETE FROM app_user_clients WHERE user_id = v_user_id AND client = 'PRB';
+  END IF;
+
+  IF v_pbb THEN
+    INSERT INTO app_user_clients (user_id, client) VALUES (v_user_id, 'PBB')
+    ON CONFLICT (user_id, client) DO NOTHING;
+  ELSE
+    DELETE FROM app_user_clients WHERE user_id = v_user_id AND client = 'PBB';
+  END IF;
+END $$;

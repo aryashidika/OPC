@@ -1,0 +1,8 @@
+INSERT INTO app_users (username, display_name, role, is_active)
+VALUES (
+  '{{this.params.username}}',
+  '{{this.params.displayName}}',
+  '{{this.params.role}}'::app_role_enum,
+  ({{this.params.isActive}})::boolean
+)
+RETURNING id;

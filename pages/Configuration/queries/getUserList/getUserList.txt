@@ -1,0 +1,15 @@
+SELECT
+  u.id,
+  u.username,
+  u.display_name,
+  u.role::text AS role,
+  u.is_active,
+  COALESCE(bool_or(c.client = 'PRB'), false) AS has_prb,
+  COALESCE(bool_or(c.client = 'PBB'), false) AS has_pbb,
+  u.email,
+  (u.keycloak_sub IS NOT NULL) AS sso_linked,
+  u.last_accessed
+FROM app_users u
+LEFT JOIN app_user_clients c ON c.user_id = u.id
+GROUP BY u.id, u.username, u.display_name, u.role, u.is_active, u.email, u.keycloak_sub, u.last_accessed
+ORDER BY u.username;
