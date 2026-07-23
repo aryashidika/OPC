@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_ad9cc88c-9506-498c-b17e-c6806e5067cb",
+  "id": "Blackbox PBB_BlackboxJS",
+  "unpublishedCollection": {
+    "name": "BlackboxJS",
+    "pageId": "Blackbox PBB",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "_pendingChanges",
+        "value": "{}"
+      }
+    ]
+  }
+}

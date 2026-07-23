@@ -1,0 +1,57 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 12,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonVariant": "SECONDARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": false,
+  "isLoading": false,
+  "isVisible": true,
+  "key": "ef2cuw38c6",
+  "leftColumn": 21,
+  "minWidth": 120,
+  "mobileBottomRow": 17,
+  "mobileLeftColumn": 21,
+  "mobileRightColumn": 37,
+  "mobileTopRow": 13,
+  "needsErrorInfo": false,
+  "onClick": "BlackboxJS.onClearAssign()",
+  "originalBottomRow": 42,
+  "originalTopRow": 38,
+  "parentColumnSpace": 20.25,
+  "parentId": "espxc7k7bz",
+  "parentRowSpace": 10,
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 41,
+  "text": "Clear",
+  "topRow": 8,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "isdpijv5xb",
+  "widgetName": "btn_clearAssign"
+}

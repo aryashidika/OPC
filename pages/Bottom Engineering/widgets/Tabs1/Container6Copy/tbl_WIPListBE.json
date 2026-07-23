@@ -44,11 +44,9 @@
     "customColumn2",
     "supplier_id",
     "wip_type",
-    "is_sockliner_wip",
-    "EditActions1",
-    "is_checked"
+    "is_sockliner_wip"
   ],
-  "columnUpdatedAt": 1784696442667,
+  "columnUpdatedAt": 1784799951022,
   "columnWidthMap": {},
   "customIsLoading": false,
   "customIsLoadingValue": "",
@@ -115,24 +113,6 @@
     },
     {
       "key": "primaryColumns.category.computedValue"
-    },
-    {
-      "key": "primaryColumns.is_checked.computedValue"
-    },
-    {
-      "key": "primaryColumns.EditActions1.saveButtonColor"
-    },
-    {
-      "key": "primaryColumns.EditActions1.saveBorderRadius"
-    },
-    {
-      "key": "primaryColumns.EditActions1.discardBorderRadius"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isSaveDisabled"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isDiscardDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -144,15 +124,6 @@
     },
     {
       "key": "onRowSelected"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isSaveDisabled"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isDiscardDisabled"
-    },
-    {
-      "key": "primaryColumns.is_checked.onCheckChange"
     }
   ],
   "dynamicTriggerPathList": [
@@ -161,9 +132,6 @@
     },
     {
       "key": "onRowSelected"
-    },
-    {
-      "key": "primaryColumns.is_checked.onCheckChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -195,46 +163,6 @@
   "parentId": "zu7dxw3qsq",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "EditActions1": {
-      "alias": "EditActions1",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "buttonStyle": "rgb(3, 179, 101)",
-      "columnType": "editActions",
-      "computedValue": "",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "discardActionLabel": "Discard",
-      "discardBorderRadius": "{{tbl_WIPListBE.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "discardButtonColor": "#F22B2B",
-      "discardButtonVariant": "TERTIARY",
-      "discardIconAlign": "left",
-      "enableFilter": true,
-      "enableSort": true,
-      "id": "EditActions1",
-      "index": 10,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": true,
-      "isDisabled": false,
-      "isDiscardDisabled": "{{tbl_WIPListBE.processedTableData.map((currentRow, currentIndex) => ( !tbl_WIPListBE.updatedRowIndices.includes(currentIndex)))}}",
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveDisabled": "{{tbl_WIPListBE.processedTableData.map((currentRow, currentIndex) => ( !tbl_WIPListBE.updatedRowIndices.includes(currentIndex)))}}",
-      "isSaveVisible": true,
-      "isVisible": false,
-      "label": "Save / Discard",
-      "notation": "standard",
-      "originalId": "EditActions1",
-      "saveActionLabel": "Save",
-      "saveBorderRadius": "{{tbl_WIPListBE.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "saveButtonColor": "{{tbl_WIPListBE.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.colors.primaryColor)))}}",
-      "saveIconAlign": "left",
-      "sticky": "right",
-      "thousandSeparator": true,
-      "validation": {},
-      "width": 150
-    },
     "category": {
       "alias": "category",
       "allowCellWrapping": false,
@@ -431,41 +359,6 @@
       "notation": "standard",
       "originalId": "inputs_label",
       "sticky": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
-    "is_checked": {
-      "alias": "is_checked",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
-      "columnType": "checkbox",
-      "computedValue": "{{(() => { const tableData = tbl_WIPListBE.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"is_checked\"])) : is_checked })()}}",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "fontStyle": "",
-      "horizontalAlignment": "LEFT",
-      "id": "is_checked",
-      "index": 11,
-      "isCellEditable": true,
-      "isCellVisible": true,
-      "isDerived": false,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": true,
-      "isSaveVisible": true,
-      "isVisible": true,
-      "label": "Checked",
-      "notation": "standard",
-      "onCheckChange": "{{ BEJS.onToggleWipCheck(currentRow.id) }}",
-      "originalId": "is_checked",
-      "sticky": "right",
-      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},

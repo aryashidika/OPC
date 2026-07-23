@@ -1,1 +1,2 @@
-SELECT username, display_name, role, is_active FROM app_users ORDER BY id;
+ALTER TABLE upper_process_catalog 
+  ADD COLUMN factory TEXT NOT NULL DEFAULT 'PRB' CHECK (factory IN ('PRB','PBB'));

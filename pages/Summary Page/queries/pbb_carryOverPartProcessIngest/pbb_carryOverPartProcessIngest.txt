@@ -1,0 +1,24 @@
+INSERT INTO pbb_part_process
+  (session_id, part_id, laminating_machine, cutting_type,
+   cutting_type_source, cutting_process_name, cos_type, cos_package_id, cos_before_package_id,
+   lead_time_lam_override_days, lead_time_cutting_override_days, lead_time_cos_override_days,
+   cos_remark_before, cos_remark_after)
+SELECT
+  {{this.params.newSessionId}},
+  pp.part_id,
+  pp.laminating_machine,
+  pp.cutting_type,
+  pp.cutting_type_source,
+  pp.cutting_process_name,
+  pp.cos_type,
+  NULL,
+  NULL,
+  pp.lead_time_lam_override_days,
+  pp.lead_time_cutting_override_days,
+  pp.lead_time_cos_override_days,
+  pp.cos_remark_before,
+  pp.cos_remark_after
+FROM pbb_part_process pp
+JOIN pbb_part op ON op.part_id = pp.part_id AND op.session_id = pp.session_id
+JOIN pbb_part np ON np.part_id = pp.part_id AND np.session_id = {{this.params.newSessionId}}
+WHERE pp.session_id = {{this.params.oldSessionId}};

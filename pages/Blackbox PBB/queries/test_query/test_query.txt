@@ -1,0 +1,22 @@
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM upper_process_catalog WHERE process_name = 'YOUNG WORLD' AND factory = 'PBB') THEN
+    INSERT INTO upper_process_catalog (process_name, division, wip_behavior, leveling_code, is_active, default_lead_time_days, factory)
+    VALUES ('YOUNG WORLD', 'BLACKBOX'::division_enum, 'LAMINATION'::wip_behavior_enum, 'PBB_BB_YOUNGWORLD', TRUE, 2, 'PBB');
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM upper_process_catalog WHERE process_name = 'YESSING' AND factory = 'PBB') THEN
+    INSERT INTO upper_process_catalog (process_name, division, wip_behavior, leveling_code, is_active, default_lead_time_days, factory)
+    VALUES ('YESSING', 'BLACKBOX'::division_enum, 'LAMINATION'::wip_behavior_enum, 'PBB_BB_YESSING', TRUE, 2, 'PBB');
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM upper_process_catalog WHERE process_name = 'BIANJI' AND factory = 'PBB') THEN
+    INSERT INTO upper_process_catalog (process_name, division, wip_behavior, leveling_code, is_active, default_lead_time_days, factory)
+    VALUES ('BIANJI', 'BLACKBOX'::division_enum, 'LAMINATION'::wip_behavior_enum, 'PBB_BB_BIANJI', TRUE, 2, 'PBB');
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM upper_process_catalog WHERE process_name = 'UNTAMER' AND factory = 'PBB') THEN
+    INSERT INTO upper_process_catalog (process_name, division, wip_behavior, leveling_code, is_active, default_lead_time_days, factory)
+    VALUES ('UNTAMER', 'BLACKBOX'::division_enum, 'LAMINATION'::wip_behavior_enum, 'PBB_BB_UNTAMER', TRUE, 2, 'PBB');
+  END IF;
+END $$;

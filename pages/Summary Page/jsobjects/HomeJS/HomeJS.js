@@ -522,6 +522,7 @@ export default {
 		const pending = appsmith.store.pendingModelIngest;
 		if (!pending) return;
 
+		const isPBB = pending.client === 'PBB';
 		const selectedReleasedIds = (tbl_modelReleasedSelect.selectedRows || [])
 		.map((r) => r.article_id);
 
@@ -537,12 +538,22 @@ export default {
 						skippedReleased.push(d.article_id);
 						continue;
 					}
-					await this.createNewSession(d.article_id, d.bomData, d.session_id, pending.model_number, d.deltaResult, pending.season, d.colorway);
+					if (isPBB) {
+						await this.pbb_createNewSession(d.article_id, d.bomData, d.session_id, pending.model_number, d.deltaResult, pending.season, d.colorway);
+					} else {
+						await this.createNewSession(d.article_id, d.bomData, d.session_id, pending.model_number, d.deltaResult, pending.season, d.colorway);
+					}
 					revised.push(d.article_id);
 				} else {
-					await markRemovedParts.run({ sessionId: d.session_id, bomJson: JSON.stringify(d.bomData) });
-					await insertNewParts.run({ sessionId: d.session_id, bomJson: JSON.stringify(d.bomData) });
-					await setAffectedDivisionsRework.run({ sessionId: d.session_id });
+					if (isPBB) {
+						await pbb_markRemovedParts.run({ sessionId: d.session_id, bomJson: JSON.stringify(d.bomData) });
+						await pbb_insertNewParts.run({ sessionId: d.session_id, bomJson: JSON.stringify(d.bomData) });
+						await pbb_setAffectedDivisionsRework.run({ sessionId: d.session_id });
+					} else {
+						await markRemovedParts.run({ sessionId: d.session_id, bomJson: JSON.stringify(d.bomData) });
+						await insertNewParts.run({ sessionId: d.session_id, bomJson: JSON.stringify(d.bomData) });
+						await setAffectedDivisionsRework.run({ sessionId: d.session_id });
+					}
 					updated.push(d.article_id);
 				}
 			} catch (e) {
@@ -815,14 +826,14 @@ export default {
 		showAlert('Info part berhasil di-resync.', 'success');
 	},
 
-	async pbb_createNewSession(articleId, parts, modelNumber, season, colorway) {
+	async pbb_createNewSession(articleId, parts, parentSessionId, modelNumber, deltaResult, season, colorway) {
 		showAlert("Membuat session PBB...", "info");
 
 		let session;
 		try {
 			const sessionResult = await pbb_createSessionAtomic.run({
 				articleId,
-				parentSessionId: '',
+				parentSessionId: parentSessionId ?? null,
 				modelNumber: modelNumber ?? null,
 				season: season ?? null,
 				colorway: colorway ?? null
@@ -843,8 +854,108 @@ export default {
 			return;
 		}
 
+		if (parentSessionId) {
+			try {
+				await pbb_carryOverPartProcessIngest.run({
+					oldSessionId: parentSessionId,
+					newSessionId: session.id
+				});
+			} catch (e) {
+				showAlert("Gagal carry-over assignment PBB: " + e.message, "error");
+				return;
+			}
+
+			try {
+				await pbb_carryOverWIPIngest.run({
+					oldSessionId: parentSessionId,
+					newSessionId: session.id
+				});
+			} catch (e) {
+				showAlert("Gagal carry-over UT WIP PBB: " + e.message, "error");
+				return;
+			}
+
+			try {
+				await pbb_carryOverWIPInputIngest.run({
+					oldSessionId: parentSessionId,
+					newSessionId: session.id
+				});
+			} catch (e) {
+				showAlert("Gagal carry-over UT WIP input PBB: " + e.message, "error");
+				return;
+			}
+
+			try {
+				const cosPkgMapping = await pbb_carryOverCOSPkgIngest.run({
+					oldSessionId: parentSessionId,
+					newSessionId: session.id
+				});
+				if (cosPkgMapping && cosPkgMapping.length > 0) {
+					await Promise.all(cosPkgMapping.map(function (m) {
+						return pbb_carryOverCOSPkgAssignInges.run({
+							oldSessionId: parentSessionId,
+							newSessionId: session.id,
+							oldPackageId: m.old_package_id,
+							newPackageId: m.new_package_id
+						});
+					}));
+				}
+			} catch (e) {
+				showAlert("Gagal carry-over COS package PBB: " + e.message, "error");
+				return;
+			}
+
+			try {
+				const bfrPkgMapping = await pbb_carryOverBfrPkgIngest.run({
+					oldSessionId: parentSessionId,
+					newSessionId: session.id
+				});
+				if (bfrPkgMapping && bfrPkgMapping.length > 0) {
+					await Promise.all(bfrPkgMapping.map(function (m) {
+						return pbb_carryOverBfrPkgAssignInges.run({
+							oldSessionId: parentSessionId,
+							newSessionId: session.id,
+							oldPackageId: m.old_package_id,
+							newPackageId: m.new_package_id
+						});
+					}));
+				}
+			} catch (e) {
+				showAlert("Gagal carry-over before package PBB: " + e.message, "error");
+				return;
+			}
+		}
+
 		try {
-			await pbb_initDivisionStatus.run({ sessionId: session.id });
+			await pbb_carryOverBtmWIPIngest.run({
+				oldSessionId: parentSessionId,
+				newSessionId: session.id
+			});
+		} catch (e) {
+			showAlert('Gagal carry-over bottom WIP PBB: ' + e.message, 'error');
+			return;
+		}
+
+		try {
+			await pbb_carryOverBtmWIPInputIngest.run({
+				oldSessionId: parentSessionId,
+				newSessionId: session.id
+			});
+		} catch (e) {
+			showAlert('Gagal carry-over bottom WIP input PBB: ' + e.message, 'error');
+			return;
+		}
+
+		try {
+			if (parentSessionId && deltaResult) {
+				await pbb_initDivisionStatusSmart.run({
+					newSessionId: session.id,
+					oldSessionId: parentSessionId,
+					deltaJson: JSON.stringify(deltaResult)
+				});
+			} else {
+				await pbb_initDivisionStatus.run({ sessionId: session.id });
+			}
 		} catch (e) {
 			showAlert("Gagal set division status PBB: " + e.message, "error");
 			return;
@@ -870,7 +981,7 @@ export default {
 
 		const created = [];
 		const skippedEmpty = [];
-		const skippedExisting = [];
+		const deltas = [];
 		const errors = [];
 
 		for (const art of articles) {
@@ -884,29 +995,88 @@ export default {
 			try {
 				const existing = await pbb_checkExistingSession.run({ articleId: article_id });
 
-				if (existing && existing.length > 0) {
-					skippedExisting.push(article_id);
+				if (!existing || existing.length === 0) {
+					await this.pbb_createNewSession(article_id, parts, null, model_number, null, season, art.colorway);
+					created.push(article_id);
 					continue;
 				}
 
-				await this.pbb_createNewSession(article_id, parts, model_number, season, art.colorway);
-				created.push(article_id);
+				const session = existing[0];
+
+				const deltaResult = await pbb_getBOMDeltaIngest.run({
+					sessionId: session.id,
+					bomJson: JSON.stringify(parts)
+				});
+				const hasChanges = deltaResult.some((r) => r.delta_status !== 'SAME');
+
+				if (!hasChanges) {
+					skippedEmpty.push(article_id);
+					continue;
+				}
+
+				const ingestMode = session.status === 'RELEASED' ? 'REVISION' : 'UPDATE';
+				deltas.push({
+					article_id,
+					session_id: session.id,
+					bomData: parts,
+					deltaResult,
+					ingestMode,
+					colorway: art.colorway
+				});
 			} catch (e) {
 				errors.push(article_id + ': ' + e.message);
 			}
 		}
 
+		if (deltas.length > 0) {
+			const combinedRows = deltas.flatMap((d) =>
+																					d.deltaResult.map((r) => ({
+				article_id: d.article_id,
+				part_id: r.part_id,
+				part_name: r.part_name,
+				delta_status: r.delta_status,
+				ingest_mode: d.ingestMode
+			}))
+																				 );
+
+			const releasedSummary = deltas
+			.filter((d) => d.ingestMode === 'REVISION')
+			.map((d) => ({
+				article_id: d.article_id,
+				session_id: d.session_id,
+				changed_parts: d.deltaResult.filter((r) => r.delta_status !== 'SAME').length
+			}));
+
+			storeValue('pendingModelIngest', {
+				client: 'PBB',
+				model_number,
+				season,
+				deltas: deltas.map((d) => ({
+					article_id: d.article_id,
+					session_id: d.session_id,
+					bomData: d.bomData,
+					ingestMode: d.ingestMode,
+					deltaResult: d.deltaResult,
+					colorway: d.colorway
+				})),
+				combinedRows,
+				releasedSummary
+			});
+
+			showModal('modal_confirmModelDelta');
+		}
+
 		let summary = 'Model ' + model_number + ' (PBB): ' + created.length + ' artikel dibuat baru (' + created.join(', ') + ').';
-		if (skippedExisting.length > 0) {
-			summary += ' ' + skippedExisting.length + ' artikel sudah ada, revisi PBB belum didukung (' + skippedExisting.join(', ') + ').';
+		if (deltas.length > 0) {
+			summary += ' ' + deltas.length + ' artikel punya perubahan BOM, menunggu konfirmasi di modal.';
 		}
 		if (skippedEmpty.length > 0) {
-			summary += ' ' + skippedEmpty.length + ' artikel dilewati (parts kosong).';
+			summary += ' ' + skippedEmpty.length + ' artikel dilewati (BOM sudah up-to-date / tidak ada part).';
 		}
 		if (errors.length > 0) {
 			showAlert('Error: ' + errors.join('; '), 'error');
 		} else {
-			showAlert(summary, 'success');
+			showAlert(summary, deltas.length > 0 ? 'info' : 'success');
 		}
 	},
 }

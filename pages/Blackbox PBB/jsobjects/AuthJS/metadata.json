@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6a451c9013289e1331252fc8_2ba21d41-5366-4aa0-957a-01c560730646",
+  "id": "Blackbox PBB_AuthJS",
+  "unpublishedCollection": {
+    "name": "AuthJS",
+    "pageId": "Blackbox PBB",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

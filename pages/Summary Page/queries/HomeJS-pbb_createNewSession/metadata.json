@@ -14,7 +14,13 @@
           "name": "parts"
         },
         {
+          "name": "parentSessionId"
+        },
+        {
           "name": "modelNumber"
+        },
+        {
+          "name": "deltaResult"
         },
         {
           "name": "season"

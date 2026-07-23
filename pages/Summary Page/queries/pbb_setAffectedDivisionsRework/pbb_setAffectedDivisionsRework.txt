@@ -1,0 +1,91 @@
+DO $$
+DECLARE
+  r RECORD;
+BEGIN
+  FOR r IN
+    SELECT division, string_agg(DISTINCT part_id || ' (' || delta_flag || ')', ', ' ORDER BY part_id || ' (' || delta_flag || ')') AS parts_desc
+    FROM (
+      SELECT 'COMMERZ' AS division, p.part_id, p.delta_flag
+      FROM pbb_part_process pp
+      JOIN pbb_part p ON p.part_id = pp.part_id AND p.session_id = pp.session_id
+      WHERE pp.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+        AND pp.cutting_type IS NOT NULL
+      UNION ALL
+      SELECT 'COS', p.part_id, p.delta_flag
+      FROM pbb_part_process pp
+      JOIN pbb_part p ON p.part_id = pp.part_id AND p.session_id = pp.session_id
+      WHERE pp.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+        AND pp.cos_type IS NOT NULL
+      UNION ALL
+      SELECT 'BLACKBOX', p.part_id, p.delta_flag
+      FROM pbb_part_process pp
+      JOIN pbb_part p ON p.part_id = pp.part_id AND p.session_id = pp.session_id
+      WHERE pp.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+        AND pp.laminating_machine IS NOT NULL
+      UNION ALL
+      SELECT 'UPPER_TOOLING', p.part_id, p.delta_flag
+      FROM pbb_upper_wip_input wi
+      JOIN pbb_part p ON p.id = wi.input_ref AND wi.input_kind = 'PART'::wip_input_kind_enum
+      JOIN pbb_upper_wip w ON w.id = wi.wip_id
+      WHERE w.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+      UNION ALL
+      SELECT 'BOTTOM_ENGINEERING', p.part_id, p.delta_flag
+      FROM pbb_bottom_wip_input wi
+      JOIN pbb_part p ON p.id = wi.input_ref AND wi.input_kind = 'PART'
+      JOIN pbb_bottom_wip w ON w.id = wi.wip_id
+      WHERE w.session_id = {{this.params.sessionId}}::int
+        AND p.delta_flag IN ('NEW', 'REMOVED')
+    ) affected
+    GROUP BY division
+  LOOP
+    IF EXISTS (
+      SELECT 1 FROM pbb_division_status
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = r.division::division_enum
+        AND state = 'SUBMITTED'
+    ) THEN
+      INSERT INTO pbb_concern (session_id, target_division, raised_by, reason, item_ref, is_closed, concern_source)
+      VALUES (
+        {{this.params.sessionId}}::int,
+        r.division::division_enum,
+        'SYSTEM',
+        'BOM diperbarui — part terdampak: ' || r.parts_desc,
+        '',
+        false,
+        'SYSTEM'
+      );
+      UPDATE pbb_division_status
+      SET state = 'REWORK'
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = r.division::division_enum;
+    ELSIF EXISTS (
+      SELECT 1 FROM pbb_division_status
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = r.division::division_enum
+        AND state = 'IN_WORK'
+    ) THEN
+      INSERT INTO pbb_concern (session_id, target_division, raised_by, reason, item_ref, is_closed, concern_source)
+      VALUES (
+        {{this.params.sessionId}}::int,
+        r.division::division_enum,
+        'SYSTEM',
+        'BOM diperbarui — part terdampak: ' || r.parts_desc,
+        '',
+        false,
+        'SYSTEM'
+      );
+    END IF;
+
+    IF r.division = 'COS' THEN
+      UPDATE pbb_division_status
+      SET packages_ready_at = NULL
+      WHERE session_id = {{this.params.sessionId}}::int
+        AND division = 'COS'::division_enum
+        AND packages_ready_at IS NOT NULL;
+    END IF;
+  END LOOP;
+END $$;

@@ -1,0 +1,14 @@
+WITH inserted AS (
+  INSERT INTO pbb_cos_before_package (session_id, package_no, cos_type, lead_time_days, created_by)
+  SELECT
+    {{this.params.newSessionId}}::INT,
+    package_no, cos_type, lead_time_days, created_by
+  FROM pbb_cos_before_package
+  WHERE session_id = {{this.params.oldSessionId}}::INT
+  RETURNING id, package_no
+)
+SELECT ins.id AS new_package_id, old.id AS old_package_id
+FROM inserted ins
+JOIN pbb_cos_before_package old
+  ON old.package_no = ins.package_no
+  AND old.session_id = {{this.params.oldSessionId}}::INT;

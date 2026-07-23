@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "DO $$\nBEGIN\n  ALTER TABLE upper_article_session ADD COLUMN colorway TEXT;\n  ALTER TABLE pbb_article_session   ADD COLUMN colorway TEXT;\nEND $$;",
+      "body": "SELECT p.oid, pg_get_function_identity_arguments(p.oid) AS args, p.prosrc\nFROM pg_proc p\nWHERE p.proname = 'get_revision_articles';",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -68,6 +68,10 @@
     {
       "id": "Configuration",
       "isDefault": false
+    },
+    {
+      "id": "Blackbox PBB",
+      "isDefault": false
     }
   ],
   "unpublishedAppLayout": {

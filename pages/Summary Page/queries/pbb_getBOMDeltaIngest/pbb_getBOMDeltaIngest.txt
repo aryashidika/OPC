@@ -5,7 +5,7 @@ WITH db_parts AS (
 	AND (delta_flag IS NULL OR delta_flag != 'REMOVED')
 ),
 api_parts AS (
-	SELECT
+	SELECT 
 	value->>'part_id' AS part_id,
 	value->>'part_name' AS part_name
 	FROM json_array_elements('{{this.params.bomJson}}'::json)
@@ -20,15 +20,15 @@ SELECT
   END AS delta_status
 FROM api_parts a
 FULL OUTER JOIN db_parts d ON d.part_id = a.part_id
-ORDER BY
-  CASE
+ORDER BY 
+  CASE 
     WHEN d.part_id IS NULL THEN 0
     WHEN a.part_id IS NULL THEN 1
     ELSE 2
   END,
   SPLIT_PART(COALESCE(a.part_id, d.part_id), '-', 1)::int,
-  CASE
-    WHEN COALESCE(a.part_id, d.part_id) LIKE '%-%'
-    THEN SPLIT_PART(COALESCE(a.part_id, d.part_id), '-', 2)::int
-    ELSE 0
+  CASE 
+    WHEN COALESCE(a.part_id, d.part_id) LIKE '%-%' 
+    THEN SPLIT_PART(COALESCE(a.part_id, d.part_id), '-', 2)::int 
+    ELSE 0 
   END;

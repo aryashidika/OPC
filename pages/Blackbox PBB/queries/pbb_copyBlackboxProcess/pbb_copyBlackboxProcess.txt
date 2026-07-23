@@ -1,0 +1,11 @@
+INSERT INTO pbb_part_process
+  (session_id, part_id, laminating_machine, lead_time_lam_override_days)
+SELECT
+  {{this.params.newSessionId}}, pp.part_id, pp.laminating_machine, pp.lead_time_lam_override_days
+FROM pbb_part_process pp
+JOIN pbb_part np ON np.part_id = pp.part_id AND np.session_id = {{this.params.newSessionId}}
+WHERE pp.session_id = {{this.params.oldSessionId}}
+ON CONFLICT (session_id, part_id) DO UPDATE SET
+  laminating_machine          = EXCLUDED.laminating_machine,
+  lead_time_lam_override_days = EXCLUDED.lead_time_lam_override_days,
+  updated_at = NOW();

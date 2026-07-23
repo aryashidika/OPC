@@ -129,10 +129,6 @@
   "parentId": "s9xawcgppr",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "Type": {
-      "isCellEditable": true,
-      "isEditable": true
-    },
     "code": {
       "alias": "code",
       "allowCellWrapping": false,
@@ -395,10 +391,6 @@
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
-    },
-    "undefined": {
-      "isCellEditable": true,
-      "isEditable": true
     }
   },
   "renderMode": "CANVAS",

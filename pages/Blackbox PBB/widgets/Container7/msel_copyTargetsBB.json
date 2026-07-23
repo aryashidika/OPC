@@ -1,0 +1,65 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 9,
+  "boxShadow": "none",
+  "defaultOptionValue": [
+    "GREEN",
+    "RED"
+  ],
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "sourceData"
+    }
+  ],
+  "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "sourceData"
+    }
+  ],
+  "dynamicTriggerPathList": [],
+  "isDisabled": false,
+  "isFilterable": true,
+  "isLoading": false,
+  "isRequired": false,
+  "isVisible": true,
+  "key": "poxcq5bjrf",
+  "labelAlignment": "left",
+  "labelPosition": "Left",
+  "labelText": "Article Target",
+  "labelTextSize": "0.875rem",
+  "labelWidth": 5,
+  "leftColumn": 0,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 12,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 20,
+  "mobileTopRow": 5,
+  "needsErrorInfo": false,
+  "optionLabel": "label",
+  "optionValue": "value",
+  "parentColumnSpace": 19.9375,
+  "parentId": "mkl09rc07j",
+  "parentRowSpace": 10,
+  "placeholderText": "Select option(s)",
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 25,
+  "serverSideFiltering": false,
+  "sourceData": "{{ (getCopyTargets.data || []).map(r => ({ label: r.article_id + (r.division_state === 'SUBMITTED' ? ' — sudah submit' : ''), value: r.session_id })) }}",
+  "topRow": 5,
+  "type": "MULTI_SELECT_WIDGET_V2",
+  "version": 1,
+  "widgetId": "kyyky8r8y5",
+  "widgetName": "msel_copyTargetsBB"
+}

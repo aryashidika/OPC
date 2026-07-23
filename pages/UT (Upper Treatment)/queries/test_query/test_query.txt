@@ -1,3 +1,4 @@
-SELECT conrelid::regclass AS table_name, conname, contype, pg_get_constraintdef(oid)
-FROM pg_constraint
-WHERE conrelid = 'pbb_division_status'::regclass;
+SELECT enumlabel
+FROM pg_enum
+WHERE enumtypid = 'wip_input_kind_enum'::regtype
+ORDER BY enumsortorder;

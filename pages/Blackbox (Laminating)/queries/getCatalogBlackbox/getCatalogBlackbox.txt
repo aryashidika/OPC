@@ -1,4 +1,4 @@
 SELECT id, process_name, default_lead_time_days
 FROM upper_process_catalog
-WHERE division = 'BLACKBOX' AND is_active = TRUE
+WHERE division = 'BLACKBOX' AND is_active = TRUE AND factory = 'PRB'
 ORDER BY id;

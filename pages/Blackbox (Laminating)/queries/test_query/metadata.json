@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT username, display_name, role, is_active FROM app_users ORDER BY id;",
+      "body": "ALTER TABLE upper_process_catalog \n  ADD COLUMN factory TEXT NOT NULL DEFAULT 'PRB' CHECK (factory IN ('PRB','PBB'));",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -1,0 +1,13 @@
+INSERT INTO pbb_division_status (session_id, division, state, submitted_at, submitted_by)
+VALUES (
+  {{this.params.sessionId}},
+  '{{this.params.division}}'::division_enum,
+  '{{this.params.state}}'::division_state_enum,
+  CASE WHEN '{{this.params.state}}' = 'SUBMITTED' THEN NOW() ELSE NULL END,
+  CASE WHEN '{{this.params.state}}' = 'SUBMITTED' THEN '{{this.params.submittedBy}}' ELSE NULL END
+)
+ON CONFLICT (session_id, division)
+DO UPDATE SET
+  state        = '{{this.params.state}}'::division_state_enum,
+  submitted_at = CASE WHEN '{{this.params.state}}' = 'SUBMITTED' THEN NOW() ELSE pbb_division_status.submitted_at END,
+  submitted_by = CASE WHEN '{{this.params.state}}' = 'SUBMITTED' THEN '{{this.params.submittedBy}}' ELSE pbb_division_status.submitted_by END;

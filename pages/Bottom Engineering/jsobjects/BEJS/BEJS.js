@@ -67,21 +67,6 @@ export default {
 		return missing;
 	},
 
-	getUncheckedPackages: function () {
-		const checked = appsmith.store.beCheckedWipIds || [];
-		const outsole = BEJS.getWIPDisplay().filter(function (w) { return !w.is_sockliner_wip; });
-		return outsole.filter(function (w) { return !checked.includes(w.id); });
-	},
-	
-	onToggleWipCheck: async function (wipId) {
-		if (BEJS.isLocked()) return;
-		const current = appsmith.store.beCheckedWipIds || [];
-		const next = current.includes(wipId)
-		? current.filter(function (id) { return id !== wipId; })
-		: current.concat([wipId]);
-		await storeValue('beCheckedWipIds', next);
-	},
-
 	onArticleSelect: async function () {
 		if (!sel_article.selectedOptionValue) return;
 		BEJS._editWipId = null;
@@ -137,16 +122,6 @@ export default {
 				'Package Sockliner berikut tidak punya raw part: ' +
 				emptySockWIPs.map(function (w) { return w.label; }).join(', ') +
 				'. Hapus atau assign input dulu.',
-				'warning'
-			);
-			return;
-		}
-
-		const unchecked = BEJS.getUncheckedPackages();
-		if (unchecked.length > 0) {
-			showAlert(
-				'Semua package (Outsole & Sockliner) harus dicentang/di-review dulu sebelum submit: ' +
-				unchecked.map(function (w) { return w.label; }).join(', '),
 				'warning'
 			);
 			return;
@@ -286,7 +261,6 @@ export default {
 				inputs_label: inputLabels || '-',
 				is_empty: !hasRawPart,
 				copied_from_article_id: w.copied_from_article_id || null,
-				is_checked: checked.includes(w.id)
 			};
 		});
 	},
@@ -702,7 +676,6 @@ export default {
 				inputs_label: inputLabels || '-',
 				is_empty: !hasRawPart,
 				copied_from_article_id: w.copied_from_article_id || null,
-				is_checked: checked.includes(w.id)
 			};
 		});
 	},

@@ -1,5 +1,3 @@
-DO $$
-BEGIN
-  ALTER TABLE upper_article_session ADD COLUMN colorway TEXT;
-  ALTER TABLE pbb_article_session   ADD COLUMN colorway TEXT;
-END $$;
+SELECT p.oid, pg_get_function_identity_arguments(p.oid) AS args, p.prosrc
+FROM pg_proc p
+WHERE p.proname = 'get_revision_articles';

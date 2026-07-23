@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT id, process_name, default_lead_time_days\nFROM upper_process_catalog\nWHERE division = 'BLACKBOX' AND is_active = TRUE\nORDER BY id;",
+      "body": "SELECT id, process_name, default_lead_time_days\nFROM upper_process_catalog\nWHERE division = 'BLACKBOX' AND is_active = TRUE AND factory = 'PRB'\nORDER BY id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -1,0 +1,12 @@
+INSERT INTO pbb_upper_wip (session_id, treatment_order, label, package_number, remark, supplier_id, lead_time_days, created_by)
+SELECT
+  {{this.params.newSessionId}},
+  w.treatment_order,
+  w.label,
+  w.package_number,
+  w.remark,
+  w.supplier_id,
+  w.lead_time_days,
+  w.created_by
+FROM pbb_upper_wip w
+WHERE w.session_id = {{this.params.oldSessionId}};

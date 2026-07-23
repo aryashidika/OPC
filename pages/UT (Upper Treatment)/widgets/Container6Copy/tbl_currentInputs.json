@@ -128,10 +128,6 @@
   "parentId": "8y4i3e9trt",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "Type": {
-      "isCellEditable": true,
-      "isEditable": true
-    },
     "customColumn1": {
       "alias": "Type",
       "allowCellWrapping": false,
@@ -326,10 +322,6 @@
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
-    },
-    "undefined": {
-      "isCellEditable": true,
-      "isEditable": true
     }
   },
   "renderMode": "CANVAS",

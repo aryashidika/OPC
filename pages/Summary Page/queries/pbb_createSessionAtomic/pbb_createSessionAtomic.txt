@@ -1,7 +1,7 @@
 WITH flipped AS (
 	UPDATE pbb_article_session
 	SET is_latest = FALSE
-	WHERE id = NULLIF('{{this.params.parentSessionId}}', '')::int
+	WHERE id = {{this.params.parentSessionId}}::int
 	RETURNING id
 )
 INSERT INTO pbb_article_session
@@ -13,7 +13,7 @@ SELECT
 		1
 	),
   'DRAFT',
-  NULLIF('{{this.params.parentSessionId}}', '')::int,
+  {{this.params.parentSessionId}}::int,
   NULLIF('{{this.params.modelNumber}}', 'null'),
   NULLIF('{{this.params.season}}', 'null'),
   NULLIF('{{this.params.colorway}}', 'null'),

@@ -1,0 +1,2 @@
+SELECT article_id, revision_no, division_state AS blackbox_state, concern_summary
+FROM get_revision_articles_pbb('BLACKBOX');
