@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT\n  p.id, p.part_id, p.part_name, p.material_desc, p.prod_uom, p.supplier_name, p.is_bought_ready,\n  wi.wip_id AS bottom_wip_id, bw.wip_type, bw.label AS wip_label\nFROM upper_part p\nLEFT JOIN bottom_wip_input wi \n  ON wi.input_kind = 'PART' AND wi.input_ref = p.id\nLEFT JOIN bottom_wip bw \n  ON bw.id = wi.wip_id AND bw.session_id = p.session_id\nWHERE p.session_id = (\n  SELECT id FROM v_current_session\n  WHERE article_id = {{sel_article.selectedOptionValue}}\n  LIMIT 1\n)\nAND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')\nAND p.part_id NOT LIKE '%-%'\nAND p.is_sockliner = FALSE\nORDER BY p.part_id::int;",
+      "body": "SELECT\n  p.id, p.part_id, p.part_name, p.material_desc, p.prod_uom, p.supplier_name, p.is_bought_ready,\n  wi.wip_id AS bottom_wip_id, bw.wip_type, bw.label AS wip_label\nFROM upper_part p\nLEFT JOIN bottom_wip_input wi \n  ON wi.input_kind = 'PART' AND wi.input_ref = p.id\nLEFT JOIN bottom_wip bw \n  ON bw.id = wi.wip_id AND bw.session_id = p.session_id\nWHERE p.session_id = (\n  SELECT id FROM v_current_session\n  WHERE article_id = {{sel_article.selectedOptionValue}}\n  LIMIT 1\n)\nAND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')\nAND p.is_sockliner = FALSE\nORDER BY\n  SPLIT_PART(p.part_id, '-', 1)::int,\n  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

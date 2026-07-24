@@ -19,7 +19,6 @@ LEFT JOIN bottom_wip bw
   AND bw.is_sockliner_wip = TRUE
 WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = '{{sel_article.selectedOptionValue}}')
 AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
-AND p.part_id NOT LIKE '%-%'
 AND (
 	p.is_sockliner = TRUE
 	OR NOT EXISTS (
@@ -31,4 +30,6 @@ AND (
 		AND bw2.session_id = p.session_id
 	)
 )
-ORDER BY p.part_id::int;
+ORDER BY
+  SPLIT_PART(p.part_id, '-', 1)::int,
+  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;

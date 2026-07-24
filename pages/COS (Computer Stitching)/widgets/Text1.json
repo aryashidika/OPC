@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 410,
+  "bottomRow": 411,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -54,7 +54,7 @@
   "text": "{{ COSJS.getValidationErrors().map(function(e) { \n  return \"❌ \" + e; \n}).join('\\n') }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 406,
+  "topRow": 407,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

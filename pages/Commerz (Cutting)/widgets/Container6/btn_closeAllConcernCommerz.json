@@ -37,6 +37,8 @@
   "mobileTopRow": 37,
   "needsErrorInfo": false,
   "onClick": "{{CommerzJS.onCloseAllConcernsCommerz()}}",
+  "originalBottomRow": 32,
+  "originalTopRow": 28,
   "parentColumnSpace": 19.9375,
   "parentId": "qysqugjsjc",
   "parentRowSpace": 10,

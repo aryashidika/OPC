@@ -4,8 +4,6 @@ export default {
 	_pendingAdd: [],
 	_pendingRemove: [],
 
-	// ─── HELPERS ──────────────────────────────────────────
-
 	getSessionId() {
 		return getDivisionStatus.data[0]?.session_id ?? null;
 	},
@@ -21,7 +19,13 @@ export default {
 		return UTJS.getUTStatus() === 'SUBMITTED';
 	},
 
-	// Reset semua state edit — dipanggil di banyak tempat
+	filterSubParts(rows) {
+		if (sw_showSubPartsUT.isSwitchedOn) return rows || [];
+		return (rows || []).filter(function (r) {
+			return String(r.part_id ?? r.code ?? '').indexOf('-') === -1;
+		});
+	},
+
 	async _resetEditState() {
 		UTJS._editWipId = null;
 		UTJS._pendingAdd = [];
@@ -32,8 +36,6 @@ export default {
 		resetWidget('inp_processLabel');
 		resetWidget('sel_supplier');
 	},
-
-	// ─── PAGE LOAD ────────────────────────────────────────
 
 	async onPageLoad() {
 		if (!AuthJS.checkAuthGuard(null, 'PRB')) return;
@@ -49,8 +51,6 @@ export default {
 		}
 	},
 
-	// ─── ARTICLE SELECT ───────────────────────────────────
-
 	async onArticleSelect() {
 		if (!sel_article.selectedOptionValue) return;
 		await storeValue('activeArticleId', sel_article.selectedOptionValue);
@@ -63,8 +63,6 @@ export default {
 			getAvailablePool.run()
 		]);
 	},
-
-	// ─── WIP SELECT ───────────────────────────────────────
 
 	async onSelectWIP() {
 		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) return;
@@ -92,8 +90,6 @@ export default {
 		await UTJS._resetEditState();
 		await getAvailablePool.run();
 	},
-
-	// ─── PENDING INPUT MANAGEMENT ─────────────────────────
 
 	onMoveToInputs() {
 		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) return;
@@ -140,8 +136,6 @@ export default {
 		});
 		showAlert(selectedRows.length + ' item ditandai untuk dihapus.', 'info');
 	},
-
-	// ─── CREATE / EDIT PROCESS ────────────────────────────
 
 	validateForm() {
 		if (!sel_article.selectedOptionValue) {
@@ -206,7 +200,6 @@ export default {
 				showAlert("Proses '" + label + "' berhasil diupdate.", 'success');
 
 			} else {
-				// ── Create mode ──
 				await createWIP.run({
 					sessionId: sessionId,
 					processId: processId,
@@ -239,8 +232,6 @@ export default {
 		}
 	},
 
-	// ─── DELETE WIP ───────────────────────────────────────
-
 	async onDeleteWIP(wipId) {
 		if (!['UPPER_TOOLING', 'ADMIN'].includes(appsmith.store.currentUser?.role)) {
 			showAlert("Hanya role UPPER_TOOLING  yang bisa melakukan aksi ini.", "warning");
@@ -263,8 +254,6 @@ export default {
 			showAlert('Gagal hapus: ' + e.message, 'error');
 		}
 	},
-
-	// ─── SUBMIT ───────────────────────────────────────────
 
 	getWIPDisplay: function () {
 		const wips = getWIPList.data || [];
@@ -438,7 +427,6 @@ export default {
 			}
 		}
 
-		// ─── VALIDASI CUTTING INLINE VS TREATMENT (UT → COMMERZ) ──
 		const commerzStatus = (getDivisionStatus.data || []).find(function (s) { return s.division === 'COMMERZ'; });
 		if (commerzStatus && commerzStatus.state === 'SUBMITTED') {
 			const inlineParts = await getPartsInlineInTreatment.run();

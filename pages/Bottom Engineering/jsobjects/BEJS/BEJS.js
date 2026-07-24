@@ -54,6 +54,13 @@ export default {
 		return BEJS.getBEStatus() === 'SUBMITTED';
 	},
 
+	filterSubParts: function (rows) {
+		if (sw_showSubPartsBE.isSwitchedOn) return rows || [];
+		return (rows || []).filter(function (r) {
+			return String(r.part_id ?? r.code ?? '').indexOf('-') === -1;
+		});
+	},
+
 	hasSB: function () {
 		const wips = getWIPListBE.data || [];
 		return wips.some(function (w) { return w.wip_type === 'SB'; });
@@ -308,7 +315,7 @@ export default {
 	},
 
 	getPoolData: function () {
-		const pool = getAvailablePoolBE.data || [];
+		const pool = BEJS.filterSubParts(getAvailablePoolBE.data);
 		const parts = getPartsForBE.data || [];
 
 		let available = pool
@@ -721,7 +728,7 @@ export default {
 	},
 
 	getSockPoolData: function () {
-		const pool = getAvailablePoolSockliner.data || [];
+		const pool = BEJS.filterSubParts(getAvailablePoolSockliner.data);
 		const parts = getPartsForSockliner.data || [];
 
 		let available = pool

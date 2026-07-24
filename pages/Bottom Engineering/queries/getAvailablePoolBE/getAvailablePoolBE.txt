@@ -16,7 +16,6 @@ SELECT * FROM (
     AND p.is_bought_ready = FALSE
     AND p.is_sockliner = FALSE
     AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
-    AND p.part_id NOT LIKE '%-%'
     AND (
       NOT EXISTS (
         SELECT 1 FROM bottom_wip_input wi

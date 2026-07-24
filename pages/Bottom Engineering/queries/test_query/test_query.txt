@@ -1,4 +1,2 @@
-SELECT u.username, u.role, g.division, g.family
-FROM app_users u
-LEFT JOIN app_user_grants g ON g.user_id = u.id
-ORDER BY u.username;
+SELECT column_name, data_type, udt_name FROM information_schema.columns 
+WHERE table_name = 'pbb_part_process' AND column_name IN ('cutting_type','cutting_process_name');

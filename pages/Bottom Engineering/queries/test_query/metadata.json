@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT u.username, u.role, g.division, g.family\nFROM app_users u\nLEFT JOIN app_user_grants g ON g.user_id = u.id\nORDER BY u.username;",
+      "body": "SELECT column_name, data_type, udt_name FROM information_schema.columns \nWHERE table_name = 'pbb_part_process' AND column_name IN ('cutting_type','cutting_process_name');",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

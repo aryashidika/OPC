@@ -37,6 +37,8 @@
   "mobileTopRow": 5,
   "needsErrorInfo": false,
   "onClick": "{{ COSJS.onCopyDivisionConfig() }}.",
+  "originalBottomRow": 9,
+  "originalTopRow": 5,
   "parentColumnSpace": 19.9375,
   "parentId": "jmxk7e33k7",
   "parentRowSpace": 10,

@@ -156,10 +156,6 @@
   "parentId": "uxbilhbmec",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "Beli Jadi": {
-      "isCellEditable": true,
-      "isEditable": true
-    },
     "bottom_wip_id": {
       "alias": "bottom_wip_id",
       "allowCellWrapping": false,
@@ -477,10 +473,6 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
-    "undefined": {
-      "isCellEditable": true,
-      "isEditable": true
-    },
     "wip_label": {
       "alias": "wip_label",
       "allowCellWrapping": false,
@@ -549,7 +541,7 @@
   "rightColumn": 64,
   "searchKey": "",
   "serverSidePaginationEnabled": false,
-  "tableData": "{{getPartsForSockliner.data}}",
+  "tableData": "{{BEJS.filterSubParts(getPartsForSockliner.data)}}",
   "textSize": "0.875rem",
   "topRow": 4,
   "totalRecordsCount": 0,

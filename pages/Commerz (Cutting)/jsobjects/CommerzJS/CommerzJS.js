@@ -16,6 +16,13 @@ export default {
 		}
 	},
 
+	filterSubParts: function (rows) {
+		if (sw_showSubPartsCommerz.isSwitchedOn) return rows || [];
+		return (rows || []).filter(function (r) {
+			return String(r.part_id ?? r.code ?? '').indexOf('-') === -1;
+		});
+	},
+
 	getCommerzStatus: function () {
 		const statuses = getDivisionStatus.data;
 		if (!statuses || statuses.length === 0) return 'NOT_STARTED';
@@ -132,10 +139,7 @@ export default {
 	},
 
 	getTableData: function () {
-		const parts = (getPartsForCommerz.data || [])
-		.filter(function(p) {
-			return p.part_id.indexOf('-') === -1;
-		})
+		const parts = CommerzJS.filterSubParts(getPartsForCommerz.data)
 		.slice().sort(function(a, b) {
 			const aParts = a.part_id.split('-');
 			const bParts = b.part_id.split('-');

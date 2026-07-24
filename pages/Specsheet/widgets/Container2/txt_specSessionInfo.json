@@ -2,7 +2,7 @@
   "animateLoading": true,
   "backgroundColor": "{{({\n  'DRAFT':       '#F1EFE8',\n  'IN_PROGRESS': '#E6F1FB',\n  'RELEASED':    '#E1F5EE',\n  'REWORK':      '#FAEEDA'\n})[SpecsheetJS.getActiveSessionInfo()?.status] ?? '#F1EFE8'}}",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 16,
+  "bottomRow": 15,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -61,7 +61,7 @@
   "text": "{{(SpecsheetJS.getActiveSessionInfo()?.status ?? '—') + '  ·  Dibuat ' + (SpecsheetJS.getActiveSessionInfo()?.created_at ?? '—') + '  ·  Revisi ke-' + (SpecsheetJS.getActiveSessionInfo()?.revision_no ?? '—')}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 12,
+  "topRow": 11,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

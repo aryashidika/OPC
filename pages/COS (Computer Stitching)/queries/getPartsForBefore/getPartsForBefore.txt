@@ -8,7 +8,7 @@ LEFT JOIN upper_part_process pp
 LEFT JOIN cos_before_package cbp
   ON cbp.id = pp.cos_before_package_id
 WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
-AND p.part_id NOT LIKE '%-%'
 AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
 ORDER BY
-  CAST(SPLIT_PART(p.part_id, '-', 1) AS INTEGER);
+  CAST(SPLIT_PART(p.part_id, '-', 1) AS INTEGER),
+  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;

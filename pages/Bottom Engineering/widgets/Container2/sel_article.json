@@ -64,7 +64,7 @@
   "placeholderText": "Select option",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 32,
+  "rightColumn": 20,
   "serverSideFiltering": false,
   "sourceData": "{{getArticleList.data.map(a => ({\n  label: (a.model_number ? a.article_id + ' — ' + a.model_number : a.article_id) + (a.needs_attention ? ' ⚠ perlu perhatian' : ''),\n  value: a.article_id\n}))}}",
   "topRow": 12,

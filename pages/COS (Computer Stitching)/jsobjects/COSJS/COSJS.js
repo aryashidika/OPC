@@ -23,6 +23,13 @@ export default {
 		return getDivisionStatus.data[0]?.session_id;
 	},
 
+	filterSubParts: function (rows) {
+		if (sw_showSubPartsCOS.isSwitchedOn) return rows || [];
+		return (rows || []).filter(function (r) {
+			return String(r.part_id ?? r.code ?? '').indexOf('-') === -1;
+		});
+	},
+
 	getConcernGroups: function () {
 		const concerns = getOpenConcernsForCOS.data || [];
 		const wipStatus = getWIPGroupStatus.data || [];
@@ -452,10 +459,7 @@ export default {
 	},
 
 	getTableData: function () {
-		const parts = (getPartsForCOS.data || [])
-		.filter(function(p) {
-			return p.part_id.indexOf('-') === -1;
-		})
+		const parts = COSJS.filterSubParts(getPartsForCOS.data)
 		.slice().sort(function(a, b) {
 			return parseInt(a.part_id) - parseInt(b.part_id);
 		});
@@ -850,7 +854,7 @@ export default {
 	},
 
 	getBeforeTableData: function () {
-		const parts = (getPartsForBefore.data || [])
+		const parts = COSJS.filterSubParts(getPartsForBefore.data)
 		.slice()
 		.sort(function (a, b) {
 			return parseInt(a.part_id) - parseInt(b.part_id);
@@ -1229,7 +1233,7 @@ export default {
 				if (bfrMap && bfrMap.length > 0) {
 					await Promise.all(bfrMap.map(m => carryOverBfrPkgAssignIngest.run({ oldSessionId: sourceSessionId, newSessionId: targetSessionId, oldPackageId: m.old_package_id, newPackageId: m.new_package_id })));
 				}
-				// target masuk fase ME: paket dianggap ready + IN_WORK (bukan submit final)
+
 				await submitDivision.run({ sessionId: targetSessionId, division: 'COS', state: 'IN_WORK', submittedBy: appsmith.user.email });
 				await markPackagesReady.run({ sessionId: targetSessionId });
 				done.push(targetSessionId);

@@ -43,10 +43,9 @@
     "is_empty",
     "customColumn1",
     "copied_from_article_id",
-    "is_sockliner_wip",
-    "is_checked"
+    "is_sockliner_wip"
   ],
-  "columnUpdatedAt": 1784696534797,
+  "columnUpdatedAt": 1784814229258,
   "columnWidthMap": {},
   "customIsLoading": false,
   "customIsLoadingValue": "",
@@ -110,9 +109,6 @@
     },
     {
       "key": "primaryColumns.category.computedValue"
-    },
-    {
-      "key": "primaryColumns.is_checked.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -325,40 +321,6 @@
       "notation": "standard",
       "originalId": "inputs_label",
       "sticky": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
-    "is_checked": {
-      "alias": "is_checked",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
-      "columnType": "checkbox",
-      "computedValue": "{{(() => { const tableData = tbl_WIPListSockliner.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"is_checked\"])) : is_checked })()}}",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "fontStyle": "",
-      "horizontalAlignment": "LEFT",
-      "id": "is_checked",
-      "index": 11,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": false,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": true,
-      "label": "is_checked",
-      "notation": "standard",
-      "originalId": "is_checked",
-      "sticky": "",
-      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},

@@ -6,13 +6,13 @@ SELECT
   pp.cutting_process_name,
   pp.cos_type,
   (
-    SELECT STRING_AGG(w.label, ' → ' ORDER BY w.id)
-    FROM upper_wip_input wi
-    JOIN upper_wip w ON w.id = wi.wip_id
-    WHERE wi.input_kind = 'PART'
-    AND wi.input_ref = p.id
-    AND w.session_id = p.session_id
-  ) AS treatment_wip,
+		SELECT STRING_AGG(w.label, ' → ' ORDER BY w.id)
+		FROM upper_wip_input wi
+		JOIN upper_wip w ON w.id = wi.wip_id
+		WHERE wi.input_kind = 'PART'
+		AND wi.input_ref = p.id
+		AND w.session_id = p.session_id
+	) AS treatment_wip,
   p.is_sockliner,
   CASE
     WHEN pp.cos_type = 'LINE'    AND pp.cutting_type = 'NORMAL' THEN TRUE
@@ -29,5 +29,6 @@ LEFT JOIN cos_before_package cbp
   AND cbp.session_id = p.session_id
 WHERE p.session_id = {{SpecsheetJS.getActiveSessionId()}}
 AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
-AND p.part_id NOT LIKE '%-%'
-ORDER BY p.part_id::int;
+ORDER BY
+  SPLIT_PART(p.part_id, '-', 1)::int,
+  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;

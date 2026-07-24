@@ -14,7 +14,6 @@ SELECT * FROM (
 	AND wi_edit.wip_id = NULLIF({{appsmith.store.editWipId}}, 0)
 	WHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})
 	AND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')
-	AND p.part_id NOT LIKE '%-%'
 	AND (
 		NOT EXISTS (
 			SELECT 1 FROM upper_wip_input wi

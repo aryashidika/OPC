@@ -6,6 +6,13 @@ export default {
 		await getAllActiveSessions.run();
 	},
 
+	filterSubParts(rows) {
+		if (sw_showSubPartsSpec.isSwitchedOn) return rows || [];
+		return (rows || []).filter(function (r) {
+			return String(r.part_id ?? r.code ?? '').indexOf('-') === -1;
+		});
+	},
+
 	getArticleOptions() {
 		const sessions = getSessionList.data || [];
 		const seen = {};
