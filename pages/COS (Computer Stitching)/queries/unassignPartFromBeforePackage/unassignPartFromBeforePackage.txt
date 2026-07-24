@@ -1,4 +1,13 @@
-UPDATE upper_part_process
-SET cos_before_package_id = NULL
-WHERE session_id = {{this.params.sessionId}}
-  AND part_id = '{{this.params.partId}}';
+INSERT INTO upper_part_process (session_id, part_id, cos_before_package_id, cos_type)
+VALUES (
+  {{this.params.sessionId}},
+  '{{this.params.partId}}',
+  {{this.params.packageId}},
+  (SELECT cbp.cos_type::cos_type_enum FROM cos_before_package cbp WHERE cbp.id = {{this.params.packageId}})
+)
+ON CONFLICT (session_id, part_id)
+DO UPDATE SET
+  cos_before_package_id = {{this.params.packageId}},
+  cos_type = (SELECT cbp.cos_type::cos_type_enum FROM cos_before_package cbp WHERE cbp.id = {{this.params.packageId}}),
+  copied_from_session_id = NULL,
+  updated_at = NOW();

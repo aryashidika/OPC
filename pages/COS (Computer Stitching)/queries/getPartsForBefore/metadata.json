@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT\n  p.id, p.part_id, p.part_name, p.material_desc,\n  pp.cos_before_package_id, pp.cos_remark_before AS remark,\n  cbp.package_no AS before_package_no, cbp.cos_type AS before_cos_type\nFROM upper_part p\nLEFT JOIN upper_part_process pp\n  ON pp.session_id = p.session_id AND pp.part_id = p.part_id\nLEFT JOIN cos_before_package cbp\n  ON cbp.id = pp.cos_before_package_id\nWHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})\nAND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')\nORDER BY\n  CAST(SPLIT_PART(p.part_id, '-', 1) AS INTEGER),\n  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;",
+      "body": "SELECT\n  p.id, p.part_id, p.part_name, p.material_desc,\n  pp.cos_before_package_id, pp.cos_type AS raw_cos_type, pp.cos_remark_before AS remark,\n  cbp.package_no AS before_package_no, cbp.cos_type AS before_cos_type\nFROM upper_part p\nLEFT JOIN upper_part_process pp\n  ON pp.session_id = p.session_id AND pp.part_id = p.part_id\nLEFT JOIN cos_before_package cbp\n  ON cbp.id = pp.cos_before_package_id\nWHERE p.session_id = (SELECT id FROM v_current_session WHERE article_id = {{sel_article.selectedOptionValue}})\nAND (p.delta_flag IS NULL OR p.delta_flag != 'REMOVED')\nORDER BY\n  CAST(SPLIT_PART(p.part_id, '-', 1) AS INTEGER),\n  CASE WHEN p.part_id LIKE '%-%' THEN SPLIT_PART(p.part_id, '-', 2)::int ELSE 0 END;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

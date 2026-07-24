@@ -8,9 +8,6 @@ VALUES (
 ON CONFLICT (session_id, part_id)
 DO UPDATE SET
   cos_package_id = NULLIF({{this.params.packageId}}, 0),
-  cos_type = COALESCE(
-    (SELECT cp.cos_type FROM cos_package cp WHERE cp.id = NULLIF({{this.params.packageId}}, 0)),
-    upper_part_process.cos_type
-  ),
+  cos_type = (SELECT cp.cos_type FROM cos_package cp WHERE cp.id = NULLIF({{this.params.packageId}}, 0)),
   copied_from_session_id = NULL,
   updated_at = NOW();

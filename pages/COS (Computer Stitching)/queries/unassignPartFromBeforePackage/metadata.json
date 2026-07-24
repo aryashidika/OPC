@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "UPDATE upper_part_process\nSET cos_before_package_id = NULL\nWHERE session_id = {{this.params.sessionId}}\n  AND part_id = '{{this.params.partId}}';",
+      "body": "INSERT INTO upper_part_process (session_id, part_id, cos_before_package_id, cos_type)\nVALUES (\n  {{this.params.sessionId}},\n  '{{this.params.partId}}',\n  {{this.params.packageId}},\n  (SELECT cbp.cos_type::cos_type_enum FROM cos_before_package cbp WHERE cbp.id = {{this.params.packageId}})\n)\nON CONFLICT (session_id, part_id)\nDO UPDATE SET\n  cos_before_package_id = {{this.params.packageId}},\n  cos_type = (SELECT cbp.cos_type::cos_type_enum FROM cos_before_package cbp WHERE cbp.id = {{this.params.packageId}}),\n  copied_from_session_id = NULL,\n  updated_at = NOW();",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

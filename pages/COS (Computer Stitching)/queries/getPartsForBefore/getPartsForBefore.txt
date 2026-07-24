@@ -1,6 +1,6 @@
 SELECT
   p.id, p.part_id, p.part_name, p.material_desc,
-  pp.cos_before_package_id, pp.cos_remark_before AS remark,
+  pp.cos_before_package_id, pp.cos_type AS raw_cos_type, pp.cos_remark_before AS remark,
   cbp.package_no AS before_package_no, cbp.cos_type AS before_cos_type
 FROM upper_part p
 LEFT JOIN upper_part_process pp

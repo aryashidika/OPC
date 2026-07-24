@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "INSERT INTO upper_part_process (session_id, part_id, cos_package_id, cos_type)\nVALUES (\n  {{this.params.sessionId}},\n  '{{this.params.partId}}',\n  NULLIF({{this.params.packageId}}, 0),\n  (SELECT cp.cos_type FROM cos_package cp WHERE cp.id = NULLIF({{this.params.packageId}}, 0))\n)\nON CONFLICT (session_id, part_id)\nDO UPDATE SET\n  cos_package_id = NULLIF({{this.params.packageId}}, 0),\n  cos_type = COALESCE(\n    (SELECT cp.cos_type FROM cos_package cp WHERE cp.id = NULLIF({{this.params.packageId}}, 0)),\n    upper_part_process.cos_type\n  ),\n  copied_from_session_id = NULL,\n  updated_at = NOW();",
+      "body": "INSERT INTO upper_part_process (session_id, part_id, cos_package_id, cos_type)\nVALUES (\n  {{this.params.sessionId}},\n  '{{this.params.partId}}',\n  NULLIF({{this.params.packageId}}, 0),\n  (SELECT cp.cos_type FROM cos_package cp WHERE cp.id = NULLIF({{this.params.packageId}}, 0))\n)\nON CONFLICT (session_id, part_id)\nDO UPDATE SET\n  cos_package_id = NULLIF({{this.params.packageId}}, 0),\n  cos_type = (SELECT cp.cos_type FROM cos_package cp WHERE cp.id = NULLIF({{this.params.packageId}}, 0)),\n  copied_from_session_id = NULL,\n  updated_at = NOW();",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

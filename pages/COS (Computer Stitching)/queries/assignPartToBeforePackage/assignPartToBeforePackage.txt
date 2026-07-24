@@ -8,9 +8,6 @@ VALUES (
 ON CONFLICT (session_id, part_id)
 DO UPDATE SET
   cos_before_package_id = {{this.params.packageId}},
-  cos_type = COALESCE(
-    (SELECT cbp.cos_type::cos_type_enum FROM cos_before_package cbp WHERE cbp.id = {{this.params.packageId}}),
-    upper_part_process.cos_type
-  ),
+  cos_type = (SELECT cbp.cos_type::cos_type_enum FROM cos_before_package cbp WHERE cbp.id = {{this.params.packageId}}),
   copied_from_session_id = NULL,
   updated_at = NOW();
